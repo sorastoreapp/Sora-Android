@@ -115,7 +115,6 @@ fun AppTextField(
                 Icon(
                     painter = painter,
                     contentDescription = null,
-                    tint = Color.Black,
                     modifier = Modifier.size(32.dp)
                 )
             }
