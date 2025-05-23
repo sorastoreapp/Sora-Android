@@ -427,6 +427,7 @@ fun AccountDetailsScreen(
             ) {
                 Text("Continue", color = Color.White, fontSize = 16.sp)
             }
+            Spacer(modifier = Modifier.height(5.dp))
         }
     }
 }
