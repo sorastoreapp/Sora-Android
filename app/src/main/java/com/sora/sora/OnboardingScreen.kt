@@ -24,25 +24,32 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.sora.sora.R
+import com.sora.sora.core.navigations.Dest
+import com.sora.sora.core.navigations.toRoute
 import com.sora.sora.ui.theme.PrimaryColor
 import com.sora.sora.ui.theme.SoraTheme
+import kotlinx.serialization.Serializable
 
-class OnboardingActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            SoraTheme {
-                Surface(modifier = Modifier.fillMaxSize()) {
-                    OnboardingScreen()
-                }
-            }
-        }
-    }
-}
-@Preview(showBackground = true)
+//@Serializable
+//class OnboardingActivity : ComponentActivity() {
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        setContent {
+//            SoraTheme {
+//                Surface(modifier = Modifier.fillMaxSize()) {
+//                    OnboardingScreen()
+//                }
+//            }
+//        }
+//    }
+//}
+
+
+//@Preview(showBackground = true)
 @Composable
-fun OnboardingScreen() {
+fun OnboardingScreen(navController: NavController) {
     val pages = listOf(
         R.drawable.onboarding1,
         R.drawable.onboarding2,
@@ -94,7 +101,16 @@ fun OnboardingScreen() {
                 .clip(MaterialTheme.shapes.medium)
 //                    .clip( )
                 .background(PrimaryColor) // arrow button bg color
-                .clickable { currentPage++},
+                .clickable {  if (currentPage < pages.lastIndex) {
+                    currentPage++
+                } else {
+                    // Last page: navigate to WelcomeScreen using your sealed class routes
+                    navController.navigate(Dest.Welcome::class.toRoute()) {
+                        // Pop onboarding from backstack so user can't go back
+                        popUpTo(Dest.OnboardingScreen::class.toRoute()) { inclusive = true }
+                    }
+                           }
+                           },
             contentAlignment = Alignment.Center
         ) {
             Icon(

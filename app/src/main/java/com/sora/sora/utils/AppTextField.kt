@@ -139,7 +139,7 @@ fun PreviewAppTextField() {
         value = text,
         onValueChange = { text = it },
         placeholder = "Leslie Alexander",
-        prefixIcon = painterResource(id = R.drawable.ic_profile),  // your preview icon
+        prefixIcon = painterResource(id = R.drawable.ic_favoritess),  // your preview icon
         modifier   = Modifier
             .fillMaxWidth()
             .padding(16.dp)

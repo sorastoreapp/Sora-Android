@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlinx.serialization)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -57,9 +58,12 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    implementation(libs.navigation.compose)
-    implementation(libs.kotlinx.serialization)
     // Add accompanist pager dependencies here:
     implementation("com.google.accompanist:accompanist-pager:0.30.1")
     implementation("com.google.accompanist:accompanist-pager-indicators:0.30.1")
+
+
+    implementation(libs.androidx.navigation.compose)
+
+    implementation(libs.kotlinx.serialization.json)
 }

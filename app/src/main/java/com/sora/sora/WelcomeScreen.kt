@@ -16,9 +16,10 @@ import androidx.compose.ui.unit.sp
 import com.sora.sora.R
 import com.sora.sora.ui.theme.PrimaryColor
 import com.sora.sora.ui.theme.SecondaryColor
+import kotlinx.serialization.Serializable
 
 
-@Preview(showBackground = true)
+
 @Composable
 fun PreviewWelcomeScreen() {
     WelcomeScreen(
@@ -27,6 +28,7 @@ fun PreviewWelcomeScreen() {
         onSkipClick = {}
     )
 }
+
 @Composable
 fun WelcomeScreen(
     onLoginClick: () -> Unit,
