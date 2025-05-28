@@ -5,7 +5,6 @@ import kotlinx.serialization.Serializable
 
 sealed class Dest{
 
-
     @Serializable
     data object Welcome : Dest()
 
@@ -20,5 +19,17 @@ sealed class Dest{
 
     @Serializable
     data object HomeScreen : Dest()
+
+    @Serializable
+    data object DashBoardScreen : Dest()
+
+    @Serializable
+    data object CategoryScreen : Dest()
+
+    @Serializable
+    data object FavoritesScreen : Dest()
+
+    @Serializable
+    data object CartScreen : Dest()
 
 }

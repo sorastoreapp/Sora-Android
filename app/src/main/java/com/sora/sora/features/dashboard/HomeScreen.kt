@@ -1,4 +1,4 @@
-package com.sora.sora.features
+package com.sora.sora.features.dashboard
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -11,7 +11,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -26,7 +25,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -88,9 +86,9 @@ fun HomeScreen() {
 
     // Scaffold for general layout
     Scaffold(
-        bottomBar = { BottomNavigationBar() },
+//        bottomBar = { BottomNavigationBar() },
         modifier = Modifier.fillMaxSize()
-    ) {
+    ) { paddingValues ->
 
         Column(
             modifier = Modifier
@@ -100,7 +98,7 @@ fun HomeScreen() {
 //                .padding(paddingValues)
                 .padding(horizontal = 16.dp)
         ) {
-            TopBar()
+            CustomTopBar()
             Spacer(modifier = Modifier.height(16.dp))
             BannerSlider()
             Spacer(modifier = Modifier.height(16.dp))
@@ -124,87 +122,87 @@ fun HomeScreen() {
     }
 }
 
-@Composable
-fun BottomNavigationBar(
-    modifier: Modifier = Modifier
-) {
-    var selectedItem by remember { mutableStateOf(0) }
-
-    val items = listOf(
-        NavItem("Home", R.drawable.ic_home, R.drawable.ic_white_home),
-        NavItem("Category", R.drawable.ic_category, R.drawable.ic_white_cat),
-        NavItem("Cart", R.drawable.ic_cart, R.drawable.ic_white_cart),
-        NavItem("Favorites", R.drawable.ic_favoritess, R.drawable.ic_white_fav),
-        NavItem("Profile", R.drawable.ic_profile, R.drawable.ic_white_profile)
-    )
-
-    Surface(
-        color = Color.White,
-        shadowElevation = 8.dp,
-        modifier = modifier
-            .fillMaxWidth()
-            .navigationBarsPadding() // safe area padding
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            items.forEachIndexed { index, item ->
-                val isSelected = selectedItem == index
-                val weight = if (isSelected) 2f else 1f
-
-                Box(
-                    modifier = Modifier
-                        .weight(weight)
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(if (isSelected) PrimaryColor else Color.Transparent)
-                        .clickable { selectedItem = index }
-                        .padding(horizontal = if (isSelected) 16.dp else 0.dp, vertical = 8.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                       if(isSelected) {
-                           Icon(
-                            painter = painterResource(id = item.icon_selected),
-                            contentDescription = item.title,
-                            tint =  Color.White,
-                            modifier = Modifier.size(22.dp)
-                        )}else{
-                           Icon(
-                               painter = painterResource(id = item.icon),
-                               contentDescription = item.title,
-                               modifier = Modifier.size(22.dp)
-                           )
-                        }
-                        if (isSelected) {
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = item.title,
-                                color = Color.White,
-                                fontWeight = FontWeight.SemiBold,
-                                fontSize = 13.sp,
-                                maxLines = 1
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
+//@Composable
+//fun BottomNavigationBar(
+//    modifier: Modifier = Modifier
+//) {
+//    var selectedItem by remember { mutableStateOf(0) }
+//
+//    val items = listOf(
+//        NavItem("Home", R.drawable.ic_home, R.drawable.ic_white_home),
+//        NavItem("Category", R.drawable.ic_category, R.drawable.ic_white_cat),
+//        NavItem("Cart", R.drawable.ic_cart, R.drawable.ic_white_cart),
+//        NavItem("Favorites", R.drawable.ic_favoritess, R.drawable.ic_white_fav),
+//        NavItem("Profile", R.drawable.ic_profile, R.drawable.ic_white_profile)
+//    )
+//
+//    Surface(
+//        color = Color.White,
+//        shadowElevation = 8.dp,
+//        modifier = modifier
+//            .fillMaxWidth()
+//            .navigationBarsPadding() // safe area padding
+//    ) {
+//        Row(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(horizontal = 12.dp, vertical = 8.dp),
+//            horizontalArrangement = Arrangement.SpaceBetween,
+//            verticalAlignment = Alignment.CenterVertically
+//        ) {
+//            items.forEachIndexed { index, item ->
+//                val isSelected = selectedItem == index
+//                val weight = if (isSelected) 2f else 1f
+//
+//                Box(
+//                    modifier = Modifier
+//                        .weight(weight)
+//                        .clip(RoundedCornerShape(16.dp))
+//                        .background(if (isSelected) PrimaryColor else Color.Transparent)
+//                        .clickable { selectedItem = index }
+//                        .padding(horizontal = if (isSelected) 16.dp else 0.dp, vertical = 8.dp),
+//                    contentAlignment = Alignment.Center
+//                ) {
+//                    Row(
+//                        verticalAlignment = Alignment.CenterVertically,
+//                        horizontalArrangement = Arrangement.Center
+//                    ) {
+//                       if(isSelected) {
+//                           Icon(
+//                            painter = painterResource(id = item.icon_selected),
+//                            contentDescription = item.title,
+//                            tint =  Color.White,
+//                            modifier = Modifier.size(22.dp)
+//                        )}else{
+//                           Icon(
+//                               painter = painterResource(id = item.icon),
+//                               contentDescription = item.title,
+//                               modifier = Modifier.size(22.dp)
+//                           )
+//                        }
+//                        if (isSelected) {
+//                            Spacer(modifier = Modifier.width(8.dp))
+//                            Text(
+//                                text = item.title,
+//                                color = Color.White,
+//                                fontWeight = FontWeight.SemiBold,
+//                                fontSize = 13.sp,
+//                                maxLines = 1
+//                            )
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
 
 // Change icon type to Int resource ID
 data class NavItem(val title: String, val icon: Int, val icon_selected: Int)
 
 
 @Composable
-fun TopBar() {
+fun CustomTopBar() {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -439,8 +437,6 @@ fun ProductCard(product: Product) {
 
                 // Other content like image, title, etc.
             }
-
-
 
             // Title & Price Column just below the image
             Column(

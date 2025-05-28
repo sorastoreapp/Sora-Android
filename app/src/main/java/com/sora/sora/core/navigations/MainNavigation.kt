@@ -11,17 +11,20 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
 import com.sora.sora.AccountDetailsScreen
 import com.sora.sora.OnboardingScreen
-import com.sora.sora.features.HomeScreen
+import com.sora.sora.core.temp.TempCustomData
+import com.sora.sora.features.dashboard.CartScreen
+import com.sora.sora.features.dashboard.CategoryScreen
+import com.sora.sora.features.dashboard.DashboardScreen
+import com.sora.sora.features.dashboard.FavoritesScreen
+import com.sora.sora.features.dashboard.HomeScreen
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlin.reflect.KClass
-import kotlin.reflect.typeOf
 
 @Parcelize
 @Serializable
@@ -88,7 +91,7 @@ fun MainNavigation(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = Dest.HomeScreen::class.toRoute(),
+        startDestination = Dest.DashBoardScreen::class.toRoute(),
         modifier = modifier
     ) {
 
@@ -137,10 +140,19 @@ fun MainNavigation(modifier: Modifier = Modifier) {
 
 
         composable(Dest.HomeScreen::class.toRoute()) {
-            HomeScreen(
-
-            )
+            HomeScreen( )
         }
+
+        composable(Dest.DashBoardScreen::class.toRoute()) {
+            DashboardScreen( )
+        }
+        composable(Dest.CategoryScreen::class.toRoute()) {
+            val categories = TempCustomData().categories
+            CategoryScreen(  categories = categories )
+        }
+
+        composable(Dest.FavoritesScreen::class.toRoute()) { FavoritesScreen()}
+        composable(Dest.CartScreen::class.toRoute()) { CartScreen()}
 
     }
 }
