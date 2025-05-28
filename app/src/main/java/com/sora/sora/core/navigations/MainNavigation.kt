@@ -91,7 +91,7 @@ fun MainNavigation(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = Dest.DashBoardScreen::class.toRoute(),
+        startDestination = Dest.OnboardingScreen::class.toRoute(),
         modifier = modifier
     ) {
 

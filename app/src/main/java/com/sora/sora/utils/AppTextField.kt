@@ -1,45 +1,3 @@
-//package com.sora.sora.ui.components
-//
-//import androidx.compose.foundation.text.KeyboardOptions
-//import androidx.compose.material3.ExperimentalMaterial3Api
-//import androidx.compose.material3.OutlinedTextField
-//import androidx.compose.material3.Text
-//import androidx.compose.material3.TextFieldDefaults
-//import androidx.compose.runtime.Composable
-//import androidx.compose.ui.Modifier
-//import androidx.compose.ui.graphics.Color
-//import androidx.compose.ui.text.input.KeyboardType
-//import com.sora.sora.ui.theme.PrimaryColor
-//
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun AppTextField(
-//    value: String,
-//    onValueChange: (String) -> Unit,
-//    label: String,
-//    modifier: Modifier = Modifier,
-//    placeholder: String? = null,
-//    keyboardType: KeyboardType = KeyboardType.Text,
-//    singleLine: Boolean = true,
-//    trailingIcon: @Composable (() -> Unit)? = null
-//) {
-//    OutlinedTextField(
-//        value = value,
-//        onValueChange = onValueChange,
-//        modifier = modifier,
-//        label = { Text(label) },
-//        placeholder = placeholder?.let { { Text(it) } },
-//        singleLine = singleLine,
-//        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
-//        trailingIcon = trailingIcon,
-//        colors = TextFieldDefaults.outlinedTextFieldColors(
-//            focusedBorderColor   = PrimaryColor,
-//            unfocusedBorderColor = Color.LightGray
-//        )
-//    )
-//}
-
-
 package com.sora.sora.ui.components
 
 import androidx.compose.foundation.background
@@ -65,6 +23,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.sora.sora.R
 import com.sora.sora.ui.theme.PrimaryColor
@@ -91,6 +50,7 @@ fun AppTextField(
     onValueChange: (String) -> Unit,
     placeholder: String,
     prefixIcon: Painter? = null,
+    height: Dp? = null,
     keyboardType: KeyboardType = KeyboardType.Text,
     modifier: Modifier = Modifier
 ) {
@@ -98,7 +58,7 @@ fun AppTextField(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier
-            .height(56.dp)
+            .height(height ?: 56.dp)
             .background(
                 color = TextFieldColor,
                 shape = RoundedCornerShape(12.dp)
