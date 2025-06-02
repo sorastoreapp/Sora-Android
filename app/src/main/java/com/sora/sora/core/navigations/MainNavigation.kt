@@ -1,5 +1,6 @@
 package com.sora.sora.core.navigations
 
+import CategoryDetailScreen
 import SignInScreen
 import WelcomeScreen
 import android.os.Build
@@ -19,6 +20,7 @@ import com.sora.sora.features.dashboard.CategoryScreen
 import com.sora.sora.features.dashboard.DashboardScreen
 import com.sora.sora.features.dashboard.FavoritesScreen
 import com.sora.sora.features.dashboard.HomeScreen
+import com.sora.sora.features.dashboard.ItemDetailScreen
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
@@ -91,7 +93,7 @@ fun MainNavigation(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = Dest.OnboardingScreen::class.toRoute(),
+        startDestination = Dest.CategoryDetailScreen::class.toRoute(),
         modifier = modifier
     ) {
 
@@ -153,6 +155,8 @@ fun MainNavigation(modifier: Modifier = Modifier) {
 
         composable(Dest.FavoritesScreen::class.toRoute()) { FavoritesScreen()}
         composable(Dest.CartScreen::class.toRoute()) { CartScreen()}
+        composable(Dest.ItemDetailScreen::class.toRoute()) { ItemDetailScreen()}
+        composable(Dest.CategoryDetailScreen::class.toRoute()) { CategoryDetailScreen()}
 
     }
 }

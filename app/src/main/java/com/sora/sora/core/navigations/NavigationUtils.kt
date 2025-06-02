@@ -31,5 +31,9 @@ sealed class Dest{
 
     @Serializable
     data object CartScreen : Dest()
+    @Serializable
+    data object ItemDetailScreen : Dest()
+    @Serializable
+    data object CategoryDetailScreen : Dest()
 
 }

@@ -1,12 +1,14 @@
 package com.sora.sora.features.dashboard
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.DismissValue
@@ -14,20 +16,23 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
@@ -38,37 +43,48 @@ import com.sora.sora.ui.theme.YellowApp
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun CartScreen() {
+    // ----------------------------
+    // 1) Dummy cart data + state
+    // ----------------------------
     var cartItems by remember {
         mutableStateOf(
             mutableListOf(
-                CartItem("Soft Plush Bear Toy", 1, 5.5, R.drawable.ic_cat_toy),
-                CartItem("Stainless Water Bottle", 1, 5.5, R.drawable.ic_cat_toy),
-                CartItem("Classic Round Sunglasses", 1, 5.5, R.drawable.ic_cat_toy)
+                CartItem("Soft Plush Bear Toy", 1, 5.5, R.drawable.img_temp_teddy),
+                CartItem("Stainless Water Bottle", 1, 5.5, R.drawable.img_temp_teddy),
+                CartItem("Classic Round Sunglasses", 1, 5.5, R.drawable.img_temp_teddy)
             )
         )
     }
 
+    // Coupon‐code state
     var couponCode by remember { mutableStateOf("") }
     val discountPercent = 10
     val deliveryCharges = 0.5
     val otherCharges = 0.5
 
+    // Calculate subtotal, discount, total
     val subtotal = cartItems.sumOf { it.price * it.quantity }
     val discountAmount = subtotal * discountPercent / 100
     val totalAmount = subtotal - discountAmount + deliveryCharges + otherCharges
+    val itemCount = cartItems.sumOf { it.quantity }
 
-    Scaffold(
-        content = { padding ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .systemBarsPadding()
-                    .padding(horizontal = 16.dp)
-            ) {
-
-                androidx.compose.material3.Text(
+    // ------------------------------------------------------
+    // 2) Entire screen as one LazyColumn (header + all parts)
+    // ------------------------------------------------------
+    Scaffold { paddingValues ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .systemBarsPadding()
+                .padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            contentPadding = PaddingValues(bottom = 32.dp) // so bottom button isn't cut off
+        ) {
+            // ----- Item 0: Screen Title -----
+            item {
+                Text(
                     text = "Cart",
-                    style = MaterialTheme.typography.headlineMedium,
+                    style = androidx.compose.material3.MaterialTheme.typography.headlineMedium,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 10.dp),
@@ -77,130 +93,182 @@ fun CartScreen() {
                     fontSize = 30.sp,
                     textAlign = TextAlign.Center
                 )
+            }
 
+            // ----- Items 1..N: Cart items with SwipeToDismiss -----
+            itemsIndexed(
+                items = cartItems,
+                key = { index, item -> item.name + index } // unique key
+            ) { index, item ->
+                val dismissState = rememberDismissState(
+                    confirmStateChange = { newState ->
+                        if (newState == DismissValue.DismissedToStart) {
+                            // Remove item from the list
+                            cartItems = cartItems.toMutableList().also { it.removeAt(index) }
+                        }
+                        true
+                    }
+                )
 
-                Spacer(Modifier.height(8.dp))
-
-                LazyColumn(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                ) {
-                    itemsIndexed(cartItems, key = { _, item -> item.name }) { index, item ->
-                        val dismissState = rememberDismissState(
-                            confirmStateChange = {
-                                if (it == DismissValue.DismissedToStart) {
-                                    cartItems = cartItems.toMutableList().also { list -> list.removeAt(index) }
+                SwipeToDismiss(
+                    state = dismissState,
+                    directions = setOf(DismissDirection.EndToStart),
+                    background = {
+                        Box(
+                            Modifier
+                                .fillMaxSize()
+                                .padding(vertical = 4.dp)
+                                .clip(RoundedCornerShape(16.dp))
+                                .background(Color(0xFFFF3B30))
+                                .padding(end = 20.dp),
+                            contentAlignment = Alignment.CenterEnd
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = "Delete",
+                                tint = Color.White,
+                                modifier = Modifier.size(28.dp)
+                            )
+                        }
+                    },
+                    dismissContent = {
+                        CartItemCard(
+                            item = item,
+                            onIncrease = {
+                                cartItems = cartItems.toMutableList().also {
+                                    it[index] = it[index].copy(quantity = it[index].quantity + 1)
                                 }
-                                true
+                            },
+                            onDecrease = {
+                                if (item.quantity > 1) {
+                                    cartItems = cartItems.toMutableList().also {
+                                        it[index] = it[index].copy(quantity = it[index].quantity - 1)
+                                    }
+                                }
                             }
                         )
-                        SwipeToDismiss(
-                            state = dismissState,
-                            directions = setOf(DismissDirection.EndToStart),
-                            background = {
-                                Box(
-                                    Modifier
-                                        .fillMaxSize()
-                                        .padding(vertical = 4.dp)
-                                        .clip(RoundedCornerShape(16.dp))
-                                        .background(Color(0xFFFF3B30))
-                                        .padding(end = 20.dp),
-                                    contentAlignment = Alignment.CenterEnd
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.Delete,
-                                        contentDescription = "Delete",
-                                        tint = Color.White,
-                                        modifier = Modifier.size(28.dp)
-                                    )
-                                }
-                            },
-                            dismissContent = {
-                                CartItemCard(
-                                    item = item,
-                                    onIncrease = {
-                                        cartItems = cartItems.toMutableList().also {
-                                            it[index] = it[index].copy(quantity = it[index].quantity + 1)
-                                        }
-                                    },
-                                    onDecrease = {
-                                        if (item.quantity > 1) {
-                                            cartItems = cartItems.toMutableList().also {
-                                                it[index] = it[index].copy(quantity = it[index].quantity - 1)
-                                            }
-                                        }
-                                    }
-                                )
-                            },
-                            modifier = Modifier.padding(vertical = 4.dp)
-                        )
-                    }
-                }
+                    },
+                    modifier = Modifier.padding(vertical = 4.dp)
+                )
+            }
 
-                Spacer(Modifier.height(16.dp))
+            // If the cart is empty, you might want to show a “Your cart is empty” message:
+            if (cartItems.isEmpty()) {
+                item {
+                    Text(
+                        "Your cart is empty",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 24.dp),
+                        textAlign = TextAlign.Center,
+                        color = Color.Gray
+                    )
+                }
+            }
+
+            // ----- Item N+1: Coupon Code Section -----
+            // ───── Inside your LazyColumn { … } ─────
+            item {
+                Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    "Coupon Code",
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 24.sp,
-                    color = Color(0xFF8B5E3C),
+                    text = "Coupon Code",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 22.sp,
+                    color = PrimaryColor, // brown text
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
 
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(YellowApp, RoundedCornerShape(25.dp))
-                        .padding(4.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(Color(0xFFF2F2F2))
+                        .border(1.dp, Color(0xFFF2F2F2), RoundedCornerShape(16.dp))
+                        .padding(horizontal = 12.dp, vertical = 8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    AppTextField(
+                    SmallCouponTextField(
                         value = couponCode,
                         onValueChange = { couponCode = it },
                         placeholder = "Code (Optional)",
-                        height = 20.dp,
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(start = 12.dp)
-                            .height(55.dp),
-//                        singleLine = true
+                        modifier = Modifier.weight(1f)
                     )
 
+                    Spacer(modifier = Modifier.width(12.dp))
+
                     Button(
-                        onClick = { /* Apply coupon action */ },
+                        onClick = { /* Apply coupon logic */ },
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF7B3F00)),
-                        shape = RoundedCornerShape(25.dp),
+                        shape = RoundedCornerShape(20.dp),
                         modifier = Modifier
-                            .height(38.dp)
-                            .width(96.dp)
+                            .height(40.dp)
+                            .width(100.dp)
                     ) {
-                        Text("Apply", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                        Text(
+                            "Apply",
+                            color = Color.White,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
+                        )
                     }
                 }
 
-                Spacer(Modifier.height(24.dp))
+            }
 
-                PriceBreakdown(
-                    subtotal = subtotal,
-                    discountPercent = discountPercent,
-                    discountAmount = discountAmount,
-                    deliveryCharges = deliveryCharges,
-                    otherCharges = otherCharges,
-                    totalAmount = totalAmount,
-                    itemCount = cartItems.sumOf { it.quantity }
-                )
 
-                Spacer(Modifier.height(16.dp))
+            // ----- Item N+2: Price Breakdown (subtotal, discount, etc.) -----
+            item {
+                Spacer(modifier = Modifier.height(24.dp))
 
+                PriceRow(label = "Price ($itemCount Items)", value = "KD %.3f".format(subtotal))
+                PriceRow(label = "Discount ($discountPercent%)", value = "KD %.3f".format(discountAmount))
+                PriceRow(label = "Delivery Charges", value = "KD %.3f".format(deliveryCharges))
+                PriceRow(label = "Other Charges", value = "KD %.3f".format(otherCharges))
+
+                Spacer(modifier = Modifier.height(8.dp))
+                Divider(color = Color.LightGray, thickness = 1.dp)
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Total line
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "Total Amount",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
+                    )
+                    Text(
+                        text = "KD %.3f".format(totalAmount),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+                Divider(color = Color.LightGray, thickness = 1.dp)
+            }
+
+            // ----- Item N+3: “Congratulations!…” saved text -----
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     "Congratulations! You've saved KD %.3f!".format(discountAmount),
                     color = Color(0xFF0BC62B),
                     fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(bottom = 24.dp)
+                    fontWeight = FontWeight.Normal,
+                    fontStyle = FontStyle.Italic,        // <-- make it italic
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 24.dp),
+                    textAlign = TextAlign.Start
                 )
+            }
 
+            // ----- Item N+4: Continue button -----
+            item {
                 Button(
                     onClick = { /* Continue action */ },
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF7B3F00)),
@@ -209,14 +277,22 @@ fun CartScreen() {
                         .height(56.dp),
                     shape = RoundedCornerShape(16.dp)
                 ) {
-                    Text("Continue", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                    Text(
+                        "Continue",
+                        color = Color.White,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
-
-                Spacer(Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(38.dp))
             }
         }
-    )
+    }
 }
+
+// ---------------------------------
+//  Helper Composables & Data Class
+// ---------------------------------
 
 @Composable
 fun CartItemCard(
@@ -230,7 +306,8 @@ fun CartItemCard(
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
-            Modifier.padding(16.dp),
+            Modifier
+                .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             androidx.compose.foundation.Image(
@@ -239,7 +316,7 @@ fun CartItemCard(
                 modifier = Modifier
                     .size(90.dp)
                     .clip(RoundedCornerShape(16.dp)),
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Fit
             )
 
             Spacer(Modifier.width(12.dp))
@@ -273,9 +350,9 @@ fun CartItemCard(
                     )
                     Text(
                         "KD 5.500",
-                        fontWeight = FontWeight.Bold,
+                        fontWeight = FontWeight.SemiBold,
                         fontSize = 16.sp,
-                        color = Color.Black
+                        color = PrimaryColor
                     )
                 }
 
@@ -290,18 +367,6 @@ fun CartItemCard(
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun PreviewQuantitySelector() {
-//    QuantitySelector(
-//        quantity = 1,
-//        onIncrease = {},
-//        onDecrease = {}
-//    )
-//}
-//--i want preview function for qualtitiy selector
-
 
 @Composable
 fun QuantitySelector(
@@ -322,14 +387,16 @@ fun QuantitySelector(
                 .size(28.dp)
                 .clip(CircleShape)
                 .background(YellowApp)
-                .clickable(enabled = quantity > 1) { if (quantity > 1) onDecrease() }
+                .clickable(enabled = quantity > 1) {
+                    if (quantity > 1) onDecrease()
+                }
                 .padding(4.dp),
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_remove),  // Use painter here
+                painter = painterResource(id = R.drawable.ic_remove,),
                 contentDescription = "Decrease",
-                tint = if (quantity > 1) Color.Black else Color.Gray,
+                tint = Color.White,
                 modifier = Modifier.size(16.dp)
             )
         }
@@ -355,49 +422,11 @@ fun QuantitySelector(
             Icon(
                 imageVector = Icons.Default.Add,
                 contentDescription = "Increase",
-                tint = Color.Black,
+                tint = Color.White,
                 modifier = Modifier.size(16.dp)
             )
         }
     }
-}
-
-
-
-
-
-@Composable
-fun PriceBreakdown(
-    subtotal: Double,
-    discountPercent: Int,
-    discountAmount: Double,
-    deliveryCharges: Double,
-    otherCharges: Double,
-    totalAmount: Double,
-    itemCount: Int
-) {
-    PriceRow("Price ($itemCount Items)", "KD %.3f".format(subtotal))
-    PriceRow("Discount ($discountPercent%)", "KD %.3f".format(discountAmount))
-    PriceRow("Delivery Charges", "KD %.3f".format(deliveryCharges))
-    PriceRow("Other Charges", "KD %.3f".format(otherCharges))
-
-    Spacer(Modifier.height(8.dp))
-
-    Divider(color = Color.LightGray, thickness = 1.dp)
-
-    Spacer(Modifier.height(8.dp))
-
-    Row(
-        Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text("Total Amount", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-        Text("KD %.3f".format(totalAmount), fontWeight = FontWeight.Bold, fontSize = 16.sp)
-    }
-
-    Spacer(Modifier.height(8.dp))
-
-    Divider(color = Color.LightGray, thickness = 1.dp)
 }
 
 @Composable
@@ -419,3 +448,60 @@ data class CartItem(
     val price: Double,
     val imageRes: Int
 )
+
+// ---------------------------------------------------------------------
+// If you want a @Preview for the QuantitySelector on its own, you can add this:
+@Preview(showBackground = true)
+@Composable
+fun PreviewQuantitySelector() {
+    QuantitySelector(quantity = 1, onIncrease = {}, onDecrease = {})
+}
+
+@Composable
+fun SmallCouponTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    placeholder: String,
+    modifier: Modifier = Modifier
+) {
+    // Remember whether to show the placeholder
+    var isHintVisible by remember { mutableStateOf(value.isEmpty()) }
+
+    Box(
+        modifier = modifier
+            .height(44.dp)                                   // total height ~44 dp
+            .background(Color(0xFFF2F2F2), RoundedCornerShape(12.dp))
+            // NOTE: we removed the .border(...) here
+            .padding(horizontal = 12.dp),                    // left/right padding
+        contentAlignment = Alignment.CenterStart
+    ) {
+        BasicTextField(
+            value = value,
+            onValueChange = {
+                onValueChange(it)
+                isHintVisible = it.isEmpty()
+            },
+            singleLine = true,
+            textStyle = LocalTextStyle.current.copy(
+                color = Color.Black,
+                fontSize = 14.sp,
+                lineHeight = 18.sp
+            ),
+            cursorBrush = SolidColor(Color(0xFF8B5E3C)),      // brown cursor
+            modifier = Modifier
+                .fillMaxWidth()
+            // no top/bottom padding here so the text sits centered
+        )
+
+        if (isHintVisible) {
+            Text(
+                text = placeholder,
+                color = Color.Gray,
+                fontSize = 14.sp
+            )
+        }
+    }
+}
+
+
+
