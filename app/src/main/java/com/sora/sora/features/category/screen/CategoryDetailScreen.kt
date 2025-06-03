@@ -28,6 +28,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
+import com.sora.sora.features.dashboard.Product
+import com.sora.sora.utils.widgets.ProductCard
 
 @Composable
 fun CategoryDetailScreen() {
@@ -36,69 +38,91 @@ fun CategoryDetailScreen() {
 
     // Sample product list, replace with your data
     val products = listOf(
-        Product(1, "Soft Plush Bear Toy", "KD 1.500", R.drawable.img_temp_teddy1),
-        Product(2, "Kids colorful car toy", "KD 1.500", R.drawable.img_temp_teddy1),
-        Product(3, "Multiple Kids toys Collection", "KD 1.500", R.drawable.img_temp_teddy1),
-        Product(4, "Blue teddy bear wearing", "KD 1.500", R.drawable.img_temp_teddy1),
-        Product(5, "Colorful building blocks castle", "KD 1.500", R.drawable.img_temp_teddy3),
-        Product(6, "Adorable teddy bear loves", "KD 1.500", R.drawable.img_temp_teddy2),
+        Product(1, "Soft Plush Bear Toy", "KD 1.500", painterResource(R.drawable.img_temp_teddy)),
+        Product(2, "Kids colorful car toy", "KD 1.500",  painterResource(R.drawable.img_temp_multi_toy)),
+        Product(3, "Multiple Kids toys Collection", "KD 1.500",  painterResource(R.drawable.img_temp_multi_toy)),
+        Product(4, "Blue teddy bear wearing", "KD 1.500",  painterResource(R.drawable.img_temp_tshirt)),
+        Product(5, "Colorful building blocks castle", "KD 1.500",  painterResource(R.drawable.img_temp_multi_toy)),
+        Product(6, "Adorable teddy bear loves", "KD 1.500",  painterResource(R.drawable.img_temp_multi_toy)),
     )
 
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .padding(bottom = 56.dp)
     ) {
         // Gradient background top quarter
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(220.dp)  // roughly quarter of typical phone height
+                .height(230.dp)  // roughly quarter of typical phone height
                 .background(
                     Brush.verticalGradient(
-                        colors = listOf(Color(0xFFFFF7D9), Color.Transparent)
+                        colors = listOf(Color(0xFFF8DC82), Color.Transparent)
                     )
                 )
         ) {
             // Top bar icons and title inside the gradient box
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 60.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-
-                IconButton(
-                    onClick = { /* Back action */ },
+            Column( modifier = Modifier.fillMaxSize()) {
+                Row(
                     modifier = Modifier
-                        .size(40.dp)
-                        .background(Color(0xFFFCE9C8), shape = CircleShape)
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 1.dp)
+//                        .background(color= Color.Red)
+                        .padding(top = 44.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "Back"
+                    IconButton(
+                        onClick = { /* Back action */ },
+                        modifier = Modifier
+                            .size(40.dp)
+                            .background(Color(0xFFFCE9C8), shape = CircleShape)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Back"
+                        )
+                    }
+
+                    Text(
+                        text = "Toys & Plushies",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
+                    )
+
+                    IconButton(
+                        onClick = { /* Cart action */ },
+                        modifier = Modifier
+                            .size(40.dp)
+                            .background(Color(0xFFFCE9C8), shape = CircleShape)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.ShoppingCart,
+                            contentDescription = "Cart"
+                        )
+                    }
+                }
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(90.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.img_temp_black_teddy),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .size(80.dp)
+//                            .background(Color.Blue)
                     )
                 }
 
-                Text(
-                    text = "Toys & Plushies",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
-                )
-
-                IconButton(
-                    onClick = { /* Cart action */ },
-                    modifier = Modifier
-                        .size(40.dp)
-                        .background(Color(0xFFFCE9C8), shape = CircleShape)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.ShoppingCart,
-                        contentDescription = "Cart"
-                    )
-                }
             }
+
+            // Black mug image below the top bar with some vertical padding
+
 
             // Filter chips row near bottom of gradient
             LazyRow(
@@ -112,9 +136,10 @@ fun CategoryDetailScreen() {
                         text = filter,
                         isSelected = filter == selectedFilter,
                         onClick = { selectedFilter = filter }
-                    )
+                     )
                 }
             }
+
         }
 
         // Products grid
@@ -141,96 +166,16 @@ fun FilterChip(text: String, isSelected: Boolean, onClick: () -> Unit) {
     Surface(
         modifier = Modifier.clickable(onClick = onClick),
         shape = RoundedCornerShape(50),
-        color = if (isSelected) Color(0xFFF7E2B0) else Color(0xFFF2F2F2),
+        color = if (isSelected) Color.White else Color(0xFFF2F2F2),
         elevation = 2.dp
     ) {
         Text(
             text = text,
             fontSize = 14.sp,
+            fontWeight = if(isSelected) FontWeight.Bold else FontWeight.Normal,
             color = if (isSelected) Color.Black else Color.Gray,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         )
     }
 }
 
-data class Product(val id: Int, val title: String, val price: String, val imageRes: Int)
-
-@Composable
-fun ProductCard(product: Product) {
-    Card(
-        shape = RoundedCornerShape(16.dp),
-        elevation = 4.dp,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(modifier = Modifier.padding(12.dp)) {
-            Box(modifier = Modifier.fillMaxWidth()) {
-                Image(
-                    painter = painterResource(product.imageRes),
-                    contentDescription = product.title,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .height(140.dp)
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(16.dp))
-                )
-                // Heart icon top-left
-                IconButton(
-                    onClick = { /* Favorite toggle */ },
-                    modifier = Modifier
-                        .size(28.dp)
-                        .background(Color.White.copy(alpha = 0.8f), shape = CircleShape)
-                        .align(Alignment.TopStart)
-                        .padding(4.dp)
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_remove), // replace with your heart icon
-                        contentDescription = "Favorite",
-                        tint = Color.Gray,
-                        modifier = Modifier.size(16.dp)
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = product.title,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 16.sp,
-                maxLines = 2,
-                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
-                modifier = Modifier.padding(horizontal = 4.dp)
-            )
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = product.price,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp,
-                    color = Color(0xFF7B3F00),
-                    modifier = Modifier.padding(start = 4.dp)
-                )
-                IconButton(
-                    onClick = { /* Add to cart */ },
-                    modifier = Modifier
-                        .size(28.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(Color(0xFF7B3F00))
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "Add",
-                        tint = Color.White,
-                        modifier = Modifier.size(16.dp)
-                    )
-                }
-            }
-        }
-    }
-}
