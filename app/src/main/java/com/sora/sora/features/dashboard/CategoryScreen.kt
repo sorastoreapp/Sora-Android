@@ -1,6 +1,7 @@
 package com.sora.sora.features.dashboard
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,6 +36,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
 import com.sora.sora.core.customText.CustomTextBubbleBobble
+import com.sora.sora.core.navigations.Dest
+import com.sora.sora.core.navigations.NavigationManager
+import com.sora.sora.core.navigations.toRoute
 
 @Composable
 fun CategoryScreen(
@@ -96,7 +100,9 @@ fun CategoryCard(category: CategoryItemData, backgroundRes: Int) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(150.dp), // approximate height to match your screenshots
+            .height(150.dp).clickable {
+                NavigationManager.navigateTo(Dest.CategoryDetailScreen::class.toRoute())
+            }, // approximate height to match your screenshots
         shape = RoundedCornerShape(16.dp),
         // Optional: set card elevation or shadow here if using Material3 CardDefaults
     ) {

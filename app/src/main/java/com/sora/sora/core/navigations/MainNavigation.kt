@@ -3,12 +3,10 @@ package com.sora.sora.core.navigations
 import CategoryDetailScreen
 import SignInScreen
 import WelcomeScreen
-import android.os.Build
-import android.os.Bundle
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -21,11 +19,13 @@ import com.sora.sora.features.dashboard.DashboardScreen
 import com.sora.sora.features.dashboard.FavoritesScreen
 import com.sora.sora.features.dashboard.HomeScreen
 import com.sora.sora.features.dashboard.ItemDetailScreen
+import com.sora.sora.features.profile.screen.AddNewAddressScreen
+import com.sora.sora.features.profile.screen.MyAddressesScreen
+import com.sora.sora.features.profile.screen.OrdersScreen
+import com.sora.sora.features.profile.screen.ProfileScreen
+import com.sora.sora.features.profile.screen.TermsAndConditionsScreen
 import kotlinx.parcelize.Parcelize
-import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import kotlin.reflect.KClass
 
 @Parcelize
@@ -36,53 +36,6 @@ data class Dummy(
 ) : Parcelable
 
 
-val DummyType = object : NavType<Dummy>(false) {
-    override fun get(bundle: Bundle, key: String): Dummy? {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            bundle.getParcelable(key, Dummy::class.java)
-        } else {
-            bundle.getParcelable(key)
-        }
-    }
-
-    override fun parseValue(value: String): Dummy {
-        return Json.decodeFromString(value)
-    }
-
-    override fun put(bundle: Bundle, key: String, value: Dummy) {
-        bundle.putParcelable(key, value)
-    }
-
-    override fun serializeAsValue(value: Dummy): String {
-        return Json.encodeToString(value)
-    }
-}
-
-
-class CustomNavType<T : Parcelable>(
-    private val clazz: KClass<T>,
-    private val serializer: KSerializer<T>
-) : NavType<T>(false) {
-    override fun get(bundle: Bundle, key: String): T? {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            bundle.getParcelable(key, clazz.java)
-        } else {
-            bundle.getParcelable(key)
-        }
-    }
-
-    override fun parseValue(value: String): T {
-        return Json.decodeFromString(serializer, value)
-    }
-
-    override fun put(bundle: Bundle, key: String, value: T) {
-        bundle.putParcelable(key, value)
-    }
-
-    override fun serializeAsValue(value: T): String {
-        return Json.encodeToString(serializer, value)
-    }
-}
 
 fun <T : Any> KClass<T>.toRoute(): String {
     return this.simpleName.orEmpty()
@@ -91,9 +44,14 @@ fun <T : Any> KClass<T>.toRoute(): String {
 @Composable
 fun MainNavigation(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
+
+    LaunchedEffect(Unit) {
+        NavigationManager.navController = navController
+    }
+
     NavHost(
         navController = navController,
-        startDestination = Dest.CategoryDetailScreen::class.toRoute(),
+        startDestination = Dest.TermConditionScreen::class.toRoute(),
         modifier = modifier
     ) {
 
@@ -111,7 +69,7 @@ fun MainNavigation(modifier: Modifier = Modifier) {
                     navController.navigate(Dest.AccountDetailsScreen::class.toRoute())
                 },
                 onSkipClick = {
-                    navController.navigate(Dest.HomeScreen::class.toRoute())
+                    navController.navigate(Dest.DashBoardScreen::class.toRoute())
                 }
             )
         }
@@ -119,13 +77,13 @@ fun MainNavigation(modifier: Modifier = Modifier) {
         composable(Dest.SignIn::class.toRoute()) {
             SignInScreen(
                 onLoginClick = {
-                    navController.navigate(Dest.HomeScreen::class.toRoute())
+                    navController.navigate(Dest.DashBoardScreen::class.toRoute())
                 },
                 onRegisterClick = {
                     navController.navigate(Dest.AccountDetailsScreen::class.toRoute())
                 },
                 onSocialLoginClick = {
-                    navController.navigate(Dest.HomeScreen::class.toRoute())
+                    navController.navigate(Dest.DashBoardScreen::class.toRoute())
                 },
                 onCountryCodeChange = {}
             )
@@ -135,7 +93,7 @@ fun MainNavigation(modifier: Modifier = Modifier) {
             AccountDetailsScreen(
                 onBackClick = {},
                 onContinueClick = {
-                    navController.navigate(Dest.HomeScreen::class.toRoute())
+                    navController.navigate(Dest.DashBoardScreen::class.toRoute())
                 }
             )
         }
@@ -146,7 +104,7 @@ fun MainNavigation(modifier: Modifier = Modifier) {
         }
 
         composable(Dest.DashBoardScreen::class.toRoute()) {
-            DashboardScreen( )
+            DashboardScreen( navController = navController)
         }
         composable(Dest.CategoryScreen::class.toRoute()) {
             val categories = TempCustomData().categories
@@ -157,6 +115,11 @@ fun MainNavigation(modifier: Modifier = Modifier) {
         composable(Dest.CartScreen::class.toRoute()) { CartScreen()}
         composable(Dest.ItemDetailScreen::class.toRoute()) { ItemDetailScreen()}
         composable(Dest.CategoryDetailScreen::class.toRoute()) { CategoryDetailScreen()}
+        composable(Dest.ProfileScreen::class.toRoute()) { ProfileScreen()}
+        composable(Dest.OrdersScreen::class.toRoute()) { OrdersScreen()}
+        composable(Dest.MyAddressScreen::class.toRoute()) { MyAddressesScreen() }
+        composable(Dest.AddNewAddressScreen::class.toRoute()) { AddNewAddressScreen() }
+        composable(Dest.TermConditionScreen::class.toRoute()) { TermsAndConditionsScreen() }
 
     }
 }

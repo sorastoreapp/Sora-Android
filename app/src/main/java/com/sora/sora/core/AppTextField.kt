@@ -1,6 +1,7 @@
 package com.sora.sora.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,6 +19,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
@@ -25,7 +27,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.sora.sora.R
+import com.sora.sora.core.customText.CustomMontserratText
 import com.sora.sora.ui.theme.PrimaryColor
 import com.sora.sora.ui.theme.TextFieldColor
 
@@ -90,6 +94,65 @@ fun AppTextField(
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType)
     )
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AppTextField2(
+    value: String,
+    onValueChange: (String) -> Unit,
+    placeholder: String,
+    prefixIcon: Painter? = null,
+    height: Dp? = null,
+    keyboardType: KeyboardType = KeyboardType.Text,
+    modifier: Modifier = Modifier
+) {
+    TextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = modifier
+            .height(height ?: 56.dp)
+            .clip(RoundedCornerShape(24.dp))  // Set the corner radius for clipping
+            .background(
+                color = Color(0xFFB583530D),  // Background color
+                shape = RoundedCornerShape(24.dp)  // Same shape for background
+            )
+            .border(
+                width = 1.dp,
+                color = if (value.isNotEmpty()) PrimaryColor else Color.Transparent,  // Set border color based on focus
+                shape = RoundedCornerShape(24.dp)  // Same shape for border
+            ),
+        singleLine = true,
+        placeholder = {
+            CustomMontserratText(  // Use the CustomMontserratText for placeholder
+                text = placeholder,
+                color = Color.Gray,
+                fontSize = 14.sp,
+//                fontWeight = FontWeight.Normal
+            )
+        },
+        leadingIcon = prefixIcon?.let { painter ->
+            {
+                Icon(
+                    painter = painter,
+                    contentDescription = null,
+                    modifier = Modifier.size(32.dp)
+                )
+            }
+        },
+        colors = TextFieldDefaults.textFieldColors(
+            focusedLabelColor = Color.Black,
+            cursorColor = PrimaryColor,
+            containerColor = TextFieldColor,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent,
+        ),
+        keyboardOptions = KeyboardOptions(keyboardType = keyboardType)
+    )
+}
+
+
+
 @Preview(showBackground = true)
 @Composable
 fun PreviewAppTextField() {

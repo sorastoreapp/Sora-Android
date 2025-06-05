@@ -36,6 +36,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
+import com.sora.sora.core.navigations.Dest
+import com.sora.sora.core.navigations.NavigationManager
+import com.sora.sora.core.navigations.toRoute
 import com.sora.sora.ui.components.AppTextField
 import com.sora.sora.ui.theme.PrimaryColor
 import com.sora.sora.ui.theme.YellowApp
@@ -303,7 +306,9 @@ fun CartItemCard(
     Card(
         shape = RoundedCornerShape(16.dp),
         elevation = 8.dp,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth().clickable {
+            NavigationManager.navigateTo(Dest.ItemDetailScreen::class.toRoute())
+        }
     ) {
         Row(
             Modifier

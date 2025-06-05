@@ -11,6 +11,7 @@ val PrimaryColorFaded = PrimaryColor.copy(alpha = 0.1f)
 val SecondaryColor = Color(0xFFB77E3E) // Example color for Sign Up
 val YellowApp = Color(0xFFFFAF17) // Example color for Sign Up
 val TextFieldColor = Color(0xFFF2F2F2) // Example color for Sign Up
+val TextFieldColor2 = Color(0xFFFFF7F2) // Example color for Sign Up
 val AppGray = Color(0xFFDCD9D9) // Example color for Sign Up
 
 

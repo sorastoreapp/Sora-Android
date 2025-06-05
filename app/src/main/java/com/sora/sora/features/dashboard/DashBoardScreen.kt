@@ -31,12 +31,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.sora.sora.R
 import com.sora.sora.core.temp.TempCustomData
+import com.sora.sora.features.profile.screen.ProfileScreen
 import com.sora.sora.ui.theme.PrimaryColor
 
 @Composable
-fun DashboardScreen() {
+fun DashboardScreen(navController : NavController) {
     var selectedIndex by remember { mutableStateOf(0) }
 
     // You can replace this with NavController-based navigation if preferred
@@ -59,7 +61,7 @@ fun DashboardScreen() {
                 1 -> CategoryScreen(TempCustomData().categories)
                 2 -> CartScreen()
                 3 -> FavoritesScreen()
-                4 -> HomeScreen()
+                4 -> ProfileScreen()
                 else -> HomeScreen()
             }
         }
