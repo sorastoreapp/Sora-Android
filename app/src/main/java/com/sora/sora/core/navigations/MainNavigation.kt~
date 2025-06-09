@@ -42,6 +42,8 @@ data class Dummy(
     val age: Int
 ) : Parcelable
 
+
+
 fun <T : Any> KClass<T>.toRoute(): String {
     return this.simpleName.orEmpty()
 }

@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sora.sora.core.CustomTopBar
 import com.sora.sora.ui.components.AppTextField
 import com.sora.sora.ui.theme.PrimaryColor
 import com.sora.sora.ui.theme.PrimaryColorFaded
@@ -37,7 +38,6 @@ fun AccountDetailsScreen(
     val countryCodes = listOf("+49", "+1", "+44")
     var expandedCountryCode by remember { mutableStateOf(false) }
     var selectedCountryCode by remember { mutableStateOf(countryCodes[0]) }
-
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var phone by remember { mutableStateOf("") }
@@ -67,7 +67,7 @@ fun AccountDetailsScreen(
             modifier = Modifier.fillMaxSize()
         )
 
-        // Overlay a semi-transparent background (optional, to improve text visibility)
+//        // Overlay a semi-transparent background (optional, to improve text visibility)
 //        Box(
 //            modifier = Modifier
 //                .fillMaxSize()
@@ -82,30 +82,31 @@ fun AccountDetailsScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             // Back button + Title Row
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                IconButton(
-                    onClick = onBackClick,
-                    modifier = Modifier
-                        .size(55.dp)
-                        .clip(CircleShape)
-                        .background(PrimaryColorFaded)
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Back",
-                        tint = Color.Black
-                    )
-                }
-                Text(
-                    text = "Account Details",
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(start = 40.dp)
-                )
-            }
+//            Row(
+//                verticalAlignment = Alignment.CenterVertically,
+//                modifier = Modifier.fillMaxWidth()
+//            ) {
+//                IconButton(
+//                    onClick = onBackClick,
+//                    modifier = Modifier
+//                        .size(55.dp)
+//                        .clip(CircleShape)
+//                        .background(PrimaryColorFaded)
+//                ) {
+//                    Icon(
+//                        imageVector = Icons.Filled.ArrowBack,
+//                        contentDescription = "Back",
+//                        tint = Color.Black
+//                    )
+//                }
+//                Text(
+//                    text = "Account Details",
+//                    fontSize = 22.sp,
+//                    fontWeight = FontWeight.Bold,
+//                    modifier = Modifier.padding(start = 40.dp)
+//                )
+//            }
+            CustomTopBar(title = "Account Details", space = 50.dp)
 
             // Profile Image + Lock Icon
             Box(

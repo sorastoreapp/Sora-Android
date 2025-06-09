@@ -22,19 +22,23 @@ fun CustomButton(
     modifier: Modifier = Modifier, // Optional modifier to customize the button's appearance
     containerColor: Color = PrimaryColor, // Default button color
     textColor: Color = Color.White, // Text color (default: White)
+    secondaryButton : Boolean = false
 ) {
     Button(
         onClick = onClick,
         modifier = modifier
             .fillMaxWidth()
             .height(65.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = containerColor),
+        colors = if(secondaryButton) ButtonDefaults.buttonColors(
+            containerColor = Color(0xFFFDF6F6))
+
+        else  ButtonDefaults.buttonColors(containerColor = containerColor),
         shape = MaterialTheme.shapes.medium
     ) {
         // Button Text
         Text(
             text = if (required) "$label" else label, // Append '*' for required fields
-            color = textColor,
+            color = if (secondaryButton) Color(0xFFDB5A5A) else textColor,
             fontSize = 16.sp
         )
     }

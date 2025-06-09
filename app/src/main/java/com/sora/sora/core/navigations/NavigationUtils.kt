@@ -48,7 +48,29 @@ sealed class Dest{
 
     @Serializable
     data object AddNewAddressScreen : Dest()
+
     @Serializable
     data object TermConditionScreen : Dest()
+
+    @Serializable
+    data object PrivacyPolicyScreen : Dest()
+
+    @Serializable
+    data object FaqScreen : Dest()
+
+    @Serializable
+    data object AboutUsScreen : Dest()
+
+    @Serializable
+    data object EditProfileScreen : Dest()
+
+    @Serializable
+    data object AddReviewScreen : Dest()
+
+    @Serializable
+    data object ReviewDetailScreen : Dest()
+
+    @Serializable
+    data object SplashScreen : Dest()
 
 }

@@ -1,8 +1,9 @@
 package com.sora.sora.features.favourites.widgets
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,88 +17,52 @@ import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.runtime.*
+import com.sora.sora.core.CustomTopBar
 
 
 @Composable
-fun RatingReviews() {
+fun ReviewDetailScreen() {
     var expanded by remember { mutableStateOf(true) }
 
     val reviews = listOf(
         ReviewDetailScreen(
             text = "Soft, cute, and perfect for my daughter! She sleeps with it every night, and it still looks brand new after multiple washes.",
             rating = 4,
-            reviewer = "Eleanor Pena"
+            reviewer = "Wade Warren"
         ),
         ReviewDetailScreen(
-            text = "Great quality, my niece loves it! The fabric is super soft, and the stitching is well done — definitely worth it",
-            rating = 3,
-            reviewer = "Esther Howard"
+            text = "Great quality, my niece loves it! The fabric is super soft, and the stitching is well done — definitely worth it.",
+            rating = 5,
+            reviewer = "John Doe"
         ),
         ReviewDetailScreen(
             text = "So comfy, I got one for myself too! It adds a nice touch to my sofa and is perfect for lounging.",
-            rating = 4,
-            reviewer = "Arlene McCoy"
+            rating = 5,
+            reviewer = "Jane Doe"
         ),
     )
+    Column(modifier = Modifier.padding(16.dp).fillMaxWidth().statusBarsPadding(),) {
+        // Header Row with title and expand/collapse icon
 
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        elevation = 1.dp,
-        shape = MaterialTheme.shapes.medium
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            // Header Row with title and expand/collapse icon
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { expanded = !expanded },
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = "Rating & Reviews",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp
-                )
-                Icon(
-                    imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                    contentDescription = if (expanded) "Collapse" else "Expand"
-                )
-            }
-
-
-
-            if (expanded) {
+        CustomTopBar(title = "Reviews", space = 110.dp)
+        Spacer(modifier = Modifier.height(40.dp))
+        reviews.forEachIndexed { index, review ->
+            ReviewItemDetails(review = review)
+            if (index != reviews.lastIndex) {
                 Spacer(modifier = Modifier.height(12.dp))
                 Divider(color = Color.LightGray, thickness = 1.dp)
                 Spacer(modifier = Modifier.height(12.dp))
-
-                reviews.forEachIndexed { index, review ->
-                    ReviewItem(review = review)
-                    if (index != reviews.lastIndex) {
-                        Spacer(modifier = Modifier.height(12.dp))
-                        Divider(color = Color.LightGray, thickness = 1.dp)
-                        Spacer(modifier = Modifier.height(12.dp))
-                    }
-                }
             }
         }
     }
 }
 
-data class Review(val text: String, val rating: Int, val reviewer: String)
+data class ReviewDetailScreen(val text: String, val rating: Int, val reviewer: String)
 
 @Composable
-fun ReviewItem(review: ReviewDetailScreen) {
+fun ReviewItemDetails(review: ReviewDetailScreen) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        Text(
-            text = review.text,
-            fontStyle = FontStyle.Italic,
-            fontSize = 14.sp,
-            color = Color.DarkGray
-        )
-        Spacer(modifier = Modifier.height(6.dp))
+
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = "${review.rating} Star",
@@ -105,16 +70,26 @@ fun ReviewItem(review: ReviewDetailScreen) {
                 color = Color(0xFFFFC107),
                 fontSize = 14.sp
             )
+
             Spacer(modifier = Modifier.width(4.dp))
             repeat(review.rating) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_filled_star),
+                    painter = painterResource(id = R.drawable.ic_filled_star_review), // Use the filled star icon
                     contentDescription = null,
                     tint = Color(0xFFFFC107),
                     modifier = Modifier.size(16.dp)
                 )
             }
         }
+        Spacer(modifier = Modifier.height(2.dp))
+        Text(
+            text = review.text,
+            fontSize = 14.sp,
+            color = Color.DarkGray
+        )
+
+        Spacer(modifier = Modifier.height(6.dp))
+
         Text(
             text = review.reviewer,
             fontWeight = FontWeight.Bold,
@@ -122,5 +97,6 @@ fun ReviewItem(review: ReviewDetailScreen) {
             fontSize = 14.sp,
             modifier = Modifier.padding(top = 2.dp)
         )
+
     }
 }

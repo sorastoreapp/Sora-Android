@@ -1,6 +1,5 @@
 package com.sora.sora.features.profile.screen
 
-
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -13,22 +12,18 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
 import com.sora.sora.core.customText.CustomMontserratText
-import com.sora.sora.ui.theme.AppGray
 import com.sora.sora.ui.theme.AppTextGray
 
-@Preview(showBackground = true)
 @Composable
-fun TermsAndConditionsScreen() {
+fun PrivacyPolicyScreen() {
     val context = LocalContext.current
     var showBackPressed by remember { mutableStateOf(false) }
 
@@ -57,7 +52,7 @@ fun TermsAndConditionsScreen() {
                 }
                 Spacer(modifier = Modifier.width(48.dp))
                 CustomMontserratText(
-                    text = "Terms & Conditions",
+                    text = "Privacy Policies",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
@@ -75,23 +70,23 @@ fun TermsAndConditionsScreen() {
             )
             Spacer(modifier = Modifier.height(8.dp))
             CustomMontserratText(
-                text = "Welcome to Sora Store, your trusted e-commerce platform in Kuwait. By accessing or using our mobile application, you agree to comply with and be bound by these Terms and Conditions. These terms govern your use of the app and establish your legal rights and obligations. Please read them thoroughly before using the application.",
+                text = "Welcome to Sora Store, a premier e-commerce platform in Kuwait. We are committed to protecting your privacy and ensuring the security of your personal data. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application. Please read this policy carefully to understand our practices.",
                 fontSize = 14.sp,
                 color = AppTextGray
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Acceptance of terms section
+            // Acceptance of Privacy Policy section
             CustomMontserratText(
-                text = "Acceptance of Terms",
+                text = "Acceptance of Privacy Policy",
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
                 color = Color.Black
             )
             Spacer(modifier = Modifier.height(8.dp))
             CustomMontserratText(
-                text = "By using Sora Store, you confirm that you have read, understood, and agreed to these Terms and Conditions, along with our Privacy Policy. If you disagree with any part of these terms, please refrain from using our application.",
+                text = "By using Sora Store, you consent to the collection and use of your information in accordance with this Privacy Policy. If you do not agree with the terms, please do not use the application.",
                 fontSize = 14.sp,
                 color = AppTextGray
             )
@@ -107,9 +102,24 @@ fun TermsAndConditionsScreen() {
             )
             Spacer(modifier = Modifier.height(8.dp))
             CustomMontserratText(
-                text = "• You must be at least 18 years of age to use this application. Users under 18 may only use the app with parental consent.\n" +
-                        "• The application is designed for residents of Kuwait and is subject to the laws and regulations of Kuwait.\n" +
-                        "• Users are responsible for ensuring that their use of the application complies with local laws and regulations.",
+                text = "• The application is intended for individuals aged 12 years and above. Users under the age of 18 require parental or guardian consent to use the application.\n" +
+                        "• By using the app, you confirm that you meet this age requirement and have the legal capacity to agree to these terms.",
+                fontSize = 14.sp,
+                color = AppTextGray
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Information We Collect section
+            CustomMontserratText(
+                text = "Information We Collect",
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                color = Color.Black
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            CustomMontserratText(
+                text = "We collect the following categories of information:",
                 fontSize = 14.sp,
                 color = AppTextGray
             )

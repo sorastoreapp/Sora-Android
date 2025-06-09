@@ -25,7 +25,7 @@ fun CustomMontserratText(
     color: Color = Color.Black,
     fontWeight: FontWeight? = null,
     lineHeight: TextUnit? = null,
-    maxLines: Int = 2,
+    maxLines: Int = 1000,
     textAlign: TextAlign? = null,
     textDecoration: TextDecoration? = null,
     overflow: TextOverflow = TextOverflow.Ellipsis,

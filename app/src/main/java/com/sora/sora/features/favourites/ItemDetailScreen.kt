@@ -67,17 +67,26 @@ fun ItemDetailScreen(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            IconButton(
-                onClick = { /* Back action */ },
+
+            Image(
+                painter = painterResource(id = R.drawable.img_back_circular),
+                contentDescription = "Back",
                 modifier = Modifier
-                    .size(40.dp)
-                    .background(PrimaryColorFaded, shape = CircleShape)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Back"
-                )
-            }
+                    .size(50.dp)
+                    .clickable {   } // If       onBackClick is provided, it will be invoked
+            )
+
+//            IconButton(
+//                onClick = { /* Back action */ },
+//                modifier = Modifier
+//                    .size(40.dp)
+//                    .background(PrimaryColorFaded, shape = CircleShape)
+//            ) {
+//                Icon(
+//                    imageVector = Icons.Default.ArrowBack,
+//                    contentDescription = "Back"
+//                )
+//            }
 
             Row {
                 IconButton(

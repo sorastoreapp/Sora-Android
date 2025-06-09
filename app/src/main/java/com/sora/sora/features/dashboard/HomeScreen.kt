@@ -91,7 +91,7 @@ fun HomeScreen() {
 //                .padding(paddingValues)
                 .padding(horizontal = 16.dp)
         ) {
-            CustomTopBar()
+            WelcomeTopBar()
             Spacer(modifier = Modifier.height(16.dp))
             BannerSlider()
             Spacer(modifier = Modifier.height(16.dp))
@@ -195,7 +195,7 @@ data class NavItem(val title: String, val icon: Int, val icon_selected: Int)
 
 
 @Composable
-fun CustomTopBar() {
+fun WelcomeTopBar() {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,

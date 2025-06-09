@@ -125,8 +125,7 @@ fun AppTextField2(
                 color = if (value.isNotEmpty()) PrimaryColor else Color.Transparent,  // Set border color based on focus
                 shape = RoundedCornerShape(24.dp)  // Same shape for border
             ),
-        singleLine = false, // Ensure it allows multi-line text
-        maxLines = 5, // Set the max lines as needed
+        singleLine = true,
         placeholder = {
             CustomMontserratText(  // Use the CustomMontserratText for placeholder
                 text = placeholder,
@@ -159,7 +158,6 @@ fun AppTextField2(
         )
     )
 }
-
 
 
 /**TEXT FIELD WITH MONTSERRAT TEXT AND PREFIX ANY*/

@@ -1,11 +1,11 @@
 package com.sora.sora.features.profile.screen
 
-
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -13,22 +13,18 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
 import com.sora.sora.core.customText.CustomMontserratText
-import com.sora.sora.ui.theme.AppGray
 import com.sora.sora.ui.theme.AppTextGray
 
-@Preview(showBackground = true)
 @Composable
-fun TermsAndConditionsScreen() {
+fun AboutUsScreen() {
     val context = LocalContext.current
     var showBackPressed by remember { mutableStateOf(false) }
 
@@ -38,11 +34,12 @@ fun TermsAndConditionsScreen() {
             .statusBarsPadding()
             .background(Color.White) // Background for the entire screen
     ) {
-        // Column for text content
+        // Column for text content with vertical scrolling enabled
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
+                .verticalScroll(rememberScrollState()) // Makes the content scrollable
         ) {
             // Back Button Section
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -57,7 +54,7 @@ fun TermsAndConditionsScreen() {
                 }
                 Spacer(modifier = Modifier.width(48.dp))
                 CustomMontserratText(
-                    text = "Terms & Conditions",
+                    text = "About Us",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
@@ -68,48 +65,33 @@ fun TermsAndConditionsScreen() {
 
             // Introduction section
             CustomMontserratText(
-                text = "Introduction",
+                text = "About Us – Sora",
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
                 color = Color.Black
             )
             Spacer(modifier = Modifier.height(8.dp))
             CustomMontserratText(
-                text = "Welcome to Sora Store, your trusted e-commerce platform in Kuwait. By accessing or using our mobile application, you agree to comply with and be bound by these Terms and Conditions. These terms govern your use of the app and establish your legal rights and obligations. Please read them thoroughly before using the application.",
+                text = "Welcome to Sora, your go-to destination for premium toys, kids' products, and accessories! We are dedicated to bringing joy and excitement to children while ensuring convenience and reliability for parents.\n ",
                 fontSize = 14.sp,
                 color = AppTextGray
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Acceptance of terms section
+            // Why Choose Sora? section
             CustomMontserratText(
-                text = "Acceptance of Terms",
+                text = "Why Choose Sora?",
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
                 color = Color.Black
             )
             Spacer(modifier = Modifier.height(8.dp))
             CustomMontserratText(
-                text = "By using Sora Store, you confirm that you have read, understood, and agreed to these Terms and Conditions, along with our Privacy Policy. If you disagree with any part of these terms, please refrain from using our application.",
-                fontSize = 14.sp,
-                color = AppTextGray
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Eligibility section
-            CustomMontserratText(
-                text = "Eligibility",
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                color = Color.Black
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            CustomMontserratText(
-                text = "• You must be at least 18 years of age to use this application. Users under 18 may only use the app with parental consent.\n" +
-                        "• The application is designed for residents of Kuwait and is subject to the laws and regulations of Kuwait.\n" +
-                        "• Users are responsible for ensuring that their use of the application complies with local laws and regulations.",
+                text = "• Wide Range of Products – From fun-filled toys to must-have kids' accessories, we have it all!\n\n" +
+                        "• Safe & Trusted – All our products meet safety standards to ensure your child’s well-being.\n\n" +
+                        "• Seamless Shopping – Enjoy a hassle-free shopping experience with easy ordering, secure payments, and fast delivery.\n\n" +
+                        "• Customer-Centric Approach – We prioritize customer satisfaction, offering excellent support and smooth returns.",
                 fontSize = 14.sp,
                 color = AppTextGray
             )

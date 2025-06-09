@@ -68,7 +68,7 @@ fun AddNewAddressScreen() {
 //            )
 //        }
 
-        CustomTopBar(title = "Add New Address")
+        CustomTopBar(title = "Ass Nwq Address")
 
         Spacer(modifier = Modifier.height(24.dp))
 

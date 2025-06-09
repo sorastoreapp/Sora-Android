@@ -72,24 +72,16 @@ fun SignInScreen(
         // Foreground content
 
         // Back button
-        IconButton(
-            onClick = {
-            /* Handle back button click */
-//                onBackPressed()
-            },
+        Image(
+            painter = painterResource(id = R.drawable.img_back_circular),
+            contentDescription = "Back",
             modifier = Modifier
                 .padding(start = 16.dp, top = 55.dp)
-                .size(55.dp)
-                .clip(CircleShape)
-                .background(PrimaryColorFaded) // your primary color
+                .size(45.dp)
+//                .background(PrimaryColorFaded) // your primary color
                 .align(Alignment.TopStart)
-        ) {
-            Icon(
-                imageVector = Icons.Filled.ArrowBack,
-                contentDescription = "Back",
-                tint = Color.Black
-            )
-        }
+                .clickable { /* Handle back button click */ }
+        )
 
         Column(
             modifier = Modifier

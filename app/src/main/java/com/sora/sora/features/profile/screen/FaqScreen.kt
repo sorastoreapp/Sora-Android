@@ -1,11 +1,12 @@
 package com.sora.sora.features.profile.screen
 
-
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -13,22 +14,18 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
 import com.sora.sora.core.customText.CustomMontserratText
-import com.sora.sora.ui.theme.AppGray
 import com.sora.sora.ui.theme.AppTextGray
 
-@Preview(showBackground = true)
 @Composable
-fun TermsAndConditionsScreen() {
+fun FaqScreen() {
     val context = LocalContext.current
     var showBackPressed by remember { mutableStateOf(false) }
 
@@ -43,6 +40,8 @@ fun TermsAndConditionsScreen() {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
+                .verticalScroll(rememberScrollState()) // Makes the content scrollable
+
         ) {
             // Back Button Section
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -57,7 +56,7 @@ fun TermsAndConditionsScreen() {
                 }
                 Spacer(modifier = Modifier.width(48.dp))
                 CustomMontserratText(
-                    text = "Terms & Conditions",
+                    text = "FAQ'S",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
@@ -68,30 +67,30 @@ fun TermsAndConditionsScreen() {
 
             // Introduction section
             CustomMontserratText(
-                text = "Introduction",
+                text = "What is Sora?",
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
                 color = Color.Black
             )
             Spacer(modifier = Modifier.height(8.dp))
             CustomMontserratText(
-                text = "Welcome to Sora Store, your trusted e-commerce platform in Kuwait. By accessing or using our mobile application, you agree to comply with and be bound by these Terms and Conditions. These terms govern your use of the app and establish your legal rights and obligations. Please read them thoroughly before using the application.",
+                text = "Sora is a trusted e-commerce platform that sells toys, kids' products, and accessories.",
                 fontSize = 14.sp,
                 color = AppTextGray
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Acceptance of terms section
+            // Acceptance of Privacy Policy section
             CustomMontserratText(
-                text = "Acceptance of Terms",
+                text = "Where does Sora operate?",
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
                 color = Color.Black
             )
             Spacer(modifier = Modifier.height(8.dp))
             CustomMontserratText(
-                text = "By using Sora Store, you confirm that you have read, understood, and agreed to these Terms and Conditions, along with our Privacy Policy. If you disagree with any part of these terms, please refrain from using our application.",
+                text = "Currently, Sora is designed for residents of Kuwait and follows the local laws and regulations.",
                 fontSize = 14.sp,
                 color = AppTextGray
             )
@@ -100,16 +99,63 @@ fun TermsAndConditionsScreen() {
 
             // Eligibility section
             CustomMontserratText(
-                text = "Eligibility",
+                text = "Who can use the Sora app?",
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
                 color = Color.Black
             )
             Spacer(modifier = Modifier.height(8.dp))
             CustomMontserratText(
-                text = "• You must be at least 18 years of age to use this application. Users under 18 may only use the app with parental consent.\n" +
-                        "• The application is designed for residents of Kuwait and is subject to the laws and regulations of Kuwait.\n" +
-                        "• Users are responsible for ensuring that their use of the application complies with local laws and regulations.",
+                text = "• You must be at least 18 years old to use the app independently.\n" +
+                        "• Users under 18 can use the app with parental consent.\n"+
+                        "• The app is intended for individuals aged 12 and above (as per the privacy policy). \n",
+
+                fontSize = 14.sp,
+                color = AppTextGray
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Information We Collect section
+            CustomMontserratText(
+                text = "How do I create an account?",
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                color = Color.Black
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            CustomMontserratText(
+                text = "Simply download the Sora app, sign up with your details, and start shopping!",
+                fontSize = 14.sp,
+                color = AppTextGray
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+            // Information We Collect section
+            CustomMontserratText(
+                text = "How do I place an order?",
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                color = Color.Black
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            CustomMontserratText(
+                text = "Browse products, add items to your cart, and proceed to checkout with a secure payment option.",
+                fontSize = 14.sp,
+                color = AppTextGray
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            CustomMontserratText(
+                text = "What payment methods does Sora accept?",
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                color = Color.Black
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            CustomMontserratText(
+                text = "Sora supports various payment methods, including credit/debit cards and other secure online payment options.",
                 fontSize = 14.sp,
                 color = AppTextGray
             )

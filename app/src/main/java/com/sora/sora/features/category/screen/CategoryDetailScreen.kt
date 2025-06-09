@@ -27,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
+import com.sora.sora.core.CustomTopBar
 import com.sora.sora.features.dashboard.Product
 import com.sora.sora.core.widgets.ProductCard
 
@@ -55,7 +56,7 @@ fun CategoryDetailScreen() {
 
     // Maximum height of the header and min height when collapsed
     val maxHeaderHeight = 230.dp
-    val minHeaderHeight = 70.dp
+    val minHeaderHeight = 90.dp
 
     // Convert scroll offset to px
     val scrollOffsetPx = gridState.firstVisibleItemScrollOffset.toFloat()
@@ -74,7 +75,7 @@ fun CategoryDetailScreen() {
     val teddySize by animateDpAsState(80.dp - (80.dp - 36.dp) * collapseFraction)
 
     Column(modifier = Modifier.fillMaxSize().padding(bottom = 40.dp)) {
-        val topPadding = 44.dp
+        val topPadding = 22.dp
         val topPaddingForTopBar = 44.dp
         val bottomPadding = 16.dp
 
@@ -89,25 +90,26 @@ fun CategoryDetailScreen() {
                 )
                 .padding(bottom = bottomPadding) // Only bottom padding here
         ) {
-            Column(modifier = Modifier.fillMaxSize()) {
+            Column(modifier = Modifier.fillMaxSize().padding(top = topPadding)) {
                 // Top bar - fixed height with top padding
+
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(minHeaderHeight)
-                        .padding(horizontal = 16.dp)
+                        .padding(horizontal = 8.dp)
                         .padding(top = topPaddingForTopBar), // Add top padding here only
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    IconButton(
-                        onClick = { /* Back action */ },
+                    // Back button on the left
+                    Image(
+                        painter = painterResource(id = R.drawable.img_back_circular),
+                        contentDescription = "Back",
                         modifier = Modifier
-                            .size(40.dp)
-                            .background(Color(0xFFFCE9C8), shape = CircleShape)
-                    ) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                    }
+                            .size(70.dp)
+                            .clickable {   } // If onBackClick is provided, it will be invoked
+                    )
 
                     Text(
                         text = "Toys & Plushies",
