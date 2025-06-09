@@ -9,6 +9,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -51,8 +52,11 @@ import kotlinx.serialization.Serializable
 @Composable
 fun OnboardingScreen(navController: NavController) {
     val pages = listOf(
-        R.drawable.onboarding1,
-        R.drawable.onboarding2,
+        R.drawable.img_onboarding1,
+        R.drawable.img_onboarding2,
+        R.drawable.img_onboarding3,
+        R.drawable.img_onboarding4,
+        R.drawable.img_onboarding5,
     )
     var currentPage by remember { mutableStateOf(0) }
 
@@ -75,10 +79,31 @@ fun OnboardingScreen(navController: NavController) {
             modifier = Modifier.fillMaxSize()
         )
 
+        Box(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(top = 50.dp, end = 16.dp)
+                .pointerInput(Unit) {
+                    // Custom touch handling for Skip Button without ripple effect
+                    detectTapGestures {
+                        // Navigate to next screen (skipping onboarding)
+                        navController.navigate(Dest.Welcome::class.toRoute()) {
+                            popUpTo(Dest.OnboardingScreen::class.toRoute()) { inclusive = true }
+                        }
+                    }
+                }
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.img_skip),  // Use your PNG for Skip button
+                contentDescription = "Skip",
+                modifier = Modifier.size(70.dp)
+            )
+        }
+
         Row(
             modifier = Modifier
-                .align(Alignment.BottomStart)
-                .padding(start = 24.dp, bottom = 64.dp),
+                .align(Alignment.TopStart)
+                .padding(start = 24.dp, top = 315.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             pages.forEachIndexed { index, _ ->
@@ -94,8 +119,8 @@ fun OnboardingScreen(navController: NavController) {
 
         Box(
             modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(end = 24.dp, bottom = 64.dp)
+                .align(Alignment.TopEnd)
+                .padding(end = 24.dp, top = 310.dp)
 //                    .offset(x = (-50).dp, y = 150                       .dp) // pushes up and left from center
                 .size(48.dp)
                 .clip(MaterialTheme.shapes.medium)

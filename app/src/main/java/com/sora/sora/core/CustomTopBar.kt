@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
 import com.sora.sora.core.customText.CustomMontserratText
+import com.sora.sora.core.navigations.NavigationManager.navController
 
 @Composable
 fun CustomTopBar(
@@ -38,7 +39,9 @@ fun CustomTopBar(
             contentDescription = "Back",
             modifier = Modifier
                 .size(40.dp)
-                .clickable { onBackClick?.invoke() } // If onBackClick is provided, it will be invoked
+                .clickable { if(onBackClick != null) onBackClick?.invoke() else{
+                    navController.popBackStack()  //
+                }  } // If onBackClick is provided, it will be invoked
         )
 
         // Spacer for the middle portion
