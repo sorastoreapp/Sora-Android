@@ -73,4 +73,7 @@ sealed class Dest{
     @Serializable
     data object SplashScreen : Dest()
 
+    @Serializable
+    data object OrderDetailScreen : Dest()
+
 }

@@ -34,6 +34,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
 import com.sora.sora.core.customButtons.CustomButton
+import com.sora.sora.core.navigations.Dest
+import com.sora.sora.core.navigations.NavigationManager.navController
+import com.sora.sora.core.navigations.toRoute
 import com.sora.sora.ui.theme.PrimaryColor
 
 @Composable
@@ -136,7 +139,11 @@ fun ProfileScreen() {
         ProfileMenuItem(
             iconRes = R.drawable.ic_orders,
             title = "My orders",
-            onClick = { Log.d("ProfileScreen", "My orders clicked") }
+            onClick = {
+                navController.navigate(Dest.OrdersScreen::class.toRoute()) {
+                    popUpTo(Dest.OrdersScreen::class.toRoute()) { inclusive = true }
+                }
+            }
         )
         DottedDivider(color = Color.Gray.copy(alpha = 0.5f))
 

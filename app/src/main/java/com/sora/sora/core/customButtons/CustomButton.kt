@@ -10,9 +10,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.ui.theme.PrimaryColor
+import com.sora.sora.ui.theme.TextFieldColor3
 
 @Composable
 fun CustomButton(
@@ -30,7 +32,9 @@ fun CustomButton(
             .fillMaxWidth()
             .height(65.dp),
         colors = if(secondaryButton) ButtonDefaults.buttonColors(
-            containerColor = Color(0xFFFDF6F6))
+//            containerColor = Color(0xFFECD6B0)
+            containerColor = TextFieldColor3
+        )
 
         else  ButtonDefaults.buttonColors(containerColor = containerColor),
         shape = MaterialTheme.shapes.medium
@@ -39,7 +43,8 @@ fun CustomButton(
         Text(
             text = if (required) "$label" else label, // Append '*' for required fields
             color = if (secondaryButton) Color(0xFFDB5A5A) else textColor,
-            fontSize = 16.sp
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold
         )
     }
 }

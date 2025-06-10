@@ -12,6 +12,7 @@ val SecondaryColor = Color(0xFFB77E3E) // Example color for Sign Up
 val YellowApp = Color(0xFFFFAF17) // Example color for Sign Up
 val TextFieldColor = Color(0xFFF2F2F2) // Example color for Sign Up
 val TextFieldColor2 = Color(0xFFFFF7F2) // Example color for Sign Up
+val TextFieldColor3 = Color(0xFFF8F3EE) // Example color for Order Detail Scrren
 val AppGray = Color(0xFFDCD9D9) // Example color for Sign Up
 val AppTextGray = Color(0xFF928C8A) // Example color for Sign Up
 

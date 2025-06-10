@@ -26,6 +26,7 @@ import com.sora.sora.features.profile.screen.AddReviewScreen
 import com.sora.sora.features.profile.screen.EditProfileScreen
 import com.sora.sora.features.profile.screen.FaqScreen
 import com.sora.sora.features.profile.screen.MyAddressesScreen
+import com.sora.sora.features.profile.screen.OrderDetailScreen
 import com.sora.sora.features.profile.screen.OrdersScreen
 import com.sora.sora.features.profile.screen.PrivacyPolicyScreen
 import com.sora.sora.features.profile.screen.ProfileScreen
@@ -56,7 +57,7 @@ fun MainNavigation(modifier: Modifier = Modifier) {
 
     NavHost(
         navController = navController,
-        startDestination = Dest.OnboardingScreen::class.toRoute(),
+        startDestination = Dest.OrdersScreen::class.toRoute(),
         modifier = modifier
     ) {
          composable(Dest.OnboardingScreen::class.toRoute()) {
@@ -131,6 +132,11 @@ fun MainNavigation(modifier: Modifier = Modifier) {
         composable(Dest.AddReviewScreen::class.toRoute()) { AddReviewScreen() }
         composable(Dest.ReviewDetailScreen::class.toRoute()) { ReviewDetailScreen() }
         composable(Dest.SplashScreen::class.toRoute()) { SplashScreen() }
-
+        composable(Dest.OrderDetailScreen::class.toRoute() + "?status={status}") { backStackEntry ->
+            val status = backStackEntry.arguments?.getString("status")
+            if (status != null) {
+                OrderDetailScreen(status = status)
+            }
+        }
     }
 }
