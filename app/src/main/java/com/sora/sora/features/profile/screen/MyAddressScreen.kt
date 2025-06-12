@@ -6,6 +6,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,6 +29,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
+import com.sora.sora.core.CustomTopBar
+import com.sora.sora.core.navigations.Dest
+import com.sora.sora.core.navigations.NavigationManager.navController
+import com.sora.sora.core.navigations.toRoute
 import com.sora.sora.ui.theme.PrimaryColor
 import com.sora.sora.ui.theme.PrimaryColorFaded
 import com.sora.sora.ui.theme.TextFieldColor
@@ -51,46 +56,52 @@ fun MyAddressesScreen(
         Address(name = "Sophia Martinez", address = "7890 Pearl Tower, Apartment 21A, Fahaheel, Kuwait, 30010", phone = "+965 9543 6789")
     )
 
-    Column(
+    Box (
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
-            .background(Color.White)  // Set background color to white
-            .statusBarsPadding()
-    ) {
-        // Back Button Section
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = { /* Handle back click */ }) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    modifier = Modifier
-                        .background(Color.Gray.copy(alpha = 0.2f), shape = CircleShape)
-                        .padding(10.dp)
-                )
+            .background(color = Color.White)
+    ){
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+                .background(Color.White)  // Set background color to white
+                .statusBarsPadding()
+        ) {
+            // Back Button Section
+//            Row(verticalAlignment = Alignment.CenterVertically) {
+//                IconButton(onClick = { /* Handle back click */ }) {
+//                    Icon(
+//                        imageVector = Icons.Filled.ArrowBack,
+//                        contentDescription = "Back",
+//                        modifier = Modifier
+//                            .background(Color.Gray.copy(alpha = 0.2f), shape = CircleShape)
+//                            .padding(10.dp)
+//                    )
+//                }
+//                Spacer(modifier = Modifier.width(48.dp))
+//                Text(
+//                    text = "My Addresses",
+//                    fontSize = 24.sp,
+//                    fontWeight = FontWeight.SemiBold,
+//                    color = Color.Black
+//                )
+//            }
+
+            CustomTopBar(title = "My Addresses")
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Address List
+            addresses.forEach { address ->
+                AddressCard(address = address)
+                Spacer(modifier = Modifier.height(12.dp))
             }
-            Spacer(modifier = Modifier.width(48.dp))
-            Text(
-                text = "My Addresses",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.Black
-            )
+
+            AddNewAddressButton()
+
         }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Address List
-        addresses.forEach { address ->
-            AddressCard(address = address)
-            Spacer(modifier = Modifier.height(12.dp))
-        }
-
-        AddNewAddressButton()
-
     }
 }
 
@@ -133,7 +144,10 @@ fun AddressCard(address: Address) {
                     Box(
                         modifier = Modifier
                             .size(30.dp) // Set the size of the icon container
-                            .background(PrimaryColorFaded, shape = CircleShape) // Set the filled primary color and circular shape
+                            .background(
+                                PrimaryColorFaded,
+                                shape = CircleShape
+                            ) // Set the filled primary color and circular shape
                             .padding(4.dp) // Padding inside the circle to ensure the icon has space around it
                     ) {
                         Image(
@@ -198,14 +212,19 @@ fun AddNewAddressButton() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(100.dp)
+            .height(75.dp)
             .padding(4.dp)
             .background(TextFieldColor2, shape = RoundedCornerShape(20.dp))
     ) {
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 1.dp),
+                .padding(horizontal = 1.dp)
+                .clickable {
+                navController.navigate(Dest.AddNewAddressScreen::class.toRoute()) {
+                    popUpTo(Dest.OrdersScreen::class.toRoute()) { inclusive = true }
+                }
+            },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center // Aligning content to the start
         ) {
@@ -224,7 +243,7 @@ fun AddNewAddressButton() {
                 text = "Add new address",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
-                color = PrimaryColor
+                color = PrimaryColor,
             )
         }
     }

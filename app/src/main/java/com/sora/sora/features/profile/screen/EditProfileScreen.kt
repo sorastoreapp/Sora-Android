@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
 import com.sora.sora.core.customButtons.CustomButton
+import com.sora.sora.features.profile.widgets.DeleteAccountBottomSheet
 import com.sora.sora.ui.components.AppTextField2
 import com.sora.sora.ui.components.AppTextField3
 import com.sora.sora.ui.theme.PrimaryColor
@@ -48,6 +49,9 @@ fun EditProfileScreen() {
 
     // Scroll state
     val scrollState = rememberScrollState()
+    val showBottomSheet = remember { mutableStateOf(false) }
+
+
 
     Box(
         modifier = Modifier
@@ -177,6 +181,7 @@ fun EditProfileScreen() {
                 }
             )
 
+
             Spacer(modifier = Modifier.height(32.dp))
 
             CustomButton(
@@ -188,10 +193,22 @@ fun EditProfileScreen() {
 
             CustomButton(
                 label = "Delete Account?", // The text that will be displayed on the button
-                onClick = { /* Handle button click */ }, // Action on button click
+                onClick = {
+                    showBottomSheet.value = true
+                }, // Action on button click
                 secondaryButton = true,
             )
 
         }
+    }
+    if (showBottomSheet.value) {
+        DeleteAccountBottomSheet(
+            orderId = "orderId",
+            onDismiss = { showBottomSheet.value = false },
+            onCancelOrder = { orderId ->
+                // Handle order cancellation logic here
+                showBottomSheet.value = false // Close bottom sheet after canceling
+            }
+        )
     }
 }

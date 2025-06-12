@@ -130,7 +130,8 @@ fun BottomNavigationBar(
                             Icon(
                                 painter = painterResource(id = item.icon),
                                 contentDescription = item.title,
-                                modifier = Modifier.size(22.dp)
+                                modifier = Modifier.size(22.dp),
+                                        tint = Color.Unspecified
                             )
                         }
                         if (isSelected) {

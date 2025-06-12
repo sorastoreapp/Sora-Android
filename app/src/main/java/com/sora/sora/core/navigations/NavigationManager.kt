@@ -13,6 +13,6 @@ object NavigationManager {
 
 
 //---------------how to use----------------
-// navController.navigate(Dest.DashBoardScreen::class.toRoute())
+//                          navController.navigate(Dest.DashBoardScreen::class.toRoute())
 
 

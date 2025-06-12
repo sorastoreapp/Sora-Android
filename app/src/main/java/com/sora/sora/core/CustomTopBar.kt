@@ -2,6 +2,7 @@ package com.sora.sora.core
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
@@ -20,7 +22,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
 import com.sora.sora.core.customText.CustomMontserratText
+import com.sora.sora.core.navigations.Dest
 import com.sora.sora.core.navigations.NavigationManager.navController
+import com.sora.sora.core.navigations.toRoute
 
 @Composable
 fun CustomTopBar(
@@ -39,9 +43,15 @@ fun CustomTopBar(
             contentDescription = "Back",
             modifier = Modifier
                 .size(40.dp)
-                .clickable { if(onBackClick != null) onBackClick?.invoke() else{
-                    navController.popBackStack()  //
-                }  } // If onBackClick is provided, it will be invoked
+                .pointerInput(Unit) {
+                    // Custom touch handling for Skip Button without ripple effect
+                    detectTapGestures {
+                        // Navigate to next screen (skipping onboarding)
+                        if(onBackClick != null) onBackClick?.invoke() else{
+                            navController.popBackStack()  //
+                        }
+                    }
+                }
         )
 
         // Spacer for the middle portion

@@ -24,7 +24,7 @@ fun CustomButton(
     modifier: Modifier = Modifier, // Optional modifier to customize the button's appearance
     containerColor: Color = PrimaryColor, // Default button color
     textColor: Color = Color.White, // Text color (default: White)
-    secondaryButton : Boolean = false
+    secondaryButton : Boolean = false,
 ) {
     Button(
         onClick = onClick,
@@ -41,7 +41,7 @@ fun CustomButton(
     ) {
         // Button Text
         Text(
-            text = if (required) "$label" else label, // Append '*' for required fields
+            text = if (required) label else label, // Append '*' for required fields
             color = if (secondaryButton) Color(0xFFDB5A5A) else textColor,
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold

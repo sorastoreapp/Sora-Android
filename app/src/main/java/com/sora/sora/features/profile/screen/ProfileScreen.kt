@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -24,7 +25,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter.Companion.tint
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -117,8 +120,12 @@ fun ProfileScreen() {
                 Image(
                     painter = painterResource(id = R.drawable.ic_edit_bar),
                     contentDescription = "Edit Profile",
-                    modifier = Modifier.size(30.dp),
-                    colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(Color(0xFF8A4C3D))
+                    modifier = Modifier.size(30.dp).pointerInput(Unit){
+                        detectTapGestures {
+                            navController.navigate(Dest.EditProfileScreen::class.toRoute())
+                        }
+                    },
+                    colorFilter = tint(Color(0xFF8A4C3D))
                 )
             }
         }
@@ -150,7 +157,11 @@ fun ProfileScreen() {
         ProfileMenuItem(
             iconRes = R.drawable.ic_address,
             title = "My Addresses",
-            onClick = { Log.d("ProfileScreen", "My Addresses clicked") }
+            onClick = {
+                navController.navigate(Dest.MyAddressScreen::class.toRoute()) {
+                    popUpTo(Dest.OrdersScreen::class.toRoute()) { inclusive = true }
+                }
+            }
         )
         DottedDivider(color = Color.Gray.copy(alpha = 0.5f))
 
@@ -177,7 +188,10 @@ fun ProfileScreen() {
                     ),
                 )
             },
-            onClick = { /* No action on row click, toggle controls state */ }
+            onClick = {
+                navController.navigate(Dest.NotificationScreen::class.toRoute())
+
+            }
         )
         DottedDivider(color = Color.Gray.copy(alpha = 0.5f))
 
@@ -222,28 +236,36 @@ fun ProfileScreen() {
         ProfileMenuItem(
             iconRes = R.drawable.ic_tnc,
             title = "Terms & Conditions",
-            onClick = { Log.d("ProfileScreen", "Terms & Conditions clicked") }
+            onClick = {
+                navController.navigate(Dest.TermConditionScreen::class.toRoute())
+            }
         )
         DottedDivider(color = Color.Gray.copy(alpha = 0.5f))
 
         ProfileMenuItem(
             iconRes = R.drawable.ic_pp,
             title = "Privacy policies",
-            onClick = { Log.d("ProfileScreen", "Privacy policies clicked") }
+            onClick = {
+                navController.navigate(Dest.PrivacyPolicyScreen::class.toRoute())
+            }
         )
         DottedDivider(color = Color.Gray.copy(alpha = 0.5f))
 
         ProfileMenuItem(
             iconRes = R.drawable.ic_faq,
             title = "FAQ’s",
-            onClick = { Log.d("ProfileScreen", "FAQ clicked") }
+            onClick = {
+                navController.navigate(Dest.FaqScreen::class.toRoute())
+            }
         )
         DottedDivider(color = Color.Gray.copy(alpha = 0.5f))
 
         ProfileMenuItem(
             iconRes = R.drawable.ic_about_us,
             title = "About Us",
-            onClick = { Log.d("ProfileScreen", "About Us clicked") }
+            onClick = {
+                navController.navigate(Dest.AboutUsScreen::class.toRoute())
+            }
         )
 
         DottedDivider(color = Color.Gray.copy(alpha = 0.5f))
@@ -251,7 +273,9 @@ fun ProfileScreen() {
         ProfileMenuItem(
             iconRes = R.drawable.ic_contact_us,
             title = "Contact Us",
-            onClick = { Log.d("ProfileScreen", "Contact Us clicked") }
+            onClick = {
+                navController.navigate(Dest.AboutUsScreen::class.toRoute())
+            }
         )
         DottedDivider(color = Color.Gray.copy(alpha = 0.5f))
         Box(
@@ -284,7 +308,12 @@ fun ProfileMenuItem(
         modifier = Modifier
             .fillMaxWidth()
             .height(48.dp)
-            .clickable { onClick() }
+            .pointerInput(Unit) {
+                // Custom touch handling for Skip Button without ripple effect
+                detectTapGestures {
+                    onClick()
+                }
+            }
             .padding(horizontal = 8.dp)
     ) {
         Image(
@@ -345,7 +374,6 @@ fun DottedDivider(
         }
     }
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

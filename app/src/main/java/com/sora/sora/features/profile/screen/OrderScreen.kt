@@ -21,6 +21,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
+import com.sora.sora.core.CustomTopBar
 import com.sora.sora.core.navigations.Dest
 import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.navigations.toRoute
@@ -43,26 +44,29 @@ fun OrdersScreen() {
             .padding(16.dp)
     ) {
         // Back Button Section
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = { /* Handle back click */ }) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    modifier = Modifier
-                        .background(Color.Gray.copy(alpha = 0.2f), shape = CircleShape)
-                        .padding(10.dp)
-                )
-            }
-            Spacer(modifier = Modifier.width(48.dp))
-            Text(
-                text = "My Orders",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.Black
-            )
-        }
+//        Row(verticalAlignment = Alignment.CenterVertically) {
+//            IconButton(onClick = { /* Handle back click */ }) {
+//                Icon(
+//                    imageVector = Icons.Filled.ArrowBack,
+//                    contentDescription = "Back",
+//                    modifier = Modifier
+//                        .background(Color.Gray.copy(alpha = 0.2f), shape = CircleShape)
+//                        .padding(10.dp)
+//                )
+//            }
+//            Spacer(modifier = Modifier.width(48.dp))
+//            Text(
+//                text = "My Orders",
+//                fontSize = 24.sp,
+//                fontWeight = FontWeight.SemiBold,
+//                color = Color.Black
+//            )
+//        }
 
+        CustomTopBar(title = "My Orders")
         Spacer(modifier = Modifier.height(16.dp))
+
+
 
         orders.forEach { order ->
             OrderCard(order = order)
@@ -78,7 +82,7 @@ fun OrderCard(order: Order) {
             .fillMaxWidth()
             .height(180.dp)
             .clickable {
-                navController.navigate(Dest.OrderDetailScreen::class.toRoute() + "?status=Processing")
+                navController.navigate(Dest.OrderDetailScreen::class.toRoute() + "?status=Refund")
             }
              ,
         shape = RoundedCornerShape(15.dp),
@@ -90,7 +94,6 @@ fun OrderCard(order: Order) {
                 .fillMaxSize()
                 .padding(4.dp)
         ) {
-
 
             // Order Details Column
             Column(
@@ -168,7 +171,7 @@ fun OrderCard(order: Order) {
                     color = Color.Black
                 )
 
-                      Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(4.dp))
 
                 // Order Status Button
                 Box(

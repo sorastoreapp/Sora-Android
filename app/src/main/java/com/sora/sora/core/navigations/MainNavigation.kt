@@ -26,6 +26,7 @@ import com.sora.sora.features.profile.screen.AddReviewScreen
 import com.sora.sora.features.profile.screen.EditProfileScreen
 import com.sora.sora.features.profile.screen.FaqScreen
 import com.sora.sora.features.profile.screen.MyAddressesScreen
+import com.sora.sora.features.profile.screen.NotificationScreen
 import com.sora.sora.features.profile.screen.OrderDetailScreen
 import com.sora.sora.features.profile.screen.OrdersScreen
 import com.sora.sora.features.profile.screen.PrivacyPolicyScreen
@@ -57,7 +58,7 @@ fun MainNavigation(modifier: Modifier = Modifier) {
 
     NavHost(
         navController = navController,
-        startDestination = Dest.OrdersScreen::class.toRoute(),
+        startDestination = Dest.SplashScreen::class.toRoute(),
         modifier = modifier
     ) {
          composable(Dest.OnboardingScreen::class.toRoute()) {
@@ -103,7 +104,6 @@ fun MainNavigation(modifier: Modifier = Modifier) {
             )
         }
 
-
         composable(Dest.HomeScreen::class.toRoute()) {
             HomeScreen( )
         }
@@ -132,6 +132,7 @@ fun MainNavigation(modifier: Modifier = Modifier) {
         composable(Dest.AddReviewScreen::class.toRoute()) { AddReviewScreen() }
         composable(Dest.ReviewDetailScreen::class.toRoute()) { ReviewDetailScreen() }
         composable(Dest.SplashScreen::class.toRoute()) { SplashScreen() }
+        composable(Dest.NotificationScreen::class.toRoute()) { NotificationScreen() }
         composable(Dest.OrderDetailScreen::class.toRoute() + "?status={status}") { backStackEntry ->
             val status = backStackEntry.arguments?.getString("status")
             if (status != null) {
