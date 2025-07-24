@@ -6,7 +6,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.*
@@ -21,10 +20,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.sora.sora.core.CustomTopBar
+import com.sora.sora.core.CustomTopBar2
 import com.sora.sora.ui.components.AppTextField
 import com.sora.sora.ui.theme.PrimaryColor
-import com.sora.sora.ui.theme.PrimaryColorFaded
 import com.sora.sora.ui.theme.TextFieldColor
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -106,7 +104,7 @@ fun AccountDetailsScreen(
 //                    modifier = Modifier.padding(start = 40.dp)
 //                )
 //            }
-            CustomTopBar(title = "Account Details", space = 50.dp)
+            CustomTopBar2(title = "Account Details", space = 50.dp)
 
             // Profile Image + Lock Icon
             Box(

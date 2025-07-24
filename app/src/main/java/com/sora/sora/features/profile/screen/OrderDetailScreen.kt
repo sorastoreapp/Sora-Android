@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -24,7 +22,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
-import com.sora.sora.core.CustomTopBar
+import com.sora.sora.core.CustomTopBar2
 import com.sora.sora.core.OrderStatusEnum
 import com.sora.sora.core.customButtons.CustomButton
 import com.sora.sora.core.customText.CustomMontserratText
@@ -35,8 +33,6 @@ import com.sora.sora.features.profile.widgets.OrderCancelBottomSheet
 import com.sora.sora.ui.theme.AppTextGray
 import com.sora.sora.ui.theme.PrimaryColor
 import com.sora.sora.ui.theme.SecondaryColor
-import com.sora.sora.ui.theme.TextFieldColor
-import com.sora.sora.ui.theme.TextFieldColor2
 import com.sora.sora.ui.theme.TextFieldColor3
 
 @Composable
@@ -74,7 +70,7 @@ fun OrderDetailScreen(status: String, ) {
         ) {
             item {
                 // Back Button Section
-                CustomTopBar("Order Details")
+                CustomTopBar2("Order Details")
 
                 Spacer(modifier = Modifier.height(16.dp))
 

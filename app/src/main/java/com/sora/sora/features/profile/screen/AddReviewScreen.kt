@@ -3,18 +3,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -22,21 +14,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.Font
 import com.sora.sora.R
-import com.sora.sora.core.CustomTopBar
+import com.sora.sora.core.CustomTopBar2
 import com.sora.sora.core.customButtons.CustomButton
 import com.sora.sora.core.customText.CustomMontserratText
 import com.sora.sora.ui.components.AppTextField2
-import com.sora.sora.ui.theme.PrimaryColor
-import com.sora.sora.ui.theme.PrimaryColorFaded
-import com.sora.sora.ui.theme.TextFieldColor
 
 @Composable
 fun AddReviewScreen() {
@@ -64,7 +46,7 @@ fun AddReviewScreen() {
             modifier = Modifier.fillMaxWidth()
         ) {
 
-            CustomTopBar(title = "Add reviews")
+            CustomTopBar2(title = "Add reviews")
 //            IconButton(onClick = { /* Handle back click */ }) {
 //                Icon(
 //                    imageVector = Icons.Filled.ArrowBack,

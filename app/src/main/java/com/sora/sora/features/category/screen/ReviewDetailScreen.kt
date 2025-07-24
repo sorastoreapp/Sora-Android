@@ -1,6 +1,5 @@
 package com.sora.sora.features.favourites.widgets
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -8,16 +7,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
-import androidx.compose.foundation.clickable
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import com.sora.sora.core.CustomTopBar
+import com.sora.sora.core.CustomTopBar2
 
 
 @Composable
@@ -44,7 +38,7 @@ fun ReviewDetailScreen() {
     Column(modifier = Modifier.padding(16.dp).fillMaxWidth().statusBarsPadding(),) {
         // Header Row with title and expand/collapse icon
 
-        CustomTopBar(title = "Reviews", space = 110.dp)
+        CustomTopBar2(title = "Reviews", space = 110.dp)
         Spacer(modifier = Modifier.height(40.dp))
         reviews.forEachIndexed { index, review ->
             ReviewItemDetails(review = review)

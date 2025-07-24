@@ -2,6 +2,7 @@ package com.sora.sora.core.navigations
 
 import CategoryDetailScreen
 import SignInScreen
+import SplashScreen
 import WelcomeScreen
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
@@ -32,7 +33,6 @@ import com.sora.sora.features.profile.screen.OrdersScreen
 import com.sora.sora.features.profile.screen.PrivacyPolicyScreen
 import com.sora.sora.features.profile.screen.ProfileScreen
 import com.sora.sora.features.profile.screen.TermsAndConditionsScreen
-import com.sora.sora.features.static_screens.SplashScreen
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
@@ -58,7 +58,7 @@ fun MainNavigation(modifier: Modifier = Modifier) {
 
     NavHost(
         navController = navController,
-        startDestination = Dest.SplashScreen::class.toRoute(),
+        startDestination = Dest.Welcome::class.toRoute(),
         modifier = modifier
     ) {
          composable(Dest.OnboardingScreen::class.toRoute()) {

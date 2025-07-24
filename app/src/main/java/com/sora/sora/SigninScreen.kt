@@ -3,7 +3,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -17,7 +16,6 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -31,20 +29,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
+import com.sora.sora.core.CustomAppBar
+import com.sora.sora.core.customText.CustomMontserratText
 import com.sora.sora.core.navigations.NavigationManager.navController
-import com.sora.sora.ui.theme.PrimaryColor
-import com.sora.sora.ui.theme.PrimaryColorFaded
+import com.sora.sora.ui.theme.SecondaryColor
+import com.sora.sora.ui.theme.SecondaryColor100
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -72,32 +70,56 @@ fun SignInScreen(
             modifier = Modifier.fillMaxSize()
         )
 
-        // Foreground content
+        CustomAppBar(
+            title = "Sign in",
+            onBackClick = { navController.popBackStack()
+            }
+        )
+
+
+        /***/
 
         // Back button
-        Image(
-            painter = painterResource(id = R.drawable.img_back_circular),
-            contentDescription = "Back",
-            modifier = Modifier
-                .padding(start = 16.dp, top = 55.dp)
-                .size(45.dp)
-//                .background(PrimaryColorFaded) // your primary color
-                .align(Alignment.TopStart)
-                .pointerInput(Unit) {
-                    detectTapGestures {
-                        navController.popBackStack()
-                    }
-                }
-        )
+//        Row(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(top = 55.dp, start = 16.dp, end = 16.dp),
+//            verticalAlignment = Alignment.CenterVertically
+//        ) {
+//            Box(
+//                modifier = Modifier
+//                    .size(40.dp)
+//                    .clip(CircleShape)
+//                    .background(SecondaryColor100)
+//                    .clickable { navController.popBackStack() }
+//            ) {
+//                Icon(
+//                    imageVector = Icons.Filled.ArrowBack,
+//                    contentDescription = "Back",
+//                    tint = SecondaryColor,
+//                    modifier = Modifier
+//                        .align(Alignment.Center)
+//                        .size(20.dp)
+//                )
+//            }
+//
+//            CustomMontserratText(
+//                text = "Sign in",
+//                modifier = Modifier
+//                    .weight(1f)
+//                    .padding(end = 40.dp), // To offset the back button width
+//                textAlign = TextAlign.Center,
+//                fontSize = 20.sp,
+//                fontWeight = FontWeight.Bold
+//            )
+//        }
 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.TopCenter)
-                .padding(horizontal = 24.dp, vertical = 270.dp)
+                .padding(horizontal = 24.dp, vertical = (174*1.1).dp)
         ) {
-            // Spacer for top content, you can adjust padding as per design
-
             // Phone input row with country code selector
             Row(
                 modifier = Modifier
@@ -121,6 +143,7 @@ fun SignInScreen(
                             contentDescription = "Select Country Code"
                         )
                     }
+
                     DropdownMenu(
                         expanded = expanded,
                         onDismissRequest = { expanded = false }

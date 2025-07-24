@@ -49,7 +49,8 @@ import com.sora.sora.ui.theme.TextFieldColor
  * @param keyboardType keyboard input type
  * @param modifier optional Modifier
  */
-@OptIn(ExperimentalMaterial3Api::class)
+
+@OptIn(ExperimentalMaterial3Api::class) //annotation
 @Composable
 fun AppTextField(
     value: String,

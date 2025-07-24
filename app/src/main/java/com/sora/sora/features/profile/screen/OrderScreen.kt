@@ -4,29 +4,22 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
-import com.sora.sora.core.CustomTopBar
+import com.sora.sora.core.CustomTopBar2
 import com.sora.sora.core.navigations.Dest
 import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.navigations.toRoute
-import com.sora.sora.ui.theme.PrimaryColor
-import com.sora.sora.ui.theme.PrimaryColorFaded
 
 
 @Composable
@@ -63,7 +56,7 @@ fun OrdersScreen() {
 //            )
 //        }
 
-        CustomTopBar(title = "My Orders")
+        CustomTopBar2(title = "My Orders")
         Spacer(modifier = Modifier.height(16.dp))
 
 

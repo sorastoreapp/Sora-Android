@@ -1,8 +1,10 @@
 package com.sora.sora.core.customButtons
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -13,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sora.sora.core.customText.CustomMontserratText
 import com.sora.sora.ui.theme.PrimaryColor
 import com.sora.sora.ui.theme.TextFieldColor3
 
@@ -46,5 +49,33 @@ fun CustomButton(
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold
         )
+    }
+}
+
+
+
+@Composable
+fun PrimaryButton(
+    text: String,
+    onClick: () -> Unit,
+    backgroundColor: Color = PrimaryColor, // Default value for the background color
+    textColor: Color = Color.White, // Default value for the text color
+    height: Int = 57, // Default height
+    modifier: Modifier = Modifier, // Default empty modifier
+    borderColor: Color? = null, // Optional border color
+//    shape: androidx.compose.foundation.shape.CornerBasedShape = MaterialTheme.shapes.large // Default shape
+    shape: RoundedCornerShape = RoundedCornerShape(20.dp),
+) {
+    Button(
+        onClick = onClick,
+        modifier = modifier
+            .fillMaxWidth()
+            .height(height.dp)
+            .then(if (borderColor != null) Modifier.border(2.dp, borderColor, shape) else Modifier), // Apply border if given
+        colors = ButtonDefaults.buttonColors(containerColor = backgroundColor),
+        shape = shape
+    ) {
+        CustomMontserratText(
+            text = text, color = textColor, fontSize = 16.sp, fontWeight = FontWeight.Bold)
     }
 }

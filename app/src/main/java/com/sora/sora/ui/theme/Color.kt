@@ -8,7 +8,9 @@ val Pink80 = Color(0xFFEFB8C8)
 
 val PrimaryColor = Color(0xFF8A4C3D)
 val PrimaryColorFaded = PrimaryColor.copy(alpha = 0.1f)
+val PrimaryColor100 = Color(0xFFFFF7F2)
 val SecondaryColor = Color(0xFFB77E3E) // Example color for Sign Up
+val SecondaryColor100 = Color(0xFFFBF9F6) // Example color for Sign Up
 val YellowApp = Color(0xFFFFAF17) // Example color for Sign Up
 val TextFieldColor = Color(0xFFF2F2F2) // Example color for Sign Up
 val TextFieldColor2 = Color(0xFFFFF7F2) // Example color for Sign Up

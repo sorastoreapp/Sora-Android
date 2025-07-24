@@ -68,4 +68,6 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
 
     implementation(libs.kotlinx.serialization.json)
+    // Lottie Compose
+    implementation("com.airbnb.android:lottie-compose:5.0.3")
 }

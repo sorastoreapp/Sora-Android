@@ -18,11 +18,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.sora.sora.core.CustomTopBar
+import com.sora.sora.core.CustomTopBar2
 import com.sora.sora.core.customButtons.CustomButton
 import com.sora.sora.core.customText.CustomMontserratText
 import com.sora.sora.core.navigations.NavigationManager.navController
-import com.sora.sora.features.dashboard.WelcomeTopBar
 import com.sora.sora.ui.components.AppTextField2
 import com.sora.sora.ui.theme.PrimaryColor
 import com.sora.sora.ui.theme.TextFieldColor
@@ -259,7 +258,7 @@ fun AddNewAddressScreen() {
             .statusBarsPadding()
     ) {
 
-        CustomTopBar(title = "Add New Address")
+        CustomTopBar2(title = "Add New Address")
 
         Spacer(modifier = Modifier.height(24.dp))
 
