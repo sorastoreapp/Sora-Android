@@ -39,10 +39,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
 import com.sora.sora.core.CustomAppBar
+import com.sora.sora.core.customButtons.PrimaryButton
 import com.sora.sora.core.customText.CustomMontserratText
+import com.sora.sora.core.hFactor
 import com.sora.sora.core.navigations.NavigationManager.navController
-import com.sora.sora.ui.theme.SecondaryColor
-import com.sora.sora.ui.theme.SecondaryColor100
+import com.sora.sora.core.vFactor
+import com.sora.sora.ui.components.AppTextField
+import com.sora.sora.ui.components.AppTextField2
+import com.sora.sora.ui.components.AppTextField3
+import com.sora.sora.ui.components.AppTextFieldWithSuffix
+import com.sora.sora.ui.theme.DividerGray
+import com.sora.sora.ui.theme.PrimaryColor
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -56,9 +63,8 @@ fun SignInScreen(
 ) {
     // Example country codes - you can replace with full list or a library
     val countryCodes = listOf("+49", "+1", "+44")
-    var expanded by remember { mutableStateOf(false) }
-    var selectedCountryCode by remember { mutableStateOf(countryCodes[0]) }
-    var phoneNumber by remember { mutableStateOf("") }
+    var phoneController by remember { mutableStateOf("") }
+    var emailController by remember { mutableStateOf("") }
 
     Box(
         modifier = modifier.fillMaxSize()
@@ -72,159 +78,110 @@ fun SignInScreen(
 
         CustomAppBar(
             title = "Sign in",
-            onBackClick = { navController.popBackStack()
+            onBackClick = {
+                navController.popBackStack()
             }
         )
-
-
-        /***/
-
-        // Back button
-//        Row(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(top = 55.dp, start = 16.dp, end = 16.dp),
-//            verticalAlignment = Alignment.CenterVertically
-//        ) {
-//            Box(
-//                modifier = Modifier
-//                    .size(40.dp)
-//                    .clip(CircleShape)
-//                    .background(SecondaryColor100)
-//                    .clickable { navController.popBackStack() }
-//            ) {
-//                Icon(
-//                    imageVector = Icons.Filled.ArrowBack,
-//                    contentDescription = "Back",
-//                    tint = SecondaryColor,
-//                    modifier = Modifier
-//                        .align(Alignment.Center)
-//                        .size(20.dp)
-//                )
-//            }
-//
-//            CustomMontserratText(
-//                text = "Sign in",
-//                modifier = Modifier
-//                    .weight(1f)
-//                    .padding(end = 40.dp), // To offset the back button width
-//                textAlign = TextAlign.Center,
-//                fontSize = 20.sp,
-//                fontWeight = FontWeight.Bold
-//            )
-//        }
 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.TopCenter)
-                .padding(horizontal = 24.dp, vertical = (174*1.1).dp)
+                .padding(horizontal = hFactor(20), vertical = vFactor(174))
         ) {
-            // Phone input row with country code selector
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-                    .clip(MaterialTheme.shapes.medium)
-                    .background(Color(0xFFF2F2F2))
-                    .padding(horizontal = 12.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box {
-                    Row(
-                        modifier = Modifier
-                            .clickable { expanded = true }
-                            .padding(horizontal = 8.dp, vertical = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(selectedCountryCode, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                        Icon(
-                            imageVector = Icons.Default.ArrowDropDown,
-                            contentDescription = "Select Country Code"
+
+            CustomMontserratText(
+                text = "Login by your Email",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.W500,
+                color = PrimaryColor
+            )
+
+            // i want spacer vertical below
+            Spacer(modifier = Modifier.height(vFactor(20)))
+
+            AppTextFieldWithSuffix(
+                value = emailController,
+                onValueChange = { emailController = it },
+                placeholder = "Email",
+                suffix = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_email),
+                        contentDescription = "Email",
+                        Modifier.size(20.dp),
+//                        tint = Color.Gray
+                    )
+                },
+                keyboardType = KeyboardType.Email,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(vFactor(20)))
+
+            AppTextFieldWithSuffix(
+                value = phoneController,
+                onValueChange = { phoneController = it },
+                placeholder = "Password",
+                suffix = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_eye_open),
+                        contentDescription = "Password",
+                        Modifier.size(20.dp),
+
                         )
-                    }
+                },
+                keyboardType = KeyboardType.Email,
+                modifier = Modifier.fillMaxWidth()
+            )
 
-                    DropdownMenu(
-                        expanded = expanded,
-                        onDismissRequest = { expanded = false }
-                    ) {
-                        countryCodes.forEach { code ->
-                            DropdownMenuItem(
-                                text = { Text(code) },
-                                onClick = {
-                                    selectedCountryCode = code
-                                    expanded = false
-                                    onCountryCodeChange(code)
-                                }
-                            )
-                        }
-                    }
-                }
 
-                Spacer(modifier = Modifier.width(4.dp))
-                // Vertical divider line between country code and phone number
-                Box(
-                    modifier = Modifier
-                        .width(1.dp)
-                        .height(32.dp)   // slightly smaller than row height for nice padding
-                        .background(Color.Gray)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                // Phone number input field
-                TextField(
-                    value = phoneNumber,
-                    onValueChange = { phoneNumber = it },
-                    placeholder = { Text(text = "(308) 555-0121") },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true,
-                    colors = TextFieldDefaults.textFieldColors(
-                        containerColor = Color.Transparent,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent
-                    ),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
-                )
-            }
+            Spacer(modifier = Modifier.height(vFactor(10)))
 
-            Spacer(modifier = Modifier.height(24.dp))
+            CustomMontserratText(
+                text = "Forget Password?",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.W600,
+                color = PrimaryColor,
+                modifier = Modifier.padding(start = hFactor(10))
+            )
 
-            // Login button
-            Button(
-                onClick = { onLoginClick(selectedCountryCode + phoneNumber) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7B3F00))
-            ) {
-                Text("Login", color = Color.White, fontSize = 16.sp)
-            }
+            Spacer(modifier = Modifier.height(vFactor(20)))
 
-            Spacer(modifier = Modifier.height(24.dp))
+            // Login Button
+            PrimaryButton(
+                text = "Sign in",
+                backgroundColor = PrimaryColor,
+                onClick = { onLoginClick(phoneController) },
+            )
+
+            Spacer(modifier = Modifier.height(vFactor(15)))
 
             // OR separator
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = hFactor(48))
             ) {
                 Divider(
-                    color = Color.Gray,
+                    color = DividerGray,
                     thickness = 1.dp,
                     modifier = Modifier.weight(1f)
                 )
-                Text(
+                CustomMontserratText(
                     " OR ",
                     color = Color.Gray,
-                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp,
                     modifier = Modifier.padding(horizontal = 8.dp)
                 )
                 Divider(
-                    color = Color.Gray,
+                    color = DividerGray,
                     thickness = 1.dp,
                     modifier = Modifier.weight(1f)
                 )
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(30.dp))
 
             // Social login buttons
             Row(
@@ -239,18 +196,20 @@ fun SignInScreen(
                 SocialLoginButton(R.drawable.ic_apple) { onSocialLoginClick("Apple") }
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(vFactor(20)))
 
             // Register prompt
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.Top,
             ) {
-                Text("Don't have account? ")
-                Text(
+                CustomMontserratText("Don't have account? ", fontSize = 14.sp, color = Color.Black)
+                CustomMontserratText(
                     text = "Register Now",
-                    color = Color(0xFF7B3F00),
+                    color = PrimaryColor,
                     fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp,
                     modifier = Modifier.clickable { onRegisterClick() }
                 )
             }
@@ -262,20 +221,21 @@ fun SignInScreen(
 fun SocialLoginButton(@DrawableRes iconRes: Int, onClick: () -> Unit) {
     OutlinedButton(
         onClick = onClick,
-        modifier = Modifier.height(50.dp).width(70.dp),
+        modifier = Modifier
+            .height(45.dp)
+            .width(65.dp),
         shape = MaterialTheme.shapes.medium,
         contentPadding = PaddingValues(0.dp),
-        border = BorderStroke(1.dp, Color(0xFFD9D9D9)),
+        border = BorderStroke(0.5.dp, Color(0xFFD9D9D9)),
         colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.White)
     ) {
         Image(
             painter = painterResource(id = iconRes),
             contentDescription = null,
-            modifier = Modifier.size(24.dp)
+            modifier = Modifier.size(20.dp)
         )
     }
 }
-
 
 
 @Preview(showBackground = true)

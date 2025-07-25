@@ -68,7 +68,7 @@ fun CustomAppBar(
             ) {
               if(isBackButton)  Box(
                     modifier = Modifier
-                        .size(40.dp)
+                        .size(45.dp)
                         .clip(CircleShape)
                         .background(SecondaryColor100)
 
@@ -79,7 +79,7 @@ fun CustomAppBar(
                         tint = backIconColor,
                         modifier = Modifier
                             .align(Alignment.Center)
-                            .size(20.dp)
+                            .size(24.dp)
                     )
                 }
             }

@@ -1,7 +1,10 @@
 package com.sora.sora.ui.components
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -33,7 +36,70 @@ import androidx.compose.ui.unit.sp
 import com.sora.sora.R
 import com.sora.sora.core.customText.CustomMontserratText
 import com.sora.sora.ui.theme.PrimaryColor
+import com.sora.sora.ui.theme.PrimaryColor100
+import com.sora.sora.ui.theme.SecondaryColor100
 import com.sora.sora.ui.theme.TextFieldColor
+import com.sora.sora.ui.theme.TextFieldColorX
+import com.sora.sora.ui.theme.TextHintColor
+
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AppTextFieldWithSuffix(
+    value: String,
+    onValueChange: (String) -> Unit,
+    placeholder: String,
+    prefixIcon: Painter? = null,
+    suffix: @Composable (() -> Unit)? = null,
+    height: Dp? = null,
+    keyboardType: KeyboardType = KeyboardType.Text,
+    modifier: Modifier = Modifier
+) {
+    TextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = modifier
+            .height(height ?: 60.dp)
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(20.dp)),
+        singleLine = true,
+        placeholder = {
+            CustomMontserratText(
+                text = placeholder,
+                color = TextHintColor,
+                fontSize = 14.sp,
+                textAlign = TextAlign.Start,
+            )
+        },
+        leadingIcon = prefixIcon?.let { painter ->
+            {
+                Icon(
+                    painter = painter,
+                    contentDescription = null,
+                    modifier = Modifier.size(32.dp),
+                    tint = Color.Unspecified,
+                )
+            }
+        },
+        trailingIcon = suffix,
+        colors = TextFieldDefaults.textFieldColors(
+            focusedLabelColor = Color.Black,
+            cursorColor = PrimaryColor,
+            containerColor = PrimaryColor100,  // Set the background color here
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent,
+        ),
+        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+        textStyle = LocalTextStyle.current.copy(
+            textAlign = TextAlign.Start
+        )
+    )
+}
+
+
+
 
 /**
  * A rectangular, filled text field with a prefix icon and static placeholder.
@@ -217,18 +283,29 @@ fun AppTextField3(
 }
 
 
+
 @Preview(showBackground = true)
 @Composable
-fun PreviewAppTextField() {
-    var text: String by remember { mutableStateOf("") }
+fun UseAppTextFieldWithSuffix() {
+    var text by remember { mutableStateOf("") }
 
-    AppTextField(
-        value = text,
-        onValueChange = { text = it },
-        placeholder = "Leslie Alexander",
-        prefixIcon = painterResource(id = R.drawable.ic_favoritess),  // your preview icon
-        modifier   = Modifier
-            .fillMaxWidth()
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
             .padding(16.dp)
-    )
+    ) {
+        AppTextFieldWithSuffix(
+            value = text,
+            onValueChange = { text = it },
+            placeholder = "Email",
+            suffix = {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_email),
+                    contentDescription = "Email",
+                )
+            },
+            keyboardType = KeyboardType.Email,
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
 }
