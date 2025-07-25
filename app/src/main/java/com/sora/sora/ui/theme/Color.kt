@@ -8,6 +8,7 @@ val PurpleGrey80 = Color(0xFFCCC2DC)
 val Pink80 = Color(0xFFEFB8C8)
 
 val PrimaryColor = Color(0xFF8A4C3D)
+val AppTextColor = Color(0xFF1C0F0CB2)
 val PrimaryColorFaded = PrimaryColor.copy(alpha = 0.1f)
 val PrimaryColor100 = Color(0xFFFFF7F2)
 val SecondaryColor = Color(0xFFB77E3E)
@@ -23,7 +24,7 @@ val DividerGray = Color(0xFFE5E5E5)
 
 //
 val TextHintColor = Color.Black.copy(alpha = 0.6f)
-
+val AppSubTextColor = Color.Black.copy(alpha = 0.7f)
 
 val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)

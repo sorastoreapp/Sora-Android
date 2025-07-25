@@ -3,6 +3,7 @@ package com.sora.sora.ui.components
 import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,6 +29,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -50,12 +53,44 @@ fun AppTextFieldWithSuffix(
     value: String,
     onValueChange: (String) -> Unit,
     placeholder: String,
+    isPassword: Boolean = false,  // New parameter to determine if the field is for a password
     prefixIcon: Painter? = null,
     suffix: @Composable (() -> Unit)? = null,
     height: Dp? = null,
     keyboardType: KeyboardType = KeyboardType.Text,
     modifier: Modifier = Modifier
 ) {
+    // State for password visibility
+    var passwordVisible by remember { mutableStateOf(false) }
+
+    // Determine the keyboard type and text obscuration based on `isPassword` and `passwordVisible`//
+
+    val visualTransformation = if (isPassword && !passwordVisible) {
+        PasswordVisualTransformation()  // Hide the text
+    } else {
+        VisualTransformation.None  // Show the text
+    }
+
+    // Suffix for password visibility toggle
+    val passwordSuffix: @Composable (() -> Unit)? = if (isPassword) {
+        {
+            Icon(
+                painter = painterResource(
+                    id = if (passwordVisible) R.drawable.ic_eye_close else R.drawable.ic_eye_open
+                ),
+                contentDescription = "Password Visibility Toggle",
+                modifier = Modifier
+                    .size(20.dp)
+                    .clickable {
+                        // Toggle password visibility
+                        passwordVisible = !passwordVisible
+                    }
+            )
+        }
+    } else {
+        suffix // Use the passed suffix if it's not a password field
+    }
+
     TextField(
         value = value,
         onValueChange = onValueChange,
@@ -82,10 +117,10 @@ fun AppTextFieldWithSuffix(
                 )
             }
         },
-        trailingIcon = suffix,
+        trailingIcon = passwordSuffix, // Use the password suffix or provided suffix
         colors = TextFieldDefaults.textFieldColors(
             focusedLabelColor = Color.Black,
-            cursorColor = PrimaryColor,
+            cursorColor =  PrimaryColor,
             containerColor = PrimaryColor100,  // Set the background color here
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
@@ -94,9 +129,11 @@ fun AppTextFieldWithSuffix(
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         textStyle = LocalTextStyle.current.copy(
             textAlign = TextAlign.Start
-        )
+        ),
+        visualTransformation = visualTransformation // Apply the visual transformation for password obscuring
     )
 }
+
 
 
 

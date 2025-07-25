@@ -1,6 +1,7 @@
 package com.sora.sora.core.navigations
 
 import CategoryDetailScreen
+import CreateAccountScreen
 import SignInScreen
 import SplashScreen
 import WelcomeScreen
@@ -12,7 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.sora.sora.AccountDetailsScreen
-import com.sora.sora.OnboardingScreen
+import com.sora.sora.features.static_screens.OnboardingScreen
 import com.sora.sora.core.temp.TempCustomData
 import com.sora.sora.features.dashboard.CartScreen
 import com.sora.sora.features.dashboard.CategoryScreen
@@ -58,7 +59,7 @@ fun MainNavigation(modifier: Modifier = Modifier) {
 
     NavHost(
         navController = navController,
-        startDestination = Dest.Welcome::class.toRoute(),
+        startDestination = Dest.SignIn::class.toRoute(),
         modifier = modifier
     ) {
          composable(Dest.OnboardingScreen::class.toRoute()) {
@@ -92,6 +93,12 @@ fun MainNavigation(modifier: Modifier = Modifier) {
                     navController.navigate(Dest.DashBoardScreen::class.toRoute())
                 },
                 onCountryCodeChange = {}
+            )
+        }
+
+        composable(Dest.CreateAccountScreen::class.toRoute()) {
+            CreateAccountScreen(
+
             )
         }
 

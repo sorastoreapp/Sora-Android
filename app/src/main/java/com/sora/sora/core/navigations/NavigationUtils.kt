@@ -12,6 +12,9 @@ sealed class Dest{
     data object SignIn : Dest()
 
     @Serializable
+    data object CreateAccountScreen : Dest()
+
+    @Serializable
     data object OnboardingScreen : Dest()
 
     @Serializable

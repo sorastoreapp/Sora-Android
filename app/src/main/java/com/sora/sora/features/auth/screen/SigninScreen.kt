@@ -1,26 +1,14 @@
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,12 +16,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -42,11 +27,10 @@ import com.sora.sora.core.CustomAppBar
 import com.sora.sora.core.customButtons.PrimaryButton
 import com.sora.sora.core.customText.CustomMontserratText
 import com.sora.sora.core.hFactor
+import com.sora.sora.core.navigations.Dest
 import com.sora.sora.core.navigations.NavigationManager.navController
+import com.sora.sora.core.navigations.toRoute
 import com.sora.sora.core.vFactor
-import com.sora.sora.ui.components.AppTextField
-import com.sora.sora.ui.components.AppTextField2
-import com.sora.sora.ui.components.AppTextField3
 import com.sora.sora.ui.components.AppTextFieldWithSuffix
 import com.sora.sora.ui.theme.DividerGray
 import com.sora.sora.ui.theme.PrimaryColor
@@ -63,8 +47,11 @@ fun SignInScreen(
 ) {
     // Example country codes - you can replace with full list or a library
     val countryCodes = listOf("+49", "+1", "+44")
-    var phoneController by remember { mutableStateOf("") }
+    var passwordController by remember { mutableStateOf("") }
     var emailController by remember { mutableStateOf("") }
+
+    // State to handle password visibility toggle
+    var passwordVisible by remember { mutableStateOf(false) }
 
     Box(
         modifier = modifier.fillMaxSize()
@@ -103,37 +90,24 @@ fun SignInScreen(
             AppTextFieldWithSuffix(
                 value = emailController,
                 onValueChange = { emailController = it },
-                placeholder = "Email",
+                placeholder = "Enter some text",
                 suffix = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_email),
-                        contentDescription = "Email",
-                        Modifier.size(20.dp),
-//                        tint = Color.Gray
-                    )
+                    Icon(painter = painterResource(id = R.drawable.ic_email), contentDescription = "Some Icon")
                 },
-                keyboardType = KeyboardType.Email,
                 modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(modifier = Modifier.height(vFactor(20)))
 
-            AppTextFieldWithSuffix(
-                value = phoneController,
-                onValueChange = { phoneController = it },
-                placeholder = "Password",
-                suffix = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_eye_open),
-                        contentDescription = "Password",
-                        Modifier.size(20.dp),
+            // Password field
 
-                        )
-                },
-                keyboardType = KeyboardType.Email,
+            AppTextFieldWithSuffix(
+                value = passwordController,
+                onValueChange = { passwordController = it },
+                placeholder = "Password",
+                isPassword = true,  // Set to true for password field
                 modifier = Modifier.fillMaxWidth()
             )
-
 
             Spacer(modifier = Modifier.height(vFactor(10)))
 
@@ -151,7 +125,9 @@ fun SignInScreen(
             PrimaryButton(
                 text = "Sign in",
                 backgroundColor = PrimaryColor,
-                onClick = { onLoginClick(phoneController) },
+                onClick = {
+                    navController.navigate(Dest.CreateAccountScreen::class.toRoute())
+                },
             )
 
             Spacer(modifier = Modifier.height(vFactor(15)))
@@ -216,6 +192,7 @@ fun SignInScreen(
         }
     }
 }
+
 
 @Composable
 fun SocialLoginButton(@DrawableRes iconRes: Int, onClick: () -> Unit) {
