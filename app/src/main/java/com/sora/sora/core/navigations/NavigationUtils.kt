@@ -82,6 +82,15 @@ sealed class Dest{
     @Serializable
     data object NotificationScreen : Dest()
 
+    @Serializable
+    data object ForgetPasswordScreen : Dest()
+
+    @Serializable
+    data object OtpScreen : Dest()
+
+    @Serializable
+    data object NewPasswordScreen : Dest()
+
 }
 
 // -- 
