@@ -118,6 +118,7 @@ fun MainNavigation(modifier: Modifier = Modifier) {
         composable(Dest.DashBoardScreen::class.toRoute()) {
             DashboardScreen( navController = navController)
         }
+
         composable(Dest.CategoryScreen::class.toRoute()) {
             val categories = TempCustomData().categories
             CategoryScreen(  categories = categories )
@@ -140,6 +141,13 @@ fun MainNavigation(modifier: Modifier = Modifier) {
         composable(Dest.ReviewDetailScreen::class.toRoute()) { ReviewDetailScreen() }
         composable(Dest.SplashScreen::class.toRoute()) { SplashScreen() }
         composable(Dest.NotificationScreen::class.toRoute()) { NotificationScreen() }
+        composable(Dest.OrderDetailScreen::class.toRoute() + "?status={status}") { backStackEntry ->
+            val status = backStackEntry.arguments?.getString("status")
+            if (status != null) {
+                OrderDetailScreen(status = status)
+            }
+        }
+
         composable(Dest.OrderDetailScreen::class.toRoute() + "?status={status}") { backStackEntry ->
             val status = backStackEntry.arguments?.getString("status")
             if (status != null) {
