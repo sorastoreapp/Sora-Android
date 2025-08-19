@@ -35,19 +35,19 @@ fun CategoryDetailScreen() {
     var selectedFilter by remember { mutableStateOf(filters[0]) }
 
     val products = listOf(
-        Product(1, "Soft Plush Bear Toy", "KD 1.500", painterResource(R.drawable.img_temp_teddy)),
-        Product(2, "Kids colorful car toy", "KD 1.500",  painterResource(R.drawable.img_temp_multi_toy)),
-        Product(3, "Multiple Kids toys Collection", "KD 1.500",  painterResource(R.drawable.img_temp_multi_toy)),
-        Product(4, "Blue teddy bear wearing", "KD 1.500",  painterResource(R.drawable.img_temp_tshirt)),
-        Product(5, "Colorful building blocks castle", "KD 1.500",  painterResource(R.drawable.img_temp_multi_toy)),
-        Product(6, "Adorable teddy bear loves", "KD 1.500",  painterResource(R.drawable.img_temp_multi_toy)),
-        Product(6, "Adorable teddy bear loves", "KD 1.500",  painterResource(R.drawable.img_temp_multi_toy)),
-        Product(6, "Adorable teddy bear loves", "KD 1.500",  painterResource(R.drawable.img_temp_multi_toy)),
-        Product(6, "Adorable teddy bear loves", "KD 1.500",  painterResource(R.drawable.img_temp_multi_toy)),
-        Product(6, "Adorable teddy bear loves", "KD 1.500",  painterResource(R.drawable.img_temp_multi_toy)),
-        Product(6, "Adorable teddy bear loves", "KD 1.500",  painterResource(R.drawable.img_temp_multi_toy)),
-        Product(6, "Adorable teddy bear loves", "KD 1.500",  painterResource(R.drawable.img_temp_multi_toy)),
-        Product(6, "Adorable teddy bear loves", "KD 1.500",  painterResource(R.drawable.img_temp_multi_toy)),
+        Product(1, "Soft Plush Bear Toy", "1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_teddy)),
+        Product(2, "Kids colorful car toy", "1.500", discountPercent = 20, oldPrice = "2.500",  painterResource(R.drawable.img_temp_multi_toy)),
+        Product(3, "Multiple Kids toys Collection", "1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_multi_toy)),
+        Product(4, "Blue teddy bear wearing", "1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_tshirt)),
+        Product(5, "Colorful building blocks castle", "1.500", discountPercent = 20, oldPrice = "2.500",  painterResource(R.drawable.img_temp_multi_toy)),
+        Product(6, "Adorable teddy bear loves", "1.500", discountPercent = 20, oldPrice = "2.500",  painterResource(R.drawable.img_temp_multi_toy)),
+        Product(6, "Adorable teddy bear loves", "1.500", discountPercent = 20, oldPrice = "2.500",  painterResource(R.drawable.img_temp_multi_toy)),
+        Product(6, "Adorable teddy bear loves", "1.500", discountPercent = 20, oldPrice = "2.500",  painterResource(R.drawable.img_temp_multi_toy)),
+        Product(6, "Adorable teddy bear loves", "1.500", discountPercent = 20, oldPrice = "2.500",  painterResource(R.drawable.img_temp_multi_toy)),
+        Product(6, "Adorable teddy bear loves", "1.500", discountPercent = 20, oldPrice = "2.500",  painterResource(R.drawable.img_temp_multi_toy)),
+        Product(6, "Adorable teddy bear loves", "1.500", discountPercent = 20, oldPrice = "2.500",  painterResource(R.drawable.img_temp_multi_toy)),
+        Product(6, "Adorable teddy bear loves", "1.500", discountPercent = 20, oldPrice = "2.500",  painterResource(R.drawable.img_temp_multi_toy)),
+        Product(6, "Adorable teddy bear loves", "1.500", discountPercent = 20, oldPrice = "2.500",  painterResource(R.drawable.img_temp_multi_toy)),
     )
 
     val gridState = rememberLazyGridState()
