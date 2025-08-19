@@ -1,10 +1,12 @@
 package com.sora.sora.features.dashboard
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
@@ -42,11 +44,11 @@ fun HomeScreen() {
 
     // Dummy categories list
     val categories = listOf(
-        Category(1, "Toys & Plushies", painterResource(R.drawable.img_temp_categories1), Color(0xFFFFE680)),
-        Category(2, "Clothing Products", painterResource(R.drawable.img_temp_categories2), Color(0xFFB0A9F2)),
-        Category(3, "Baby Essentials", painterResource(R.drawable.img_temp_categories3), Color(0xFFF6A2DB)),
-        Category(4, "Cups & Mugs", painterResource(R.drawable.img_temp_categories4), Color(0xFFB7E9BC)),
-        Category(5, "Accessories", painterResource(R.drawable.img_temp_categories4), Color(0xFFD5C2E3))
+        Category(1, "Toys & Plushies", painterResource(R.drawable.ic_temp_toy), Color(0xFFFFE680)),
+        Category(2, "Clothing Products", painterResource(R.drawable.ic_temp_shirts), Color(0xFFB0A9F2)),
+        Category(3, "Baby Essentials", painterResource(R.drawable.ic_temp_baby_essentials), Color(0xFFF6A2DB)),
+        Category(4, "Cups & Mugs", painterResource(R.drawable.ic_temp_cup), Color(0xFFB7E9BC)),
+//        Category(5, "Accessories", painterResource(R.drawable.ic_temp_), Color(0xFFD5C2E3))
     )
 
     // Dummy products list
@@ -90,29 +92,33 @@ fun HomeScreen() {
                 .fillMaxSize()
                 .systemBarsPadding()
                 .verticalScroll(scrollState)
-//                .padding(paddingValues)
-                .padding(horizontal = 16.dp)
         ) {
             WelcomeTopBar()
             Spacer(modifier = Modifier.height(16.dp))
             BannerSlider()
-            Spacer(modifier = Modifier.height(24.dp))
-            CategorySection(categories)
-            Spacer(modifier = Modifier.height(24.dp))
-            ProductSection(title = AppTexts.soraDeals, products = newArrivals)
-            Spacer(modifier = Modifier.height(24.dp))
-            ProductSection(title = "Clothings", products = clothingProducts)
-            Spacer(modifier = Modifier.height(24.dp))
-            OfferCard()
-            Spacer(modifier = Modifier.height(24.dp))
-            ProductSection(title = "Towels", products = towels)
-            Spacer(modifier = Modifier.height(48.dp)) // extra bottom padding
-            ProductSection(title = AppTexts.soraDeals, products = towels)
-            Spacer(modifier = Modifier.height(48.dp)) // extra bottom padding
-            ProductSection(title = "Cups & Mugs", products = mugs)
-            Spacer(modifier = Modifier.height(48.dp)) // extra bottom padding
-            ProductSection(title = "Discount Product", products = discountProducts)
-            Spacer(modifier = Modifier.height(48.dp)) // extra bottom padding
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp)
+            ){
+                Spacer(modifier = Modifier.height(24.dp))
+                CategorySection(categories)
+                Spacer(modifier = Modifier.height(24.dp))
+                ProductSection(title = AppTexts.soraDeals, products = newArrivals)
+                Spacer(modifier = Modifier.height(24.dp))
+                ProductSection(title = "Clothings", products = clothingProducts)
+                Spacer(modifier = Modifier.height(24.dp))
+                OfferCard()
+                Spacer(modifier = Modifier.height(24.dp))
+                ProductSection(title = "Towels", products = towels)
+                Spacer(modifier = Modifier.height(48.dp)) // extra bottom padding
+                ProductSection(title = AppTexts.soraDeals, products = towels)
+                Spacer(modifier = Modifier.height(48.dp)) // extra bottom padding
+                ProductSection(title = "Cups & Mugs", products = mugs)
+                Spacer(modifier = Modifier.height(48.dp)) // extra bottom padding
+                ProductSection(title = "Discount Product", products = discountProducts)
+                Spacer(modifier = Modifier.height(48.dp)) // extra bottom padding
+            }
         }
     }
 }
@@ -199,7 +205,7 @@ data class NavItem(val title: String, val icon: Int, val icon_selected: Int)
 @Composable
 fun WelcomeTopBar() {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -253,7 +259,7 @@ fun BannerSlider(
             state = pagerState,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(180.dp)
+                .height(200.dp)
         ) { page ->
             Image(
                 painter = painterResource(bannerImages[page]),
@@ -261,7 +267,7 @@ fun BannerSlider(
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(180.dp)
+                    .height(200.dp)
             )
         }
 
@@ -326,18 +332,20 @@ fun CategorySection(
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun PreviewCategorySection(){
-//    val categories = listOf(
-//        Category(1, "Toys & Plushies", painterResource(R.drawable.img_temp_categories1), Color(0xFFFFE680)),
-//        Category(2, "Clothing Products", painterResource(R.drawable.img_temp_categories2), Color(0xFFB0A9F2)),
-//        Category(3, "Baby Essentials", painterResource(R.drawable.img_temp_categories3), Color(0xFFF6A2DB)),
-//        Category(4, "Cups & Mugs", painterResource(R.drawable.img_temp_categories4), Color(0xFFB7E9BC)),
-//        Category(5, "Accessories", painterResource(R.drawable.img_temp_categories4), Color(0xFFD5C2E3))
-//    )
+@Preview(showBackground = true)
+@Composable
+fun PreviewCategorySection(){
+    val categories = listOf(
+        Category(1, "Toys & Plushies", painterResource(R.drawable.ic_temp_toy), Color(0xFFFFFAF1)),
+        Category(2, "Clothing Products", painterResource(R.drawable.img_temp_categories2), Color(0xFFF9F8FF)),
+        Category(3, "Baby Essentials", painterResource(R.drawable.img_temp_categories3), Color(0xFFFEF8F8)),
+        Category(4, "Cups & Mugs", painterResource(R.drawable.img_temp_categories4), Color(0xFFF6FFF2)),
+        Category(5, "Accessories", painterResource(R.drawable.img_temp_categories4), Color(0xFFFFF7F7))
+    )
 //    CategorySection(categories = categories, onSeeAllClick = {})
-//}
+
+    CategoryItem(categories[0])
+}
 
 @Composable
 fun CategoryItem(category: Category) {
@@ -346,19 +354,19 @@ fun CategoryItem(category: Category) {
         modifier = Modifier.clickable { /* TODO: Handle click */ }
     ) {
         Box(
-//            modifier = Modifier
-//                .size(60.dp)
-//                .background(category.bgColor, shape = CircleShape),
+            modifier = Modifier
+                .size(55.dp)
+                .background(category.bgColor.copy(alpha = 0.15f), shape = CircleShape),
             contentAlignment = Alignment.Center
         ) {
             Image(
                 painter = category.icon,
                 contentDescription = category.title,
-                modifier = Modifier.size(60.dp)
+                modifier = Modifier.size(35.dp)
             )
         }
         Spacer(modifier = Modifier.height(8.dp))
-        Text(
+        CustomMontserratText(
             category.title,
             fontSize = 10.sp,
             maxLines = 3,
