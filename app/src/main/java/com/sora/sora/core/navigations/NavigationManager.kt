@@ -34,5 +34,6 @@ object NavigationManager {
 //---------------how to use----------------
 // navController.navigate(Dest.DashBoardScreen::class.toRoute())
 // navController.navigateAndReplace(Dest.DashBoardScreen::class.toRoute()) //for push replacement
+// NavigationManager.navigateAndClearStack(Dest.SignIn::class.toRoute())
 
 

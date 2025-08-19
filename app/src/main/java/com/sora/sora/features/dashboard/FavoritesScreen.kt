@@ -134,9 +134,9 @@ fun ProductFavoritesCard(product: Product) {
 @Composable
 fun FavoritesScreen() {
     val favProductList = listOf(
-        Product(4, "Brown Men Full T-shirt", "KD 1.500", painterResource(R.drawable.img_temp_tshirt)),
-        Product(5, "Baby Denim Blue Jean Outfit", "KD 1.500", painterResource(R.drawable.img_temp_shorts)),
-        Product(6, "Brown Men Full T-shirt", "KD 1.500", painterResource(R.drawable.img_temp_tshirt)),
+        Product(4, "Brown Men Full T-shirt", "1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_tshirt)),
+        Product(5, "Baby Denim Blue Jean Outfit", "1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_shorts)),
+        Product(6, "Brown Men Full T-shirt", "1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_tshirt)),
     )
 
     Scaffold(

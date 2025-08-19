@@ -19,6 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -26,13 +27,14 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 import com.sora.sora.R
+import com.sora.sora.core.AppTexts
+import com.sora.sora.core.customText.CustomMontserratText
 import com.sora.sora.core.widgets.ProductSection
 
 // Data classes
 data class Category(val id: Int, val title: String, val icon: Painter, val bgColor: Color)
-data class Product(val id: Int, val title: String, val price: String, val image: Painter)
+data class Product(val id: Int, val title: String, val price: String, val discountPercent: Int, val oldPrice: String, val image: Painter)
 
-// Main Screen
 //@Preview(showBackground = true)
 @Composable
 fun HomeScreen() {
@@ -49,32 +51,32 @@ fun HomeScreen() {
 
     // Dummy products list
     val newArrivals = listOf(
-        Product(1, "Soft Plush Bear Toys", "KD 1.500", painterResource(R.drawable.img_temp_teddy)),
-        Product(2, "Stainless Steel Water Bottle", "KD 1.500", painterResource(R.drawable.img_temp_bottel)),
-        Product(3, "Classic Sunglasses", "KD 1.500", painterResource(R.drawable.img_temp_teddy))
+        Product(1, "Soft Plush Bear Toys", "1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_teddy)),
+        Product(2, "Stainless Steel Water Bottle", "1.500", discountPercent = 20, oldPrice = "2.500",painterResource(R.drawable.img_temp_bottel)),
+        Product(3, "Classic Sunglasses", "1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_teddy))
     )
 
     val clothingProducts = listOf(
-        Product(4, "Brown Men Full T-shirt", "KD 1.500", painterResource(R.drawable.img_temp_tshirt)),
-        Product(5, "Baby Denim Blue Jean Outfit", "KD 1.500", painterResource(R.drawable.img_temp_shorts)),
-        Product(6, "Brown Men Full T-shirt", "KD 1.500", painterResource(R.drawable.img_temp_tshirt)),
+        Product(4, "Brown Men Full T-shirt", "1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_tshirt)),
+        Product(5, "Baby Denim Blue Jean Outfit", "1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_shorts)),
+        Product(6, "Brown Men Full T-shirt", "1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_tshirt)),
     )
 
     val towels = listOf(
-        Product(6, "Basket of clean towels", "KD 1.500", painterResource(R.drawable.img_temp_clean_towel)),
-        Product(7, "Stack of Soft Bath Towels 5 S...", "KD 1.500", painterResource(R.drawable.img_temp_soft_towel)),
-        Product(9, "Stack of Soft Bath Towels 5 S...", "KD 1.500", painterResource(R.drawable.img_temp_clean_towel))
+        Product(6, "Basket of clean towels", "1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_clean_towel)),
+        Product(7, "Stack of Soft Bath Towels 5 S...","1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_soft_towel)),
+        Product(9, "Stack of Soft Bath Towels 5 S...", "1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_clean_towel))
     )
     val mugs = listOf(
-        Product(6, "Elegant Mug A Black Mug", "KD 1.500", painterResource(R.drawable.img_temp_black_mug)),
-        Product(7, "Elegant Mug A Creamy Mug", "KD 1.500", painterResource(R.drawable.img_temp_cream_mug)),
-        Product(9, "Elegant Mug A Black Mug", "KD 1.500", painterResource(R.drawable.img_temp_black_mug))
+        Product(6, "Elegant Mug A Black Mug", "1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_black_mug)),
+        Product(7, "Elegant Mug A Creamy Mug","1.500", discountPercent = 20, oldPrice = "2.500",  painterResource(R.drawable.img_temp_cream_mug)),
+        Product(9, "Elegant Mug A Black Mug", "1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_black_mug))
     )
 
     val discountProducts = listOf(
-        Product(6, "Soft Plush Bear Toys", "KD 1.500", painterResource(R.drawable.img_temp_kids_toy)),
-        Product(7, "Elegant Mug A Creamy Mug", "KD 1.500", painterResource(R.drawable.img_temp_cream_mug)),
-        Product(9, "Stack of Soft Bath Towels 5 S...", "KD 1.500", painterResource(R.drawable.img_temp_soft_towel))
+        Product(6, "Soft Plush Bear Toys", "1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_kids_toy)),
+        Product(7, "Elegant Mug A Creamy Mug", "1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_cream_mug)),
+        Product(9, "Stack of Soft Bath Towels 5 S...", "1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_soft_towel))
     )
 
     // Scaffold for general layout
@@ -94,10 +96,10 @@ fun HomeScreen() {
             WelcomeTopBar()
             Spacer(modifier = Modifier.height(16.dp))
             BannerSlider()
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(24.dp))
             CategorySection(categories)
             Spacer(modifier = Modifier.height(24.dp))
-            ProductSection(title = "New Arrivals", products = newArrivals)
+            ProductSection(title = AppTexts.soraDeals, products = newArrivals)
             Spacer(modifier = Modifier.height(24.dp))
             ProductSection(title = "Clothings", products = clothingProducts)
             Spacer(modifier = Modifier.height(24.dp))
@@ -105,7 +107,7 @@ fun HomeScreen() {
             Spacer(modifier = Modifier.height(24.dp))
             ProductSection(title = "Towels", products = towels)
             Spacer(modifier = Modifier.height(48.dp)) // extra bottom padding
-            ProductSection(title = "Sora Deals", products = towels)
+            ProductSection(title = AppTexts.soraDeals, products = towels)
             Spacer(modifier = Modifier.height(48.dp)) // extra bottom padding
             ProductSection(title = "Cups & Mugs", products = mugs)
             Spacer(modifier = Modifier.height(48.dp)) // extra bottom padding
@@ -207,22 +209,22 @@ fun WelcomeTopBar() {
             modifier = Modifier.size(80.dp)
         )
 
-        Row {
-            IconButton(onClick = { /* TODO: Search Action */ }) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_search),
-                    contentDescription = "Search",
-                    tint = Color.Unspecified
-                )
-            }
-            IconButton(onClick = { /* TODO: Notification Action */ }) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_notification),
-                    contentDescription = "Notification",
-                    tint = Color.Unspecified
-                )
-            }
-        }
+//        Row {
+//            IconButton(onClick = { /* TODO: Search Action */ }) {
+//                Icon(
+//                    painter = painterResource(R.drawable.ic_search),
+//                    contentDescription = "Search",
+//                    tint = Color.Unspecified
+//                )
+//            }
+//            IconButton(onClick = { /* TODO: Notification Action */ }) {
+//                Icon(
+//                    painter = painterResource(R.drawable.ic_notification),
+//                    contentDescription = "Notification",
+//                    tint = Color.Unspecified
+//                )
+//            }
+//        }
     }
 }
 
@@ -277,6 +279,8 @@ fun BannerSlider(
 }
 
 
+
+
 @Composable
 fun CategorySection(
     categories: List<Category>,
@@ -293,21 +297,21 @@ fun CategorySection(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = "Categories",
+            CustomMontserratText(
+                text = AppTexts.categories,
                 fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
+                fontSize = 16.sp,
                 color = Color.Black
             )
-            Text(
-                text = "See All",
+            CustomMontserratText(
+                text = AppTexts.seeAll,
                 color = Color.Gray,
-                fontSize = 14.sp,
+                fontSize = 12.sp,
                 modifier = Modifier.clickable { onSeeAllClick() }
             )
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         Row(
             modifier = Modifier
@@ -322,6 +326,18 @@ fun CategorySection(
     }
 }
 
+//@Preview(showBackground = true)
+//@Composable
+//fun PreviewCategorySection(){
+//    val categories = listOf(
+//        Category(1, "Toys & Plushies", painterResource(R.drawable.img_temp_categories1), Color(0xFFFFE680)),
+//        Category(2, "Clothing Products", painterResource(R.drawable.img_temp_categories2), Color(0xFFB0A9F2)),
+//        Category(3, "Baby Essentials", painterResource(R.drawable.img_temp_categories3), Color(0xFFF6A2DB)),
+//        Category(4, "Cups & Mugs", painterResource(R.drawable.img_temp_categories4), Color(0xFFB7E9BC)),
+//        Category(5, "Accessories", painterResource(R.drawable.img_temp_categories4), Color(0xFFD5C2E3))
+//    )
+//    CategorySection(categories = categories, onSeeAllClick = {})
+//}
 
 @Composable
 fun CategoryItem(category: Category) {
@@ -345,7 +361,7 @@ fun CategoryItem(category: Category) {
         Text(
             category.title,
             fontSize = 10.sp,
-            maxLines = 2,
+            maxLines = 3,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.width(65.dp).align(Alignment.CenterHorizontally),
             fontWeight = FontWeight.Medium,
