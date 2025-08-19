@@ -49,9 +49,9 @@ fun ItemDetailScreen(
     val productDescription = remember { mutableStateOf("Soft, cozy, and designed for unicorn lovers, this plush pillow adds comfort and charm to any space...") }
     // Dummy products list
     val discountProductList = listOf(
-        Product(1, "Kids Colorful car toy", "KD 1.500", painterResource(R.drawable.img_temp_kids_toy)),
-        Product(2, "Brown Men Full T-Short", "KD 1.500", painterResource(R.drawable.img_temp_tshirt)),
-        Product(3, "Stainless Steel Water Bottle", "KD 1.500", painterResource(R.drawable.img_temp_bottel))
+        Product(1, "Kids Colorful car toy", "1.500", discountPercent = 20, oldPrice = "2.500",    painterResource(R.drawable.img_temp_kids_toy)),
+        Product(2, "Brown Men Full T-Short", "1.500", discountPercent = 20, oldPrice = "2.500",       painterResource(R.drawable.img_temp_tshirt)),
+        Product(3, "Stainless Steel Water Bottle", "1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_bottel))
     )
     Column(
         modifier = Modifier
