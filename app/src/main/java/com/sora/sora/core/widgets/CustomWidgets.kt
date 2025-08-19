@@ -373,8 +373,8 @@ fun ProductCard(
     onRemoveFromCart: () -> Unit = {},
     quantity: Int = 0 // <- add this (default keeps old calls working)
 ) {
-    val cardWidth = 170.dp
-    val cardHeight = 240.dp
+    val cardWidth = 190.dp
+    val cardHeight = 263.dp
 
     Card(
         modifier = Modifier
@@ -475,7 +475,7 @@ fun AnimatedAddToCart(
     onRemove: () -> Unit,
     modifier: Modifier = Modifier,
     color: Color = PrimaryColor,
-    autoCollapseMillis: Long = 4000L,
+    autoCollapseMillis: Long = 2000L,
     maxQty: Int = 5,
     minQty: Int = 0
 ) {
@@ -603,226 +603,8 @@ fun AnimatedAddToCart(
 
 
 
-/***/
-
-//@Composable
-//fun ProductCard(product: Product) {
-//    Card(
-//        modifier = Modifier
-//            .width(160.dp)
-//            .height(250.dp),
-//        shape = RoundedCornerShape(18.dp),
-//        elevation = CardDefaults.cardElevation(4.dp),
-//        colors = CardDefaults.cardColors(containerColor = Color.White)
-//    ) {
-//        // ===== Top Product Area =====
-//        Box(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .height(160.dp)
-//                .background(Color(0xFFFDF6F0)) // top light beige
-//        ) {
-//            // Favourite (top-left)
-//            Box(
-//                modifier = Modifier
-//                    .padding(8.dp)
-//                    .size(28.dp)
-//                    .background(Color.White.copy(alpha = 0.8f), CircleShape)
-//                    .align(Alignment.TopStart)
-//                    .clickable {},
-//                contentAlignment = Alignment.Center
-//            ) {
-//                Icon(
-//                    imageVector = Icons.Default.FavoriteBorder,
-//                    contentDescription = null,
-//                    tint = PrimaryColor,
-//                    modifier = Modifier.size(17.dp)
-//                )
-//            }
-//
-//            // Product Image
-//            Image(
-//                painter = product.image,
-//                contentDescription = product.title,
-//                contentScale = ContentScale.Fit,
-//                modifier = Modifier
-//                    .height(110.dp)
-//                    .align(Alignment.Center)
-//            )
-//
-//            // Add (+) button (top-right)
-//            Box(
-//                modifier = Modifier
-//                    .padding(8.dp)
-//                    .size(32.dp)
-//                    .background(PrimaryColor, shape = RoundedCornerShape(9.dp))
-//                    .align(Alignment.TopEnd)
-//                    .clickable {},
-//                contentAlignment = Alignment.Center
-//            ) {
-//                Icon(
-//                    imageVector = Icons.Default.Add,
-//                    contentDescription = null,
-//                    tint = Color.White,
-//                    modifier = Modifier.size(20.dp)
-//                )
-//            }
-//        }
-//
-//        // ===== Bottom Details Area =====
-//        Column(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(horizontal = 12.dp, vertical = 10.dp)
-//        ) {
-//            Text(
-//                text = product.title,
-//                color = Color(0xFF383B3E),
-//                fontSize = 14.sp,
-//                maxLines = 2,
-//                fontWeight = FontWeight.SemiBold
-//            )
-//
-//            Spacer(modifier = Modifier.height(6.dp))
-//
-//            Row(verticalAlignment = Alignment.CenterVertically) {
-//                Text(
-//                    text = "KD ${product.price}",
-//                    color = PrimaryColor,
-//                    fontSize = 15.sp,
-//                    fontWeight = FontWeight.Bold
-//                )
-//                Spacer(modifier = Modifier.width(6.dp))
-//                Text(
-//                    text = "KD ${product.oldPrice}",
-//                    color = Color.Gray,
-//                    fontSize = 12.sp,
-//                    textDecoration = TextDecoration.LineThrough
-//                )
-//                Spacer(modifier = Modifier.width(6.dp))
-//                Text(
-//                    text = "${product.discountPercent}%",
-//                    color = Color(0xFFD93025),
-//                    fontSize = 12.sp,
-//                    fontWeight = FontWeight.Bold
-//                )
-//                Spacer(modifier = Modifier.weight(1f))
-//                Icon(
-//                    imageVector = Icons.Default.Share,
-//                    contentDescription = null,
-//                    tint = PrimaryColor,
-//                    modifier = Modifier.size(18.dp)
-//                )
-//            }
-//        }
-//    }
-//}
 
 
-/***/
-/***/
-/***/
-
-
-@Composable
-fun AnimatedAddToCart(
-    quantity: Int,
-    onAdd: () -> Unit,
-    onRemove: () -> Unit,
-    modifier: Modifier = Modifier,
-    color: androidx.compose.ui.graphics.Color = PrimaryColor,
-    autoCollapseMillis: Long = 4000L
-) {
-    var expanded by remember { mutableStateOf(false) }
-    var pressed by remember { mutableStateOf(false) }
-    val scale by animateFloatAsState(if (pressed) 0.95f else 1f, label = "press-scale")
-
-    // Collapse when quantity hits 0
-    LaunchedEffect(quantity) {
-        if (quantity <= 0) expanded = false
-    }
-    // Auto-collapse after a delay (Swift reference)
-    LaunchedEffect(expanded, quantity) {
-        if (expanded && quantity > 0) {
-            delay(autoCollapseMillis)
-            expanded = false
-        }
-    }
-
-    Box(modifier = modifier.graphicsLayer { scaleX = scale; scaleY = scale }) {
-
-        // Expanded:  [-  qty  +]
-        AnimatedVisibility(
-            visible = expanded || quantity > 0,
-            enter = expandHorizontally(
-                animationSpec = spring(stiffness = Spring.StiffnessMediumLow, dampingRatio = 0.85f)
-            ) + fadeIn(),
-            exit = shrinkHorizontally(
-                animationSpec = spring(stiffness = Spring.StiffnessMediumLow, dampingRatio = 0.85f)
-            ) + fadeOut()
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier
-                    .height(36.dp)
-                    .background(color, RoundedCornerShape(10.dp))
-                    .padding(horizontal = 12.dp)
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_remove,),
-                    contentDescription = "Decrease",
-                    tint = androidx.compose.ui.graphics.Color.White,
-                    modifier = Modifier
-                        .size(16.dp)
-                        .clickable {
-                            pressed = true
-                            onRemove()
-                            pressed = false
-                        }
-                )
-                Text(
-                    text = quantity.toString(),
-                    color = androidx.compose.ui.graphics.Color.White,
-                    fontWeight = FontWeight.SemiBold
-                )
-                Icon(
-                    imageVector = Icons.Rounded.Add,
-                    contentDescription = "Increase",
-                    tint = androidx.compose.ui.graphics.Color.White,
-                    modifier = Modifier
-                        .size(16.dp)
-                        .clickable {
-                            if (!expanded) expanded = true
-                            pressed = true
-                            onAdd()
-                            pressed = false
-                        }
-                )
-            }
-        }
-
-        // Collapsed:  [+]
-        AnimatedVisibility(
-            visible = !expanded && quantity == 0,
-            enter = fadeIn(),
-            exit = fadeOut()
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(36.dp)
-                    .background(color, RoundedCornerShape(10.dp))
-                    .clickable {
-                        expanded = true
-                        onAdd()
-                    },
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(Icons.Rounded.Add, contentDescription = "Add", tint = androidx.compose.ui.graphics.Color.White)
-            }
-        }
-    }
-}
 
 
 
