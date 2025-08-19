@@ -241,7 +241,7 @@ fun BannerSlider(
         .padding(horizontal = 8.dp) // small left-right padding
 ) {
     val pagerState = rememberPagerState()
-    val bannerImages = listOf(R.drawable.img_discount_card, R.drawable.img_discount_card, R.drawable.img_discount_card)
+    val bannerImages = listOf(R.drawable.img_temp_slider, R.drawable.img_discount_card, R.drawable.img_discount_card) // your images
 
     // Auto-scroll logic
     LaunchedEffect(key1 = pagerState.currentPage) {
@@ -254,25 +254,62 @@ fun BannerSlider(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // Horizontal Pager for the banner slider
         HorizontalPager(
             count = bannerImages.size,
             state = pagerState,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp)
+                .height(200.dp) // Adjust the height of the slider
         ) { page ->
-            Image(
-                painter = painterResource(bannerImages[page]),
-                contentDescription = "Banner Image",
-                contentScale = ContentScale.Crop,
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp)
-            )
+            ) {
+                Image(
+                    painter = painterResource(bannerImages[page]),
+                    contentDescription = "Banner Image",
+                    contentScale = ContentScale.FillWidth,
+                    modifier = Modifier.height(200.dp)
+
+                )
+
+                // Text Overlay
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
+                        .align(Alignment.Center)
+                ) {
+                    CustomMontserratText(
+                        text = "Effortless Style, Timeless Elegance",
+                        color = Color.Black,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 3,
+                        modifier = Modifier.padding(bottom = 8.dp).widthIn(max = 200.dp)
+                    )
+                    CustomMontserratText(
+                        text = "Limited-Time Sale! Get up to 30% off on selected items.",
+                        color = Color.White,
+                        fontSize = 14.sp,
+                        modifier = Modifier.padding(bottom = 16.dp)
+                    )
+                    Button(
+                        onClick = { /* Handle button click */ },
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Text(text = "Explore Now", color = Color.White)
+                    }
+                }
+            }
         }
 
         Spacer(modifier = Modifier.height(12.dp))
 
+        // Pager indicator
         HorizontalPagerIndicator(
             pagerState = pagerState,
             activeColor = Color(0xFF86544E),
@@ -283,6 +320,57 @@ fun BannerSlider(
         )
     }
 }
+
+//@OptIn(ExperimentalPagerApi::class)
+//@Composable
+//fun BannerSlider(
+//    modifier: Modifier = Modifier
+//        .padding(horizontal = 8.dp) // small left-right padding
+//) {
+//    val pagerState = rememberPagerState()
+//    val bannerImages = listOf(R.drawable.img_temp_slider, R.drawable.img_discount_card, R.drawable.img_discount_card)
+//
+//    // Auto-scroll logic
+//    LaunchedEffect(key1 = pagerState.currentPage) {
+//        kotlinx.coroutines.delay(3000) // delay 3 seconds
+//        val nextPage = (pagerState.currentPage + 1) % bannerImages.size
+//        pagerState.animateScrollToPage(nextPage)
+//    }
+//
+//    Column(
+//        modifier = Modifier.fillMaxWidth(),
+//        horizontalAlignment = Alignment.CenterHorizontally
+//    ) {
+//        HorizontalPager(
+//            count = bannerImages.size,
+//            state = pagerState,
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .height(200.dp)
+//        ) { page ->
+//            Image(
+//                painter = painterResource(bannerImages[page]),
+//                contentDescription = "Banner Image",
+//                contentScale = ContentScale.Crop,
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .height(200.dp)
+//            )
+//
+//        }
+//
+//        Spacer(modifier = Modifier.height(12.dp))
+//
+//        HorizontalPagerIndicator(
+//            pagerState = pagerState,
+//            activeColor = Color(0xFF86544E),
+//            inactiveColor = Color.LightGray,
+//            indicatorWidth = 25.dp,
+//            indicatorHeight = 6.dp,
+//            spacing = 6.dp
+//        )
+//    }
+//}
 
 
 
