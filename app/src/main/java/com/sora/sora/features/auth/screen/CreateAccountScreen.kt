@@ -34,7 +34,9 @@ import com.sora.sora.core.CustomAppBar
 import com.sora.sora.core.customButtons.PrimaryButton
 import com.sora.sora.core.customText.CustomMontserratText
 import com.sora.sora.core.hFactor
+import com.sora.sora.core.navigations.Dest
 import com.sora.sora.core.navigations.NavigationManager.navController
+import com.sora.sora.core.navigations.toRoute
 import com.sora.sora.core.vFactor
 import com.sora.sora.ui.components.AppTextFieldWithSuffix
 import com.sora.sora.ui.theme.AppSubTextColor
@@ -64,51 +66,52 @@ fun CreateAccountScreen(
                 .fillMaxWidth()
                 .align(Alignment.TopCenter)
                 .background(color = Color.White)
-                .padding(horizontal = hFactor(20),)
         ) {
             CustomAppBar(
-                title = "Crete account",
+                title = "Create account",
                 onBackClick = {
                     navController.popBackStack()
                 }
             )
 
-            Spacer(modifier = Modifier.height(vFactor(20)))
-            AppTextFieldWithSuffix(
-                value = nameController,
-                onValueChange = { nameController = it },
-                placeholder = "Name",
-                suffix = {
-                    Icon(painter = painterResource(id = R.drawable.ic_profile2), contentDescription = "Some Icon")
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
+         Column ( modifier = Modifier
+             .fillMaxWidth()
+             .padding(horizontal = hFactor(20),)){       Spacer(modifier = Modifier.height(vFactor(20)))
+             AppTextFieldWithSuffix(
+                 value = nameController,
+                 onValueChange = { nameController = it },
+                 placeholder = "Name",
+                 suffix = {
+                     Icon(painter = painterResource(id = R.drawable.ic_profile2), contentDescription = "Some Icon")
+                 },
+                 modifier = Modifier.fillMaxWidth()
+             )
 
-            Spacer(modifier = Modifier.height(vFactor(20)))
+             Spacer(modifier = Modifier.height(vFactor(20)))
 
-            AppTextFieldWithSuffix(
-                value = emailController,
-                onValueChange = { emailController = it },
-                placeholder = "Email",
-                suffix = {
-                    Icon(painter = painterResource(id = R.drawable.ic_email), contentDescription = "Some Icon")
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
+             AppTextFieldWithSuffix(
+                 value = emailController,
+                 onValueChange = { emailController = it },
+                 placeholder = "Email",
+                 suffix = {
+                     Icon(painter = painterResource(id = R.drawable.ic_email), contentDescription = "Some Icon")
+                 },
+                 modifier = Modifier.fillMaxWidth()
+             )
 
-            Spacer(modifier = Modifier.height(vFactor(20)))
+             Spacer(modifier = Modifier.height(vFactor(20)))
 
-            // Password field
+             // Password field
 
-            AppTextFieldWithSuffix(
-                value = passwordController,
-                onValueChange = { passwordController = it },
-                placeholder = "Password",
-                isPassword = true,  // Set to true for password field
-                modifier = Modifier.fillMaxWidth()
-            )
+             AppTextFieldWithSuffix(
+                 value = passwordController,
+                 onValueChange = { passwordController = it },
+                 placeholder = "Password",
+                 isPassword = true,  // Set to true for password field
+                 modifier = Modifier.fillMaxWidth()
+             )
 
-            Spacer(modifier = Modifier.height(vFactor(10)))
+             Spacer(modifier = Modifier.height(vFactor(10)))
 
 //            CustomMontserratText(
 //                text = "By clicking continue, you accept the Terms & Conditions and Privacy Policy",
@@ -118,48 +121,49 @@ fun CreateAccountScreen(
 //                modifier = Modifier.padding(start = hFactor(10))
 //            )
 
-            val annotatedString = buildAnnotatedString {
-                append("By clicking continue, you accept the ")
-                pushStyle(SpanStyle(textDecoration = TextDecoration.Underline))
-                append("Terms & Conditions")
-                pop()
-                append(" and ")
-                pushStyle(SpanStyle(textDecoration = TextDecoration.Underline))
-                append("Privacy Policy")
-                pop()
-                append(".")
-            }
+             val annotatedString = buildAnnotatedString {
+                 append("By clicking continue, you accept the ")
+                 pushStyle(SpanStyle(textDecoration = TextDecoration.Underline))
+                 append("Terms & Conditions")
+                 pop()
+                 append(" and ")
+                 pushStyle(SpanStyle(textDecoration = TextDecoration.Underline))
+                 append("Privacy Policy")
+                 pop()
+                 append(".")
+             }
 
-            ClickableText(
-                text = annotatedString,
-                onClick = { offset ->
-                    // Handle click events for terms and privacy policy here
-                    annotatedString.getStringAnnotations(tag = "terms", start = offset, end = offset)
-                        .firstOrNull()?.let {
-                            // Handle click on Terms & Conditions
-                            // For example, open the Terms & Conditions screen
-                        }
+             ClickableText(
+                 text = annotatedString,
+                 onClick = { offset ->
+                     // Handle click events for terms and privacy policy here
+                     annotatedString.getStringAnnotations(tag = "terms", start = offset, end = offset)
+                         .firstOrNull()?.let {
+                             // Handle click on Terms & Conditions
+                             // For example, open the Terms & Conditions screen
+                         }
 
-                    annotatedString.getStringAnnotations(tag = "privacy", start = offset, end = offset)
-                        .firstOrNull()?.let {
-                            // Handle click on Privacy Policy
-                            // For example, open the Privacy Policy screen
-                        }
-                },
-                style = LocalTextStyle.current.copy(fontSize = 14.sp, color = AppSubTextColor)
-            )
+                     annotatedString.getStringAnnotations(tag = "privacy", start = offset, end = offset)
+                         .firstOrNull()?.let {
+                             // Handle click on Privacy Policy
+                             // For example, open the Privacy Policy screen
+                         }
+                 },
+                 style = LocalTextStyle.current.copy(fontSize = 14.sp, color = AppSubTextColor)
+             )
 
+             Spacer(modifier = Modifier.height(vFactor(20)))
 
-            Spacer(modifier = Modifier.height(vFactor(20)))
+             // Login Button
+             PrimaryButton(
+                 text = "Continue",
+                 backgroundColor = PrimaryColor,
+                 onClick = {
+                     navController.navigate(Dest.ForgetPasswordScreen::class.toRoute())
+                 },
+             )
 
-            // Login Button
-            PrimaryButton(
-                text = "Sign in",
-                backgroundColor = PrimaryColor,
-                onClick = {  },
-            )
-
-            Spacer(modifier = Modifier.height(vFactor(15)))
+             Spacer(modifier = Modifier.height(vFactor(15))) }
 
         }
     }

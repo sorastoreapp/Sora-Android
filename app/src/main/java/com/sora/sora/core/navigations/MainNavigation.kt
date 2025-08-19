@@ -2,6 +2,9 @@ package com.sora.sora.core.navigations
 
 import CategoryDetailScreen
 import CreateAccountScreen
+import ForgetPasswordScreen
+import NewPasswordScreen
+import OtpScreen
 import SignInScreen
 import SplashScreen
 import WelcomeScreen
@@ -101,6 +104,21 @@ fun MainNavigation(modifier: Modifier = Modifier) {
 
             )
         }
+        composable(Dest.ForgetPasswordScreen::class.toRoute()) {
+            ForgetPasswordScreen(
+
+            )
+        }
+        composable(Dest.OtpScreen::class.toRoute()) {
+            OtpScreen(
+
+            )
+        }
+        composable(Dest.NewPasswordScreen::class.toRoute()) {
+            NewPasswordScreen(
+
+            )
+        }
 
         composable(Dest.AccountDetailsScreen::class.toRoute()) {
             AccountDetailsScreen(
@@ -141,13 +159,6 @@ fun MainNavigation(modifier: Modifier = Modifier) {
         composable(Dest.ReviewDetailScreen::class.toRoute()) { ReviewDetailScreen() }
         composable(Dest.SplashScreen::class.toRoute()) { SplashScreen() }
         composable(Dest.NotificationScreen::class.toRoute()) { NotificationScreen() }
-        composable(Dest.OrderDetailScreen::class.toRoute() + "?status={status}") { backStackEntry ->
-            val status = backStackEntry.arguments?.getString("status")
-            if (status != null) {
-                OrderDetailScreen(status = status)
-            }
-        }
-
         composable(Dest.OrderDetailScreen::class.toRoute() + "?status={status}") { backStackEntry ->
             val status = backStackEntry.arguments?.getString("status")
             if (status != null) {

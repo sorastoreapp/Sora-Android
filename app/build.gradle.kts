@@ -70,4 +70,6 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     // Lottie Compose
     implementation("com.airbnb.android:lottie-compose:5.0.3")
+//    implementation("com.github.chaosqw:otpview:1.0.1")
+
 }
