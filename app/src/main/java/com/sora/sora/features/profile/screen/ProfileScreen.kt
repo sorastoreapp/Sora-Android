@@ -1,6 +1,8 @@
 package com.sora.sora.features.profile.screen
 
 import android.util.Log
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -9,15 +11,21 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.ButtonElevation
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,23 +33,33 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorFilter.Companion.tint
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.disabled
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
 import com.sora.sora.core.customButtons.CustomButton
+import com.sora.sora.core.customText.CustomMontserratText
 import com.sora.sora.core.navigations.Dest
 import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.navigations.toRoute
 import com.sora.sora.ui.theme.PrimaryColor
 
+@Preview(showBackground = true)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen() {
     val context = LocalContext.current
@@ -55,92 +73,80 @@ fun ProfileScreen() {
             .statusBarsPadding()
             .verticalScroll(rememberScrollState())
             // Add top padding for status bar
-            .padding(horizontal = 16.dp, vertical = 12.dp)
+            .padding(horizontal = 20.dp, vertical = 12.dp)
     ) {
-        // Header Row
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
+
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = "Profile",
+            CustomMontserratText(
+                text = "Settings",
                 fontWeight = FontWeight.Bold,
-                fontSize = 28.sp,
+                fontSize = 16.sp,
                 color = Color.Black,
-                modifier = Modifier.weight(1f)
-            )
-            Image(
-                painter = painterResource(id = R.drawable.ic_notification),
-                contentDescription = "Notifications",
-                modifier = Modifier
-                    .padding(start = 10.dp, end = 10.dp)
-                    .size(width = 40.dp, height = 40.dp)
+                textAlign = TextAlign.Center
             )
         }
+        Spacer(modifier = Modifier.height(10.dp))
 
-        Spacer(modifier = Modifier.height(24.dp))
 
-        // Profile card
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
             Image(
-                painter = painterResource(id = R.drawable.img_temp_profile_pic), // Your profile photo drawable
+                painter = painterResource(id = R.drawable.ic_profile_icon), // Your profile photo drawable
                 contentDescription = "Profile Photo",
                 contentScale = ContentScale.Crop,
+
+
                 modifier = Modifier
-                    .size(70.dp)
+                    .size(48.dp)
                     .clip(CircleShape)
-                    .border(2.dp, Color(0xFF8A4C3D), CircleShape)
+                    .background(Color(0xFFF3EDEC)) // Fondo claro marrón
+
+                    .padding(6.dp)
+
+
             )
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(
-                    text = "Leslie Alexander",
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 18.sp,
-                    color = Color.Black
-                )
-                Spacer(modifier = Modifier.height(height = 6.dp))
-                Text(
-                    text = "(308) 555-0121",
-                    fontSize = 14.sp,
-                    color = Color.Black
-                )
-            }
 
-            IconButton(
-                onClick = { Log.d("ProfileScreen", "Edit profile clicked") }
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_edit_bar),
-                    contentDescription = "Edit Profile",
-                    modifier = Modifier.size(30.dp).pointerInput(Unit){
-                        detectTapGestures {
-                            navController.navigate(Dest.EditProfileScreen::class.toRoute())
-                        }
-                    },
-                    colorFilter = tint(Color(0xFF8A4C3D))
+            CustomMontserratText(
+                    text = "Visitor",
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 16.sp,
+                    color = Color.Black
                 )
-            }
+            Spacer(modifier = Modifier.height(6.dp).weight(1f))
+
+
+            CustomMontserratText(
+                text = "Create account",
+                fontSize = 14.sp,
+                color = PrimaryColor,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.clickable {
+
+                })
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(26.dp))
 
         // Section Title
-        Text(
+        CustomMontserratText(
             text = "Account",
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
             color = Color(0xFF8A4C3D)
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(5.dp))
 
         // Account items
         ProfileMenuItem(
@@ -152,9 +158,10 @@ fun ProfileScreen() {
                 }
             }
         )
-        DottedDivider(color = Color.Gray.copy(alpha = 0.5f))
+        CommonDivider()
 
         ProfileMenuItem(
+            showArrow = true,
             iconRes = R.drawable.ic_address,
             title = "My Addresses",
             onClick = {
@@ -163,41 +170,35 @@ fun ProfileScreen() {
                 }
             }
         )
-        DottedDivider(color = Color.Gray.copy(alpha = 0.5f))
+CommonDivider()
+        var notificationsEnabled by remember { mutableStateOf(true) }
+        var switchEnabled by remember { mutableStateOf(true) } // control disabled state
 
         ProfileMenuItem(
             iconRes = R.drawable.ic_notifications,
             title = "Notifications",
             trailingContent = {
-                Switch(
+                MinimalSwitch(
                     checked = notificationsEnabled,
-                    onCheckedChange = {
-                        notificationsEnabled = it
-                        Log.d("ProfileScreen", "Notifications toggled: $it")
-                    },
-                    colors = SwitchDefaults.colors(
-                        checkedThumbColor = Color(0xFF8A4C3D),
-                        checkedTrackColor = Color(0xFFCFAE9B), // lighter brown for track when ON
-                        uncheckedThumbColor = Color.White,
-                        uncheckedTrackColor = Color.Gray.copy(alpha = 0.4f), // more visible track when OFF
-
-                        disabledCheckedThumbColor = Color(0xFF8A4C3D).copy(alpha = 0.5f),
-                        disabledCheckedTrackColor = Color(0xFFCFAE9B).copy(alpha = 0.3f),
-                        disabledUncheckedThumbColor = Color.White.copy(alpha = 0.5f),
-                        disabledUncheckedTrackColor = Color.Gray.copy(alpha = 0.2f)
-                    ),
+                    onCheckedChange = { notificationsEnabled = it },
+                    enabled = switchEnabled
                 )
             },
             onClick = {
+                // Example: toggle whether the switch is enabled/disabled
+                // switchEnabled = !switchEnabled
                 navController.navigate(Dest.NotificationScreen::class.toRoute())
-
             }
         )
-        DottedDivider(color = Color.Gray.copy(alpha = 0.5f))
+
+
+
+        CommonDivider()
 
         ProfileMenuItem(
             iconRes = R.drawable.ic_language,
             title = "Languages",
+
             trailingText = "English",
             onClick = {
                 showLanguageSheet = true
@@ -212,26 +213,19 @@ fun ProfileScreen() {
                     showLanguageSheet = false
                 })
         }
-        DottedDivider(color = Color.Gray.copy(alpha = 0.5f))
+        CommonDivider()
 
-        ProfileMenuItem(
-            iconRes = R.drawable.ic_country,
-            title = "Country",
-            trailingText = "Kuwait",
-            onClick = { Log.d("ProfileScreen", "Country clicked") }
-        )
-        DottedDivider(color = Color.Gray.copy(alpha = 0.5f))
-        Spacer(modifier = Modifier.height(32.dp))
 
-        // Others section title
-        Text(
+        Spacer(modifier = Modifier.height(22.dp))
+
+        CustomMontserratText(
             text = "Others",
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
             color = Color(0xFF8A4C3D)
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(5.dp))
 
         ProfileMenuItem(
             iconRes = R.drawable.ic_tnc,
@@ -240,7 +234,7 @@ fun ProfileScreen() {
                 navController.navigate(Dest.TermConditionScreen::class.toRoute())
             }
         )
-        DottedDivider(color = Color.Gray.copy(alpha = 0.5f))
+        CommonDivider()
 
         ProfileMenuItem(
             iconRes = R.drawable.ic_pp,
@@ -249,7 +243,7 @@ fun ProfileScreen() {
                 navController.navigate(Dest.PrivacyPolicyScreen::class.toRoute())
             }
         )
-        DottedDivider(color = Color.Gray.copy(alpha = 0.5f))
+        CommonDivider()
 
         ProfileMenuItem(
             iconRes = R.drawable.ic_faq,
@@ -258,7 +252,7 @@ fun ProfileScreen() {
                 navController.navigate(Dest.FaqScreen::class.toRoute())
             }
         )
-        DottedDivider(color = Color.Gray.copy(alpha = 0.5f))
+        CommonDivider()
 
         ProfileMenuItem(
             iconRes = R.drawable.ic_about_us,
@@ -267,30 +261,75 @@ fun ProfileScreen() {
                 navController.navigate(Dest.AboutUsScreen::class.toRoute())
             }
         )
+        Spacer(modifier = Modifier.height(22.dp))
 
-        DottedDivider(color = Color.Gray.copy(alpha = 0.5f))
-
-        ProfileMenuItem(
-            iconRes = R.drawable.ic_contact_us,
-            title = "Contact Us",
+        Button(
             onClick = {
-                navController.navigate(Dest.AboutUsScreen::class.toRoute())
-            }
-        )
-        DottedDivider(color = Color.Gray.copy(alpha = 0.5f))
-        Box(
+              //  navController.navigate(Dest.LoginScreen::class.toRoute())
+            },
+            shape = RoundedCornerShape(20.dp),
+            colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color(0xFFFEF7F2),
+                contentColor = Color(0xFF8A4C3D)
+            ),
+            elevation = ButtonDefaults.elevation(
+                defaultElevation = 0.1.dp,
+                pressedElevation = 0.dp,
+                disabledElevation = 0.dp,
+                hoveredElevation = 0.dp,
+                focusedElevation = 0.dp,
+
+
+            ),
+
             modifier = Modifier
                 .fillMaxWidth()
-                .height(87.dp),
-            contentAlignment = Alignment.Center
+                .height(56.dp).padding(horizontal = 2.dp)
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.img_logout),
-                contentDescription = "Logout",
-                modifier = Modifier.size(80.dp)
-            )
+            CustomMontserratText(text = "Log in", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = PrimaryColor)
         }
-        Spacer( modifier = Modifier.height(70.dp))
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = {
+             //   navController.navigate(Dest.ContactUsScreen::class.toRoute())
+            },
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color(0xFFF2FBF8),
+                contentColor = Color(0xFF07BD74)
+            ),
+            elevation = ButtonDefaults.elevation(
+                defaultElevation = 0.1.dp,
+                pressedElevation = 0.dp,
+                disabledElevation = 0.dp,
+                hoveredElevation = 0.dp,
+                focusedElevation = 0.dp,
+
+
+                ),
+            shape = RoundedCornerShape(20.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    painter = painterResource(id = R.drawable.img_whatsapp),
+                    contentDescription = null,
+                    tint = Color(0xFF07BD74),
+                    modifier = Modifier.size(20.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                CustomMontserratText(text = "Have an issue? Contact us", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color(0xFF07BD74))
+
+            }
+        }
+
+
+
+
+        Spacer( modifier = Modifier.height(100.dp))
     }
 
 }
@@ -300,6 +339,7 @@ fun ProfileMenuItem(
     iconRes: Int,
     title: String,
     trailingText: String? = null,
+    showArrow: Boolean = true,
     trailingContent: (@Composable () -> Unit)? = null,
     onClick: () -> Unit = {}
 ) {
@@ -323,24 +363,37 @@ fun ProfileMenuItem(
                 .size(24.dp)
         )
         Spacer(modifier = Modifier.width(12.dp))
-        Text(
+        CustomMontserratText(
             text = title,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Normal,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.W600,
             color = Color.Black,
             modifier = Modifier.weight(1f)
         )
         if (trailingText != null) {
-            Text(
+            CustomMontserratText(
                 text = trailingText,
                 color = Color(0xFF8A4C3D),
                 fontWeight = FontWeight.Bold,
-                fontSize = 14.sp
+                fontSize = 12.sp
             )
-            Spacer(modifier = Modifier.width(12.dp))
+
         }
         if (trailingContent != null) {
             trailingContent()
+        }
+        Spacer(modifier = Modifier.width(12.dp))
+        if (showArrow) {
+
+            Icon(
+
+                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                contentDescription = "Arrow",
+
+                tint = PrimaryColor
+                ,
+                modifier = Modifier.size(20.dp)
+            )
         }
     }
 }
@@ -374,6 +427,91 @@ fun DottedDivider(
         }
     }
 }
+@Composable
+fun CommonDivider(
+    color: Color = Color.Gray.copy(alpha = 0.1f),
+    thickness: Dp = 1.dp,
+    horizontalPadding: Dp = 0.dp,
+    verticalPadding: Dp = 4.dp
+) {
+    Divider(
+        color = color,
+        thickness = thickness,
+        modifier = Modifier
+            .padding(horizontal = horizontalPadding, vertical = verticalPadding)
+    )
+}
+
+
+@Immutable
+data class MinimalSwitchColors(
+    val checkedThumb: Color = Color(0xFFFFFFFF),
+    val checkedTrack: Color = Color(0xFF8A4C3D),
+    val uncheckedThumb: Color = Color.White,
+    val uncheckedTrack: Color = Color(0xFFBDBDBD),
+
+    // Disabled state
+    val disabledThumb: Color = Color.White.copy(alpha = 0.7f),
+    val disabledTrack: Color = Color(0xFFE0E0E0)
+)
+
+@Composable
+fun MinimalSwitch(
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    colors: MinimalSwitchColors = MinimalSwitchColors()
+) {
+    // Choose colors based on state
+    val targetTrack = when {
+        !enabled -> colors.disabledTrack
+        checked -> colors.checkedTrack
+        else -> colors.uncheckedTrack
+    }
+    val targetThumb = when {
+        !enabled -> colors.disabledThumb
+        checked -> colors.checkedThumb
+        else -> colors.uncheckedThumb
+    }
+
+    val trackColor by animateColorAsState(targetValue = targetTrack, label = "trackColor")
+    val thumbColor by animateColorAsState(targetValue = targetThumb, label = "thumbColor")
+    val thumbOffset by animateDpAsState(targetValue = if (checked) 20.dp else 0.dp, label = "thumbOffset")
+
+    val shape = CircleShape
+
+    Box(
+        modifier = modifier
+            .width(40.dp)
+            .height(20.5.dp)
+            .clip(shape)
+            .background(trackColor)
+            .toggleable( // ✅ instead of clickable + semantics
+                value = checked,
+                enabled = enabled,
+                role = Role.Switch,
+                onValueChange = { onCheckedChange(it) }
+            ),
+        contentAlignment = Alignment.CenterStart
+    ) {
+        // Thumb
+        Box(
+            modifier = Modifier
+                .offset(x = thumbOffset)
+                .size(17.dp)
+                .clip(shape)
+                .background(thumbColor)
+                .border(
+                    width = 1.dp,
+                    color = if (enabled) Color.Black.copy(alpha = 0.06f) else Color.Black.copy(alpha = 0.04f),
+                    shape = shape
+                )
+        )
+    }
+}
+
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -451,3 +589,28 @@ fun LanguageSelectionBottomSheet(
         }
     }
 }
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SettingsAppBar(
+    showBack: Boolean = false,
+    onBack: (() -> Unit)? = null
+) {
+     CenterAlignedTopAppBar(
+        title = {
+            Text(
+                text = "Settings",
+
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
+            )
+        },
+
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = Color.White,
+            titleContentColor = Color.Black
+        )
+    )
+}
+
