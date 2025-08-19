@@ -21,6 +21,7 @@ val TextFieldColor3 = Color(0xFFF8F3EE)
 val AppGray = Color(0xFFDCD9D9)
 val AppTextGray = Color(0xFF928C8A)
 val DividerGray = Color(0xFFE5E5E5)
+val LightBrown = Color(0xFFFEF7F2)
 
 //
 val TextHintColor = Color.Black.copy(alpha = 0.6f)

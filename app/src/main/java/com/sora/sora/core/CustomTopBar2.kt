@@ -46,7 +46,7 @@ fun CustomAppBar(
     modifier: Modifier = Modifier  // To allow further customization
 ) {
     Box(
-        modifier = modifier
+        modifier =  modifier
             .fillMaxWidth()
             .background(backgroundColor)
             .padding(top = 55.dp, start = 16.dp, end = 16.dp),
@@ -85,18 +85,19 @@ fun CustomAppBar(
 
         // Title (only shown if title is not null)
         title?.let {
-            Text(
+            CustomMontserratText(
                 text = it,
-                style = TextStyle(
-                    color = titleColor,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
-                ),
+
+                    color = if (titleColor != null) titleColor else Color.Black,
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight(600),
+
                 modifier = Modifier
                     .align(Alignment.Center)
                     .padding(start = if (onBackClick != null) 50.dp else 0.dp)  // Add offset for back button if present
                     .padding(end = 40.dp),
-                textAlign = TextAlign.Center
+
             )
         }
     }

@@ -51,11 +51,13 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
+import com.sora.sora.core.CustomAppBar
 import com.sora.sora.core.customButtons.CustomButton
 import com.sora.sora.core.customText.CustomMontserratText
 import com.sora.sora.core.navigations.Dest
 import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.navigations.toRoute
+import com.sora.sora.ui.theme.LightBrown
 import com.sora.sora.ui.theme.PrimaryColor
 
 @Preview(showBackground = true)
@@ -72,26 +74,35 @@ fun ProfileScreen() {
             .fillMaxSize()
             .statusBarsPadding()
             .verticalScroll(rememberScrollState())
-            // Add top padding for status bar
+
             .padding(horizontal = 20.dp, vertical = 12.dp)
     ) {
 
+        CustomAppBar(
+            title = "Settings",
+            isBackButton = false,
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            CustomMontserratText(
-                text = "Settings",
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp,
-                color = Color.Black,
-                textAlign = TextAlign.Center
-            )
-        }
-        Spacer(modifier = Modifier.height(10.dp))
+            onBackClick = {
+               // navController.navigate(Dest.Home.toRoute())
+            }
+        )
+
+
+//        Box(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(16.dp),
+//            contentAlignment = Alignment.Center
+//        ) {
+//            CustomMontserratText(
+//                text = "Settings",
+//                fontWeight = FontWeight.Bold,
+//                fontSize = 16.sp,
+//                color = Color.Black,
+//                textAlign = TextAlign.Center
+//            )
+//        }
+        Spacer(modifier = Modifier.height(20.dp))
 
 
         Row(
@@ -119,7 +130,7 @@ fun ProfileScreen() {
 
             CustomMontserratText(
                     text = "Visitor",
-                    fontWeight = FontWeight.Medium,
+                fontWeight = FontWeight(500),
                     fontSize = 16.sp,
                     color = Color.Black
                 )
@@ -130,7 +141,9 @@ fun ProfileScreen() {
                 text = "Create account",
                 fontSize = 14.sp,
                 color = PrimaryColor,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight(500),
+                lineHeight = 20.sp,
+                textAlign = TextAlign.Right,
                 modifier = Modifier.clickable {
 
                 })
@@ -141,9 +154,9 @@ fun ProfileScreen() {
         // Section Title
         CustomMontserratText(
             text = "Account",
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight(600),
             fontSize = 16.sp,
-            color = Color(0xFF8A4C3D)
+            color = PrimaryColor
         )
 
         Spacer(modifier = Modifier.height(5.dp))
@@ -220,9 +233,9 @@ CommonDivider()
 
         CustomMontserratText(
             text = "Others",
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight(600),
             fontSize = 16.sp,
-            color = Color(0xFF8A4C3D)
+            color = PrimaryColor
         )
 
         Spacer(modifier = Modifier.height(5.dp))
@@ -262,74 +275,29 @@ CommonDivider()
             }
         )
         Spacer(modifier = Modifier.height(22.dp))
+        CustomButton(
+            label = "Log in",
+            onClick = {},
+            containerColor = LightBrown,
+            textColor = PrimaryColor,
 
-        Button(
-            onClick = {
-              //  navController.navigate(Dest.LoginScreen::class.toRoute())
-            },
-            shape = RoundedCornerShape(20.dp),
-            colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color(0xFFFEF7F2),
-                contentColor = Color(0xFF8A4C3D)
-            ),
-            elevation = ButtonDefaults.elevation(
-                defaultElevation = 0.1.dp,
-                pressedElevation = 0.dp,
-                disabledElevation = 0.dp,
-                hoveredElevation = 0.dp,
-                focusedElevation = 0.dp,
+        )
 
-
-            ),
-
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp).padding(horizontal = 2.dp)
-        ) {
-            CustomMontserratText(text = "Log in", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = PrimaryColor)
-        }
 
         Spacer(modifier = Modifier.height(16.dp))
-
-        Button(
-            onClick = {
-             //   navController.navigate(Dest.ContactUsScreen::class.toRoute())
-            },
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color(0xFFF2FBF8),
-                contentColor = Color(0xFF07BD74)
-            ),
-            elevation = ButtonDefaults.elevation(
-                defaultElevation = 0.1.dp,
-                pressedElevation = 0.dp,
-                disabledElevation = 0.dp,
-                hoveredElevation = 0.dp,
-                focusedElevation = 0.dp,
-
-
-                ),
-            shape = RoundedCornerShape(20.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp)
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    painter = painterResource(id = R.drawable.img_whatsapp),
-                    contentDescription = null,
-                    tint = Color(0xFF07BD74),
-                    modifier = Modifier.size(20.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                CustomMontserratText(text = "Have an issue? Contact us", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color(0xFF07BD74))
-
-            }
-        }
+        CustomButton(
+            label = "Have an issue? Contact us",
+            onClick = { /* Handle Click */ },
+            containerColor = Color(0xFFF2FBF8),
+            textColor = Color(0xFF07BD74),
+            icon = R.drawable.img_whatsapp // Pass the resource ID of the icon
+        )
+        Spacer(modifier = Modifier.height(200.dp))
 
 
 
 
-        Spacer( modifier = Modifier.height(100.dp))
+
     }
 
 }
@@ -366,7 +334,8 @@ fun ProfileMenuItem(
         CustomMontserratText(
             text = title,
             fontSize = 14.sp,
-            fontWeight = FontWeight.W600,
+            lineHeight = 18.sp,
+            fontWeight = FontWeight(400),
             color = Color.Black,
             modifier = Modifier.weight(1f)
         )
@@ -374,7 +343,8 @@ fun ProfileMenuItem(
             CustomMontserratText(
                 text = trailingText,
                 color = Color(0xFF8A4C3D),
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight(500),
+                lineHeight = 18.sp,
                 fontSize = 12.sp
             )
 

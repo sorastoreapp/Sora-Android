@@ -2,26 +2,36 @@ package com.sora.sora.features.profile.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
+import com.sora.sora.core.CustomAppBar
 import com.sora.sora.core.CustomTopBar2
 import com.sora.sora.core.navigations.Dest
 import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.navigations.toRoute
 
 
+
+@Preview(showBackground = true)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OrdersScreen() {
     val orders = listOf(
@@ -29,63 +39,70 @@ fun OrdersScreen() {
         Order(orderId = "SORA-9876543210", date = "March 30, 2025", productName = "Brown Men Full T-shirt", amount = "KD 5.500", status = "Shipped", image = R.drawable.img_temp_tshirt),
         Order(orderId = "SORA-9876543210", date = "April 2, 2025", productName = "Basket of clean towels", amount = "KD 5.500", status = "Delivered", image = R.drawable.img_temp_clean_towel)
     )
-
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .statusBarsPadding()
-            .padding(16.dp)
+            .background(Color.White)
     ) {
-        // Back Button Section
-//        Row(verticalAlignment = Alignment.CenterVertically) {
-//            IconButton(onClick = { /* Handle back click */ }) {
-//                Icon(
-//                    imageVector = Icons.Filled.ArrowBack,
-//                    contentDescription = "Back",
-//                    modifier = Modifier
-//                        .background(Color.Gray.copy(alpha = 0.2f), shape = CircleShape)
-//                        .padding(10.dp)
-//                )
-//            }
-//            Spacer(modifier = Modifier.width(48.dp))
-//            Text(
-//                text = "My Orders",
-//                fontSize = 24.sp,
-//                fontWeight = FontWeight.SemiBold,
-//                color = Color.Black
-//            )
-//        }
+        // AppBar should be outside the scrollable content
+        CustomAppBar(
+            title = "My Orders",
+            onBackClick = {
+                // Handle back click, navigate back or pop from the navigation stack
+                navController.popBackStack()
+            },
+            modifier = Modifier.align(Alignment.TopCenter) // Aligning app bar at the top
+        )
 
-        CustomTopBar2(title = "My Orders")
-        Spacer(modifier = Modifier.height(16.dp))
+        // Column that holds the scrollable content
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 70.dp) // Adjust to make space for the app bar
+                .statusBarsPadding()
+                .padding(horizontal = 20.dp, )
+                .verticalScroll(rememberScrollState())
+        ) {
+            Spacer(modifier = Modifier.height(16.dp)) // Spacing before content
 
-
-
-        orders.forEach { order ->
-            OrderCard(order = order)
-            Spacer(modifier = Modifier.height(12.dp))
+            orders.forEach { order ->
+                OrderCard(order = order)
+                Spacer(modifier = Modifier.height(12.dp))
+            }
         }
     }
 }
+
 
 @Composable
 fun OrderCard(order: Order) {
     Card(
         modifier = Modifier
+            .shadow(elevation = 24.dp, spotColor = Color(0x0D000000), ambientColor = Color(0x0D000000))
+            .border(width = 1.dp, color = Color.Black.copy(alpha = 0.1f), shape = RoundedCornerShape(size = 15.dp))
+            .padding(1.dp)
+
+            .height(111.dp)
+            .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(size = 15.dp))
+
             .fillMaxWidth()
             .height(180.dp)
             .clickable {
                 navController.navigate(Dest.OrderDetailScreen::class.toRoute() + "?status=Refund")
             }
              ,
-        shape = RoundedCornerShape(15.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+//        shape = RoundedCornerShape(15.dp),
+
+       colors = CardDefaults.cardColors(containerColor = Color.White)
+
     ) {
         Row(
+            horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(4.dp)
+
+
         ) {
 
             // Order Details Column
@@ -95,41 +112,41 @@ fun OrderCard(order: Order) {
                     .padding(16.dp)
             ) {
                 // Order ID and Date
-                Row ( modifier = Modifier
-                    .weight(1f) ){
-                    // Order ID with background and rounded corners
-                    Box(
-                        modifier = Modifier
-                            .background(Color.Gray.copy(alpha = 0.1f), shape = RoundedCornerShape(10.dp))
-                            .padding(horizontal = 12.dp, vertical = 6.dp)
-                    ) {
-                        Text(
-                            text = order.orderId,
-                            fontSize = 12.sp,
-                            color = Color.Black,
-                            fontWeight = FontWeight.SemiBold
-
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.width(8.dp))
-
-                    // Order Date
-                    Box(
-                        modifier = Modifier
-                            .background(Color.Gray.copy(alpha = 0.1f), shape = RoundedCornerShape(10.dp))
-                            .padding(horizontal = 12.dp, vertical = 6.dp)
-                    ) {
-                        Text(
-                            text = order.date,
-                            fontSize = 12.sp,
-                            color = Color.Black,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(8.dp))
+//                Row ( modifier = Modifier
+//                    .weight(1f) ){
+//                    // Order ID with background and rounded corners
+//                    Box(
+//                        modifier = Modifier
+//                            .background(Color.Gray.copy(alpha = 0.1f), shape = RoundedCornerShape(10.dp))
+//                            .padding(horizontal = 12.dp, vertical = 6.dp)
+//                    ) {
+//                        Text(
+//                            text = order.orderId,
+//                            fontSize = 12.sp,
+//                            color = Color.Black,
+//                            fontWeight = FontWeight.SemiBold
+//
+//                        )
+//                    }
+//
+//                    Spacer(modifier = Modifier.width(8.dp))
+//
+//                    // Order Date
+//                    Box(
+//                        modifier = Modifier
+//                            .background(Color.Gray.copy(alpha = 0.1f), shape = RoundedCornerShape(10.dp))
+//                            .padding(horizontal = 12.dp, vertical = 6.dp)
+//                    ) {
+//                        Text(
+//                            text = order.date,
+//                            fontSize = 12.sp,
+//                            color = Color.Black,
+//                            fontWeight = FontWeight.SemiBold
+//                        )
+//                    }
+//                }
+//
+//                Spacer(modifier = Modifier.height(8.dp))
 
 
                 Row(){
@@ -137,10 +154,17 @@ fun OrderCard(order: Order) {
                     Image(
                         painter = painterResource(id = order.image),
                         contentDescription = "Product Image",
-                        modifier = Modifier
-                            .size(100.dp)
-                            .align(Alignment.CenterVertically)
-                            .padding(end = 16.dp)
+                        modifier =
+//                            Modifier
+//                            .size(100.dp)
+//                            .background(color = Color.Gray.copy(alpha = 0.1f), shape = RoundedCornerShape(10.dp))
+//                            .align(Alignment.CenterVertically)
+//                            .padding(end = 16.dp)
+                            Modifier
+                                 .width(64.dp)
+                                .height(64.dp)
+                                .background(color = Color(0xFFF6F1EF), shape = RoundedCornerShape(size = 8.dp))
+                                .padding(start = 4.32432.dp, top = 4.32432.dp, end = 4.32432.dp, bottom = 4.32432.dp)
                     )
 
                   Column(){

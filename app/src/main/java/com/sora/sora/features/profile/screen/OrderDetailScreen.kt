@@ -19,6 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
@@ -34,9 +35,11 @@ import com.sora.sora.ui.theme.AppTextGray
 import com.sora.sora.ui.theme.PrimaryColor
 import com.sora.sora.ui.theme.SecondaryColor
 import com.sora.sora.ui.theme.TextFieldColor3
+@Preview(showBackground = true)
+@OptIn(ExperimentalMaterial3Api::class)
 
 @Composable
-fun OrderDetailScreen(status: String, ) {
+fun OrderDetailScreen(status: String="Pending") {
     // Convert the incoming status string to the corresponding enum
     val orderStatusEnum = OrderStatusEnum.fromText(status)
 
@@ -166,37 +169,18 @@ fun OrderDetailScreen(status: String, ) {
                         OrderStatusEnum.Completed
                     )
                 ) {
-
-                    Button(
-                        onClick = {},
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(65.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF2FBF8)) ,
-
-                        shape = MaterialTheme.shapes.medium
-                    ) {
-                        // Button Text
-                        Row {
-                            Image(
-                                painter = painterResource(id = R.drawable.img_whatsapp),
-                                contentDescription = "",
-                                Modifier.size(20.dp)
-                            )
-                            Spacer(modifier = Modifier.width(10.dp))
-                            Text(
-                                text = "Have an issue? Contact us ",
-                                color = Color(0xFF07BD74),
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
+                    CustomButton(
+                        label = "Have an issue? Contact us",
+                        onClick = { /* Handle Click */ },
+                        containerColor = Color(0xFFF2FBF8),
+                        textColor = Color(0xFF07BD74),
+                        icon = R.drawable.img_whatsapp // Pass the resource ID of the icon
+                    )
 
                     Spacer(modifier = Modifier.height(10.dp))
                 }
 
-                if (orderStatusEnum == OrderStatusEnum.Shipped || orderStatusEnum == OrderStatusEnum.Delivered || orderStatusEnum == OrderStatusEnum.Canceled) {
+             //   if (orderStatusEnum == OrderStatusEnum.Shipped || orderStatusEnum == OrderStatusEnum.Delivered || orderStatusEnum == OrderStatusEnum.Canceled) {
                     CustomButton(
                         label = "Return request",
                         onClick = {},
@@ -205,7 +189,7 @@ fun OrderDetailScreen(status: String, ) {
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
                     Spacer(modifier = Modifier.width(10.dp))
-                }
+              //  }
 
                 Spacer(
                     modifier = Modifier
