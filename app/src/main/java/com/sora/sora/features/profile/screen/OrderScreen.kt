@@ -62,12 +62,12 @@ fun OrdersScreen() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 70.dp) // Adjust to make space for the app bar
+                .padding(top = 56.dp) // Adjust to make space for the app bar
                 .statusBarsPadding()
                 .padding(horizontal = 20.dp, )
                 .verticalScroll(rememberScrollState())
         ) {
-            Spacer(modifier = Modifier.height(20.dp)) // Spacing before content
+            Spacer(modifier = Modifier.height(15.dp)) // Spacing before content
 
             orders.forEach { order ->
                 OrderCard(order = order)

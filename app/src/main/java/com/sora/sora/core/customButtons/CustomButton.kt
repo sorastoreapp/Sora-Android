@@ -1,6 +1,7 @@
 package com.sora.sora.core.customButtons
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -67,6 +68,7 @@ fun CustomButton(
     modifier: Modifier = Modifier, // Optional modifier to customize the button's appearance
     containerColor: Color = PrimaryColor, // Default button color
     textColor: Color = Color.White, // Text color (default: White)
+    iconColor: Color = Color.White, // Text color (default: White)
     secondaryButton: Boolean = false, // Whether this is a secondary button
     icon: Int? = null // Optional icon resource (null if no icon)
 
@@ -90,8 +92,11 @@ fun CustomButton(
             if (icon != null) {
                 Image(
                     painter = painterResource(id = icon),
+
                     contentDescription = "",
                     modifier = Modifier.size(20.dp)
+                        .background(iconColor),
+
                 )
                 Spacer(modifier = Modifier.width(10.dp)) // Spacer between icon and text
             }
