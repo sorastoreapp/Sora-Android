@@ -1,5 +1,8 @@
 package com.sora.sora.features.dashboard
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -32,6 +36,10 @@ import com.sora.sora.R
 import com.sora.sora.core.AppTexts
 import com.sora.sora.core.customText.CustomMontserratText
 import com.sora.sora.core.widgets.ProductSection
+import com.sora.sora.ui.theme.PrimaryColor
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.pager.HorizontalPager
+import com.google.accompanist.pager.PagerState
 
 // Data classes
 data class Category(val id: Int, val title: String, val icon: Painter, val bgColor: Color)
@@ -123,80 +131,6 @@ fun HomeScreen() {
     }
 }
 
-//@Composable
-//fun BottomNavigationBar(
-//    modifier: Modifier = Modifier
-//) {
-//    var selectedItem by remember { mutableStateOf(0) }
-//
-//    val items = listOf(
-//        NavItem("Home", R.drawable.ic_home, R.drawable.ic_white_home),
-//        NavItem("Category", R.drawable.ic_category, R.drawable.ic_white_cat),
-//        NavItem("Cart", R.drawable.ic_cart, R.drawable.ic_white_cart),
-//        NavItem("Favorites", R.drawable.ic_favoritess, R.drawable.ic_white_fav),
-//        NavItem("Profile", R.drawable.ic_profile, R.drawable.ic_white_profile)
-//    )
-//
-//    Surface(
-//        color = Color.White,
-//        shadowElevation = 8.dp,
-//        modifier = modifier
-//            .fillMaxWidth()
-//            .navigationBarsPadding() // safe area padding
-//    ) {
-//        Row(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(horizontal = 12.dp, vertical = 8.dp),
-//            horizontalArrangement = Arrangement.SpaceBetween,
-//            verticalAlignment = Alignment.CenterVertically
-//        ) {
-//            items.forEachIndexed { index, item ->
-//                val isSelected = selectedItem == index
-//                val weight = if (isSelected) 2f else 1f
-//
-//                Box(
-//                    modifier = Modifier
-//                        .weight(weight)
-//                        .clip(RoundedCornerShape(16.dp))
-//                        .background(if (isSelected) PrimaryColor else Color.Transparent)
-//                        .clickable { selectedItem = index }
-//                        .padding(horizontal = if (isSelected) 16.dp else 0.dp, vertical = 8.dp),
-//                    contentAlignment = Alignment.Center
-//                ) {
-//                    Row(
-//                        verticalAlignment = Alignment.CenterVertically,
-//                        horizontalArrangement = Arrangement.Center
-//                    ) {
-//                       if(isSelected) {
-//                           Icon(
-//                            painter = painterResource(id = item.icon_selected),
-//                            contentDescription = item.title,
-//                            tint =  Color.White,
-//                            modifier = Modifier.size(22.dp)
-//                        )}else{
-//                           Icon(
-//                               painter = painterResource(id = item.icon),
-//                               contentDescription = item.title,
-//                               modifier = Modifier.size(22.dp)
-//                           )
-//                        }
-//                        if (isSelected) {
-//                            Spacer(modifier = Modifier.width(8.dp))
-//                            Text(
-//                                text = item.title,
-//                                color = Color.White,
-//                                fontWeight = FontWeight.SemiBold,
-//                                fontSize = 13.sp,
-//                                maxLines = 1
-//                            )
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-//}
 
 // Change icon type to Int resource ID
 data class NavItem(val title: String, val icon: Int, val icon_selected: Int)
@@ -234,52 +168,71 @@ fun WelcomeTopBar() {
     }
 }
 
+/**Working without smothness and proper indicator2*/
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun BannerSlider(
-    modifier: Modifier = Modifier
-        .padding(horizontal = 8.dp) // small left-right padding
+    modifier: Modifier = Modifier.padding(horizontal = 8.dp)
 ) {
+    val bannerImages = listOf(
+        R.drawable.img_temp_slider,
+        R.drawable.img_temp_slider,
+        R.drawable.img_temp_slider
+    )
     val pagerState = rememberPagerState()
-    val bannerImages = listOf(R.drawable.img_temp_slider, R.drawable.img_discount_card, R.drawable.img_discount_card) // your images
 
-    // Auto-scroll logic
-    LaunchedEffect(key1 = pagerState.currentPage) {
-        kotlinx.coroutines.delay(3000) // delay 3 seconds
-        val nextPage = (pagerState.currentPage + 1) % bannerImages.size
-        pagerState.animateScrollToPage(nextPage)
+    // Only ONE coroutine that never interrupts in-progress scrolls
+    LaunchedEffect(pagerState) {
+        while (true) {
+            if (!pagerState.isScrollInProgress) {
+                kotlinx.coroutines.delay(2000)
+                // If still not scrolling and on same page, animate
+                if (!pagerState.isScrollInProgress) {
+                    val nextPage = (pagerState.currentPage + 1) % bannerImages.size
+                    pagerState.animateScrollToPage(
+                        page = nextPage,
+                        animationSpec = tween(
+                            durationMillis = 5000,   // 800ms for quick yet smooth
+                            easing = FastOutSlowInEasing // Makes slide look ‘material’
+                        )
+                    )
+                }
+            }
+            // Check every 100ms to avoid busy looping
+            kotlinx.coroutines.delay(100)
+        }
     }
 
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Horizontal Pager for the banner slider
         HorizontalPager(
             count = bannerImages.size,
             state = pagerState,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp) // Adjust the height of the slider
+                .height(200.dp)
         ) { page ->
             Box(
-                modifier = Modifier
+                Modifier
                     .fillMaxWidth()
                     .height(200.dp)
             ) {
                 Image(
                     painter = painterResource(bannerImages[page]),
                     contentDescription = "Banner Image",
-                    contentScale = ContentScale.FillWidth,
-                    modifier = Modifier.height(200.dp)
-
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
                 )
+                // (Your overlay here)
 
                 // Text Overlay
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(16.dp)
+                        .padding(horizontal = 16.dp)
+                        .padding(top = 32.dp)
                         .align(Alignment.Center)
                 ) {
                     CustomMontserratText(
@@ -288,39 +241,89 @@ fun BannerSlider(
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         maxLines = 3,
-                        modifier = Modifier.padding(bottom = 8.dp).widthIn(max = 200.dp)
+                        modifier = Modifier
+                            .padding(bottom = 8.dp)
+                            .widthIn(max = 200.dp)
                     )
                     CustomMontserratText(
                         text = "Limited-Time Sale! Get up to 30% off on selected items.",
-                        color = Color.White,
+                        color = Color.Black,
                         fontSize = 14.sp,
-                        modifier = Modifier.padding(bottom = 16.dp)
+                        maxLines = 3,
+                        modifier = Modifier.padding(bottom = 16.dp).widthIn(max = 200.dp)
                     )
                     Button(
-                        onClick = { /* Handle button click */ },
-                        modifier = Modifier.align(Alignment.CenterHorizontally),
-                        shape = RoundedCornerShape(12.dp)
+                            onClick = { /* Handle button click */ },
+                    shape = RoundedCornerShape(25.dp),
+                    colors = ButtonDefaults.buttonColors(PrimaryColor),
+                    contentPadding = PaddingValues(0.dp), // Remove internal padding
+                    modifier = Modifier
+                        .width(105.dp) // Make button stretch across
+                        .height(28.dp) // Adjust button height as needed
                     ) {
-                        Text(text = "Explore Now", color = Color.White)
-                    }
+                    Text(
+                        text = "Explore Now",
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White,
+                        fontSize = 14.sp,
+//                        modifier = Modifier.fillMaxSize(), // Ensure text is centered within button
+                        textAlign = TextAlign.Center
+                    )
                 }
+
+                }
+
+
             }
         }
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        // Pager indicator
-        HorizontalPagerIndicator(
+        Spacer(Modifier.height(12.dp))
+        FancyPagerIndicator(
             pagerState = pagerState,
+            pageCount = bannerImages.size,
             activeColor = Color(0xFF86544E),
-            inactiveColor = Color.LightGray,
-            indicatorWidth = 25.dp,
-            indicatorHeight = 6.dp,
-            spacing = 6.dp
+            inactiveColor = Color.LightGray
         )
     }
 }
 
+
+
+@Composable
+fun FancyPagerIndicator(
+    pagerState: PagerState,
+    pageCount: Int,
+    activeColor: Color = Color(0xFF86544E),
+    inactiveColor: Color = Color.LightGray,
+    modifier: Modifier = Modifier.padding(horizontal = 16.dp)
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        repeat(pageCount) { index ->
+            val isSelected = pagerState.currentPage == index
+            val animatedWidth by animateDpAsState(targetValue = if (isSelected) 25.dp else 8.dp)
+            val animatedHeight by animateDpAsState(targetValue = if (isSelected) 6.dp else 6.dp)
+            val animatedColor by animateColorAsState(targetValue = if (isSelected) activeColor else inactiveColor)
+            val animatedShape = if (isSelected) RoundedCornerShape(4.dp) else RoundedCornerShape(4.dp)
+
+            Box(
+                modifier = Modifier
+                    .width(animatedWidth)
+                    .height(animatedHeight)
+                    .clip(animatedShape)
+                    .background(animatedColor)
+            )
+            if (index < pageCount - 1) {
+                Spacer(Modifier.width(5.dp))
+            }
+        }
+    }
+}
+
+
+/**Working without smothness and proper indicator1*/
 //@OptIn(ExperimentalPagerApi::class)
 //@Composable
 //fun BannerSlider(
@@ -328,7 +331,7 @@ fun BannerSlider(
 //        .padding(horizontal = 8.dp) // small left-right padding
 //) {
 //    val pagerState = rememberPagerState()
-//    val bannerImages = listOf(R.drawable.img_temp_slider, R.drawable.img_discount_card, R.drawable.img_discount_card)
+//    val bannerImages = listOf(R.drawable.img_temp_slider, R.drawable.img_temp_slider, R.drawable.img_temp_slider) // your images
 //
 //    // Auto-scroll logic
 //    LaunchedEffect(key1 = pagerState.currentPage) {
@@ -341,26 +344,79 @@ fun BannerSlider(
 //        modifier = Modifier.fillMaxWidth(),
 //        horizontalAlignment = Alignment.CenterHorizontally
 //    ) {
+//        // Horizontal Pager for the banner slider
 //        HorizontalPager(
 //            count = bannerImages.size,
 //            state = pagerState,
 //            modifier = Modifier
 //                .fillMaxWidth()
-//                .height(200.dp)
+//                .height(200.dp) // Adjust the height of the slider
 //        ) { page ->
-//            Image(
-//                painter = painterResource(bannerImages[page]),
-//                contentDescription = "Banner Image",
-//                contentScale = ContentScale.Crop,
+//            Box(
 //                modifier = Modifier
 //                    .fillMaxWidth()
 //                    .height(200.dp)
-//            )
+//            ) {
+//                // Use ContentScale.Crop to ensure the images fill the area completely without stretching
+//                Image(
+//                    painter = painterResource(bannerImages[page]),
+//                    contentDescription = "Banner Image",
+//                    contentScale = ContentScale.Crop, // Ensure the image fits within the box
+//                    modifier = Modifier
+//                        .fillMaxSize() // Ensure it fills the container completely
+//                )
 //
+//                // Text Overlay
+//                Column(
+//                    modifier = Modifier
+//                        .fillMaxSize()
+//                        .padding(horizontal = 16.dp)
+//                        .padding(top = 32.dp)
+//                        .align(Alignment.Center)
+//                ) {
+//                    CustomMontserratText(
+//                        text = "Effortless Style, Timeless Elegance",
+//                        color = Color.Black,
+//                        fontSize = 16.sp,
+//                        fontWeight = FontWeight.Bold,
+//                        maxLines = 3,
+//                        modifier = Modifier
+//                            .padding(bottom = 8.dp)
+//                            .widthIn(max = 200.dp)
+//                    )
+//                    CustomMontserratText(
+//                        text = "Limited-Time Sale! Get up to 30% off on selected items.",
+//                        color = Color.Black,
+//                        fontSize = 14.sp,
+//                        maxLines = 3,
+//                        modifier = Modifier.padding(bottom = 16.dp).widthIn(max = 200.dp)
+//                    )
+//                    Button(
+//                            onClick = { /* Handle button click */ },
+//                    shape = RoundedCornerShape(25.dp),
+//                    colors = ButtonDefaults.buttonColors(PrimaryColor),
+//                    contentPadding = PaddingValues(0.dp), // Remove internal padding
+//                    modifier = Modifier
+//                        .width(105.dp) // Make button stretch across
+//                        .height(28.dp) // Adjust button height as needed
+//                    ) {
+//                    Text(
+//                        text = "Explore Now",
+//                        fontWeight = FontWeight.Bold,
+//                        color = Color.White,
+//                        fontSize = 14.sp,
+////                        modifier = Modifier.fillMaxSize(), // Ensure text is centered within button
+//                        textAlign = TextAlign.Center
+//                    )
+//                }
+//
+//                }
+//            }
 //        }
 //
 //        Spacer(modifier = Modifier.height(12.dp))
 //
+//        // Pager indicator
 //        HorizontalPagerIndicator(
 //            pagerState = pagerState,
 //            activeColor = Color(0xFF86544E),
@@ -371,8 +427,7 @@ fun BannerSlider(
 //        )
 //    }
 //}
-
-
+//
 
 
 @Composable
@@ -393,14 +448,15 @@ fun CategorySection(
         ) {
             CustomMontserratText(
                 text = AppTexts.categories,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.ExtraBold,
                 fontSize = 16.sp,
                 color = Color.Black
             )
             CustomMontserratText(
                 text = AppTexts.seeAll,
-                color = Color.Gray,
-                fontSize = 12.sp,
+                color = PrimaryColor,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
                 modifier = Modifier.clickable { onSeeAllClick() }
             )
         }
