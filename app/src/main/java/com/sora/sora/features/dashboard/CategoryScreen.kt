@@ -107,7 +107,7 @@ import com.sora.sora.core.navigations.toRoute
 //        modifier = Modifier
 //            .fillMaxWidth()
 //            .height(150.dp).clickable {
-//                NavigationManager.navigateTo(Dest.CategoryDetailScreen::class.toRoute())
+//                NavigationManager.navigateTo(Dest.com.sora.sora.features.category.screen.CategoryDetailScreen::class.toRoute())
 //            }, // approximate height to match your screenshots
 //        shape = RoundedCornerShape(16.dp),
 //        // Optional: set card elevation or shadow here if using Material3 CardDefaults
