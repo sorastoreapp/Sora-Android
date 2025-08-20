@@ -11,13 +11,16 @@ import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sora.sora.core.CustomAppBar
 import com.sora.sora.core.CustomTopBar2
 import com.sora.sora.core.customButtons.CustomButton
 import com.sora.sora.core.customText.CustomMontserratText
@@ -234,6 +237,8 @@ import com.sora.sora.ui.theme.TextFieldColor
 
 
 
+@Preview(showBackground = true)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddNewAddressScreen() {
     // Form field states
@@ -251,110 +256,126 @@ fun AddNewAddressScreen() {
     val areas = listOf("Area 1", "Area 2", "Area 3", "Area 4")
     var expandedArea by remember { mutableStateOf(false) }
     val context = LocalContext.current
-    Column(
+
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(25.dp)
-            .statusBarsPadding()
+            .background(color = Color.White)
     ) {
-
-        CustomTopBar2(title = "Add New Address")
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // Name Field
-        AppTextField2(
-            placeholder = "Enter Name",
-            value = name,
-            onValueChange = { name = it },
-            keyboardType = KeyboardType.Text,
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Phone Number Field
-        AppTextField2(
-            placeholder = "Phone number",
-            value = phoneNumber,
-            onValueChange = { phoneNumber = it },
-            keyboardType = KeyboardType.Phone,
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Governorate Dropdown
-        CustomDropdown(
-            label = "Governorate (City)",
-            items = governorates,
-            selectedItem = governorate,
-            onItemSelected = { governorate = it },
-            expanded = expandedGov,
-            onExpandChanged = { expandedGov = it },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Area Dropdown
-        CustomDropdown(
-            label = "Area",
-            items = areas,
-            selectedItem = area,
-            onItemSelected = { area = it },
-            expanded = expandedArea,
-            onExpandChanged = { expandedArea = it },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Block Field
-        AppTextField2(
-            placeholder = "Block",
-            value = block,
-            onValueChange = { block = it },
-            keyboardType = KeyboardType.Text,
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // House No Field
-        AppTextField2(
-            placeholder = "House No",
-            value = houseNo,
-            onValueChange = { houseNo = it },
-            keyboardType = KeyboardType.Text,
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Additional Details Field
-        AppTextField2(
-            placeholder = "Any additional details",
-            value = additionalDetails,
-            onValueChange = { additionalDetails = it },
-            keyboardType = KeyboardType.Text,
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        // Save Button
-        CustomButton(
-            label = "Save",
-            onClick = {
-                Toast.makeText(context, "New Address Saved", Toast.LENGTH_SHORT).show()
-                navController.popBackStack()  //
+        CustomAppBar(
+            title = "Add New Address",
+            onBackClick = {
+                // Handle back click, navigate back or pop from the navigation stack
+                navController.popBackStack()
             },
-            required = true,
-            modifier = Modifier.padding(bottom = 8.dp) // Optional custom modifier
-        )
 
-        Spacer(modifier = Modifier.height(5.dp))
+        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 70.dp)
+                .statusBarsPadding()
+        ) {
+
+
+
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Name Field
+            AppTextField2(
+                placeholder = "Enter Name",
+                value = name,
+                onValueChange = { name = it },
+                keyboardType = KeyboardType.Text,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Phone Number Field
+            AppTextField2(
+                placeholder = "Phone number",
+                value = phoneNumber,
+                onValueChange = { phoneNumber = it },
+                keyboardType = KeyboardType.Phone,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Governorate Dropdown
+            CustomDropdown(
+                label = "Governorate (City)",
+                items = governorates,
+                selectedItem = governorate,
+                onItemSelected = { governorate = it },
+                expanded = expandedGov,
+                onExpandChanged = { expandedGov = it },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Area Dropdown
+            CustomDropdown(
+                label = "Area",
+                items = areas,
+                selectedItem = area,
+                onItemSelected = { area = it },
+                expanded = expandedArea,
+                onExpandChanged = { expandedArea = it },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Block Field
+            AppTextField2(
+                placeholder = "Block",
+                value = block,
+                onValueChange = { block = it },
+                keyboardType = KeyboardType.Text,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // House No Field
+            AppTextField2(
+                placeholder = "House No",
+                value = houseNo,
+                onValueChange = { houseNo = it },
+                keyboardType = KeyboardType.Text,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Additional Details Field
+            AppTextField2(
+                placeholder = "Any additional details",
+                value = additionalDetails,
+                onValueChange = { additionalDetails = it },
+                keyboardType = KeyboardType.Text,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // Save Button
+            CustomButton(
+                label = "Save",
+                onClick = {
+                    Toast.makeText(context, "New Address Saved", Toast.LENGTH_SHORT).show()
+                    navController.popBackStack()  //
+                },
+                required = true,
+                modifier = Modifier.padding(bottom = 8.dp) // Optional custom modifier
+            )
+
+            Spacer(modifier = Modifier.height(5.dp))
+        }
     }
 }
 
