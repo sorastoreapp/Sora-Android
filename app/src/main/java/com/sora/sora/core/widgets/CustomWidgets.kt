@@ -64,6 +64,7 @@ import androidx.compose.ui.res.painterResource
 
 import androidx.compose.ui.unit.dp
 import com.sora.sora.R
+import com.sora.sora.core.AppTexts
 import kotlinx.coroutines.delay
 
 
@@ -108,17 +109,18 @@ fun ProductSection(title: String, products: List<Product>) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
+            CustomMontserratText(
                 text = title,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 18.sp,
+                fontWeight = FontWeight.ExtraBold,
+                fontSize = 16.sp,
                 color = Color.Black
             )
-            Text(
-                text = "See All",
+            CustomMontserratText(
+                text = AppTexts.seeAll,
                 color = PrimaryColor,
-                fontSize = 12.sp,
-                modifier = Modifier.clickable { }
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.clickable {  }
             )
         }
         Spacer(modifier = Modifier.height(12.dp))

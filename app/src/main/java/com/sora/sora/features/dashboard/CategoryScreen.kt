@@ -194,25 +194,27 @@ fun CategoryScreen(
                 .fillMaxWidth()
                 .padding(vertical = 10.dp),
             color = Color.Black,
-            fontWeight = FontWeight.SemiBold,
+            fontWeight = FontWeight.Bold,
             fontSize = 18.sp,
             textAlign = TextAlign.Center
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .systemBarsPadding()
                 .padding(horizontal = 16.dp, vertical = 8.dp)
-                .padding(bottom = 50.dp),
+                .padding(bottom = 70.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             itemsIndexed(categories) { index, category ->
                 CategoryCard(category = category)
             }
         }
+
+
     }
 }
 @Composable
@@ -224,7 +226,7 @@ fun CategoryCard(category: CategoryItemData) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(150.dp)  // Adjust the height of the card
+                .height(110.dp)  // Adjust the height of the card
                 .clickable {
                     // Navigate to category details screen
                     NavigationManager.navigateTo(Dest.CategoryDetailScreen::class.toRoute())
@@ -235,67 +237,66 @@ fun CategoryCard(category: CategoryItemData) {
             ) // Apply colorCode1 as the background color
         ) {
             // Content: Text and Icon with white circular background
-            Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(start = 20.dp, end = 20.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                // Text with custom font
-                Box(
+            Box {
+                // Shade image
+                Image(
+                    painter = painterResource(id = R.drawable.ic_category_shade),
+                    contentDescription = null,
                     modifier = Modifier
-                        .widthIn(max = 160.dp)  // allow wider max width if needed
-                        .padding(vertical = 2.dp)  // add vertical padding to avoid clipping
-                ) {
-                    CustomMontserratText(
-                        text = category.title,
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White,
-                        maxLines = 2,
-                        textAlign = TextAlign.Start,
-                    )
-                }
+                        .align(Alignment.TopEnd).height(100.dp), // Align the image to the top right corner
+                    colorFilter = ColorFilter.tint(Color(android.graphics.Color.parseColor(category.colorCode2))) // Apply colorCode2 as tint
+                )
 
-                Spacer(modifier = Modifier.width(12.dp))
-
-                // White circular background with icon inside
-                Surface(
-                    shape = CircleShape,
-                    color = Color.White,
-                    shadowElevation = 6.dp,
-                    modifier = Modifier.size(60.dp),
+                // Row for text and icon
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(start = 20.dp, end = 20.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
+                    // Text with custom font
                     Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier
+                            .widthIn(max = 190.dp)  // allow wider max width if needed
+                            .padding(vertical = 2.dp)  // add vertical padding to avoid clipping
                     ) {
-                        Image(
-                            painter = painterResource(id = category.iconRes),
-                            contentDescription = category.title,
-                            modifier = Modifier.size(36.dp) // icon size similar to your screenshots
+                        CustomMontserratText(
+                            text = category.title,
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Black,
+                            maxLines = 2,
+                            textAlign = TextAlign.Start,
                         )
+                    }
+
+                    Spacer(modifier = Modifier.width(12.dp))
+
+                    // White circular background with icon inside
+                    Surface(
+                        shape = CircleShape,
+                        color = Color.White,
+                        shadowElevation = 6.dp,
+                        modifier = Modifier.size(60.dp),
+                    ) {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            Image(
+                                painter = painterResource(id = category.iconRes),
+                                contentDescription = category.title,
+                                modifier = Modifier.size(36.dp) // icon size similar to your screenshots
+                            )
+                        }
                     }
                 }
             }
         }
-
-        // Right side shade (using the image) with colorCode2 as tint
-        Box (modifier = Modifier.background(Color.Red)) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_category_shade),
-                contentDescription = null,
-                modifier = Modifier
-                    .align(Alignment.TopEnd) // Align the image to the top right corner
-                    .width(200.dp)  // Adjust the width as needed
-                    .height(190.dp),  // Adjust the height as needed
-                contentScale = ContentScale.Fit,
-                colorFilter = ColorFilter.tint(Color(android.graphics.Color.parseColor(category.colorCode2))) // Apply colorCode2 as tint
-            )
-        }
     }
 }
+
 
 
 
