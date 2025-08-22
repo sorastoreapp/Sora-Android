@@ -76,7 +76,7 @@ fun MyAddressesScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 76.dp) // Adjust to make space for the app bar
+                .padding(top = 56.dp) // Adjust to make space for the app bar
                 .statusBarsPadding()
                 .padding(horizontal = 20.dp, )
                 .verticalScroll(rememberScrollState())
@@ -113,17 +113,13 @@ fun MyAddressesScreen(
             }
             Spacer(modifier = Modifier.height(vFactor(35)))
             CustomButton(
-                icon = R.drawable.ic_add ,
-                iconColor = PrimaryColor,
-                label = "Log in",
+                icon = R.drawable.ic_add_brown ,
+                label = "Add new address",
                 onClick = {},
                 containerColor = LightBrown,
                 textColor = PrimaryColor,
 
                 )
-
-
-            AddNewAddressButton()
 
         }
     }
@@ -136,7 +132,7 @@ fun AddressCard(address: Address) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(150.dp),
+            .height(vFactor(156)),
         shape = RoundedCornerShape(15.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White)
@@ -202,7 +198,7 @@ fun AddressCard(address: Address) {
                     text = address.address,
                     fontSize = 14.sp,
                     color = Color(0xB21C0F0C),
-                    maxLines = 2,
+                    maxLines = 3,
 //                    fontStyle = FontStyle.Italic,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -233,47 +229,6 @@ fun AddressCard(address: Address) {
 }
 
 
-@Composable
-fun AddNewAddressButton() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(75.dp)
-            .padding(4.dp)
-            .background(TextFieldColor2, shape = RoundedCornerShape(20.dp))
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 1.dp)
-                .clickable {
-                navController.navigate(Dest.AddNewAddressScreen::class.toRoute()) {
-                    popUpTo(Dest.OrdersScreen::class.toRoute()) { inclusive = true }
-                }
-            },
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center // Aligning content to the start
-        ) {
-            // Add Icon
-            Icon(
-                imageVector = Icons.Default.Add, // You can replace with your own icon
-                contentDescription = "Add New Address Icon",
-                modifier = Modifier.size(24.dp),
-                tint = PrimaryColor
-            )
-
-            Spacer(modifier = Modifier.width(8.dp)) // Spacer between icon and text
-
-            // Add new address text
-            Text(
-                text = "Add new address",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                color = PrimaryColor,
-            )
-        }
-    }
-}
 
 
 

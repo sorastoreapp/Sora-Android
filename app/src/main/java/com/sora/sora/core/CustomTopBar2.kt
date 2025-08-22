@@ -55,13 +55,19 @@ fun CustomAppBar(
         if (isBackButton == true) {
             Row(
                 modifier = Modifier
-                    .clickable {
-                        if (onBackClick == null) {
-                            navController?.popBackStack()
-                        } else {
-                            onBackClick()
-                        }
+                    .pointerInput(Unit) {
+                        detectTapGestures(
+                            onPress = { offset ->
+                                if (onBackClick == null) {
+                                    navController?.popBackStack()
+                                } else {
+                                    onBackClick()
+                                }
+                                awaitRelease()
+                            }
+                        )
                     },
+
                 verticalAlignment = Alignment.CenterVertically
             ) {
               if(isBackButton)  Box(

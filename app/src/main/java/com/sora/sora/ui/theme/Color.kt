@@ -1,6 +1,5 @@
 package com.sora.sora.ui.theme
 
-import androidx.compose.material.Colors
 import androidx.compose.ui.graphics.Color
 
 val Purple80 = Color(0xFFD0BCFF)
@@ -22,6 +21,8 @@ val AppGray = Color(0xFFDCD9D9)
 val AppTextGray = Color(0xFF928C8A)
 val DividerGray = Color(0xFFE5E5E5)
 val LightBrown = Color(0xFFFEF7F2)
+val ImageBackgroundColor = Color(0xFFF6F1EF)
+
 
 //
 val TextHintColor = Color.Black.copy(alpha = 0.6f)

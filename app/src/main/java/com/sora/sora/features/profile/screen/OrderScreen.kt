@@ -24,24 +24,26 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
 import com.sora.sora.core.CustomAppBar
-import com.sora.sora.core.CustomTopBar2
-import com.sora.sora.core.customText.CustomInterText
+import com.sora.sora.utils.constant.OrderStatusEnum
 import com.sora.sora.core.customText.CustomMontserratText
 import com.sora.sora.core.navigations.Dest
 import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.navigations.toRoute
-
+import com.sora.sora.core.vFactor
+import com.sora.sora.core.widgets.OrderStatusWidget
+import com.sora.sora.ui.theme.ImageBackgroundColor
+import com.sora.sora.utils.models.OrderModel
 
 
 @Preview(showBackground = true)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OrdersScreen() {
-    val orders = listOf(
-        Order(orderId = "Order #87778", items = 10, date = "March 28, 2025", productName = "Soft Plush Bear Toy", amount = "KD 20", status = "Processing ", image = R.drawable.img_temp_teddy_without_bg),
-        Order(orderId = "Order #87778", items = 10, date = "March 30, 2025", productName = "Brown Men Full T-shirt", amount = "KD 20", status = "Shipped", image = R.drawable.img_temp_teddy_without_bg),
-        Order(orderId = "Order #87778", items = 10, date = "April 2, 2025", productName = "Basket of clean towels", amount = "KD 20", status = "Delivered", image = R.drawable.img_temp_teddy_without_bg),
-        Order(orderId = "Order #87778", items = 10, date = "April 2, 2025", productName = "Basket of clean towels", amount = "KD 20", status = "Returned ", image = R.drawable.img_temp_teddy_without_bg)
+    val orderModels = listOf(
+        OrderModel(orderId = "Order #87778", items = 10, date = "March 28, 2025", productName = "Soft Plush Bear Toy", amount = "KD 20", status = OrderStatusEnum.Processing, image = R.drawable.img_temp_teddy_without_bg),
+        OrderModel(orderId = "Order #87778", items = 10, date = "March 30, 2025", productName = "Brown Men Full T-shirt", amount = "KD 20", status = OrderStatusEnum.Shipped, image = R.drawable.img_temp_teddy_without_bg),
+        OrderModel(orderId = "Order #87778", items = 10, date = "April 2, 2025", productName = "Basket of clean towels", amount = "KD 20", status = OrderStatusEnum.Delivered, image = R.drawable.img_temp_teddy_without_bg),
+        OrderModel(orderId = "Order #87778", items = 10, date = "April 2, 2025", productName = "Basket of clean towels", amount = "KD 20", status = OrderStatusEnum.Returned, image = R.drawable.img_temp_teddy_without_bg)
     )
     Box(
         modifier = Modifier
@@ -69,8 +71,8 @@ fun OrdersScreen() {
         ) {
             Spacer(modifier = Modifier.height(15.dp)) // Spacing before content
 
-            orders.forEach { order ->
-                OrderCard(order = order)
+            orderModels.forEach { order ->
+                OrderCard(orderModel = order)
                 Spacer(modifier = Modifier.height(12.dp))
             }
         }
@@ -79,20 +81,20 @@ fun OrdersScreen() {
 
 
 @Composable
-fun OrderCard(order: Order) {
+fun OrderCard(orderModel: OrderModel) {
     Card(
         modifier = Modifier
             .shadow(elevation = 24.dp, spotColor = Color(0x0D000000), ambientColor = Color(0x0D000000))
             .border(width = 1.dp, color = Color.Black.copy(alpha = 0.1f), shape = RoundedCornerShape(size = 15.dp))
             .padding(1.dp)
             .fillMaxWidth()
-            .height(125.dp)
+            .height(vFactor(120))
             .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(size = 15.dp))
 
 
 
             .clickable {
-                navController.navigate(Dest.OrderDetailScreen::class.toRoute() + "?status=Refund")
+                navController.navigate(Dest.OrderDetailScreen::class.toRoute() + "?status=${orderModel.status}")
             }
              ,
 //        shape = RoundedCornerShape(15.dp),
@@ -156,13 +158,13 @@ fun OrderCard(order: Order) {
                 Row(){
                     //            // Product Image
                     Image(
-                        painter = painterResource(id = order.image),
+                        painter = painterResource(id = orderModel.image),
                         contentDescription = "Product Image",
                         modifier =
                             Modifier
                                  .width(74.dp)
                                 .height(74.dp)
-                                .background(color = Color(0xFFF6F1EF), shape = RoundedCornerShape(size = 8.dp))
+                                .background(color = ImageBackgroundColor, shape = RoundedCornerShape(size = 8.dp))
                                 .padding(start = 4.32432.dp, top = 4.32432.dp, end = 4.32432.dp, bottom = 4.32432.dp)
                     )
                     Spacer(modifier = Modifier.width(12.dp))
@@ -172,7 +174,7 @@ fun OrderCard(order: Order) {
 
                 // Product Name
                       CustomMontserratText(
-                          text = order.orderId,
+                          text = orderModel.orderId,
                           fontWeight = FontWeight(500),
                           fontSize = 16.sp,
                           color = Color.Black,
@@ -183,7 +185,7 @@ fun OrderCard(order: Order) {
 
 
                 CustomMontserratText(
-                    text = "Items: ${order.items}",
+                    text = "Items: ${orderModel.items}",
                     fontSize = 13.sp,
                     fontWeight = FontWeight(400),
                     color = Color.Black.copy(alpha = 0.9f),
@@ -192,7 +194,7 @@ fun OrderCard(order: Order) {
 
                 Spacer(modifier = Modifier.height(5.dp))
                       CustomMontserratText(
-                    text = "${order.amount}",
+                    text = "${orderModel.amount}",
                     fontSize = 13.sp,
                     fontWeight = FontWeight(400),
                     color = Color.Black.copy(alpha = 0.9f),
@@ -200,34 +202,10 @@ fun OrderCard(order: Order) {
                 )
 
                 Spacer(modifier = Modifier.height(6.dp))
+                      OrderStatusWidget(status = orderModel.status)
 
                 // Order Status Button
-                Box(
-                    modifier = Modifier
-                        .background(
-                            color = when (order.status) {
-                                "Processing " -> Color(0x1AB58353)
-                                "Shipped" -> Color(0x1A006FEE)
-                                "Delivered" -> Color(0x0D07BD74)
-                                else -> Color(0x0D1C0F0C)
-                            },
-                            shape = RoundedCornerShape(20.dp)
-                        )
-                        .padding(horizontal = 9.dp, vertical = 5.dp)
-                ) {
-                    CustomInterText(
-                        text = order.status,
-                        fontSize = 14.sp,
-                        lineHeight = 16.sp,
-                           color = when (order.status) {
-                            "Processing " -> Color(0xFFB58353)
-                            "Shipped" -> Color(0xFF006FEE)
-                            "Delivered" -> Color(0xFF07BD74)
-                            else -> Color.Black
-                        },
-                        fontWeight = FontWeight.Medium
-                    )
-                }
+
 
             }
             }
@@ -240,12 +218,4 @@ fun OrderCard(order: Order) {
     }
 }
 
-data class Order(
-    val orderId: String,
-    val items: Int,
-    val date: String,
-    val productName: String,
-    val amount: String,
-    val status: String,
-    val image: Int // Image resource for the product
-)
+
