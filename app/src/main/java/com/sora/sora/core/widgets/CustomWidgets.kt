@@ -373,6 +373,7 @@ fun ProductCard(
     onShare: () -> Unit = {},
     onAddToCart: () -> Unit = {},
     onRemoveFromCart: () -> Unit = {},
+    color : Color = PrimaryColor,
     quantity: Int = 0 // <- add this (default keeps old calls working)
 ) {
     val cardWidth = 190.dp
@@ -433,7 +434,7 @@ fun ProductCard(
                     quantity = quantity,
                     onAdd = onAddToCart,
                     onRemove = onRemoveFromCart,
-                    color = PrimaryColor,
+                    color = color,
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
                         .padding(8.dp)
