@@ -159,8 +159,9 @@ fun OrderDetailScreen(status: String ="Processing", ) {
                     } else {
                         OrderDetailReviewCard(item)
                     }
-                    Spacer(modifier = Modifier.height(12.dp))
+
                 }
+                Spacer(modifier = Modifier.height(vFactor(36)))
 
                 // Cancel Order Button for specific statuses
                 if (orderStatusEnum == OrderStatusEnum.Processing) {
@@ -176,7 +177,7 @@ fun OrderDetailScreen(status: String ="Processing", ) {
                         textColor = Color(0xFFDB5A5A),
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
-                    Spacer(modifier = Modifier.width(10.dp))
+                    Spacer(modifier = Modifier.width(hFactor(16)))
                 }
 
                 // Conditional button text for specific order statuses
@@ -197,7 +198,7 @@ fun OrderDetailScreen(status: String ="Processing", ) {
                         icon = R.drawable.img_whatsapp // Pass the resource ID of the icon
                     )
 
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(hFactor(16)))
                 }
 
 
@@ -209,7 +210,7 @@ fun OrderDetailScreen(status: String ="Processing", ) {
                     textColor = PrimaryColor,
 
                     )
-                    Spacer(modifier = Modifier.width(10.dp))
+                    Spacer(modifier = Modifier.width(hFactor(12)))
               //  }
 
                 Spacer(
