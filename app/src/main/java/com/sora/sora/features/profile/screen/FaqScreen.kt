@@ -18,12 +18,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
+import com.sora.sora.core.CustomAppBar
 import com.sora.sora.core.customText.CustomMontserratText
+import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.ui.theme.AppTextGray
-
+@Preview(showBackground = true)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FaqScreen() {
     val context = LocalContext.current
@@ -32,135 +36,48 @@ fun FaqScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .statusBarsPadding()
+
             .background(Color.White) // Background for the entire screen
     ) {
+
+        CustomAppBar(
+            title = "FAQ'S",
+            onBackClick = {
+                // Handle back click, navigate back or pop from the navigation stack
+                navController.popBackStack()
+            },
+            modifier = Modifier.align(Alignment.TopCenter) // Aligning app bar at the top
+        )
+
         // Column for text content
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState()) // Makes the content scrollable
+                .padding(top = 56.dp) //
+                .statusBarsPadding()
+                .padding(horizontal = 20.dp, )
+                .verticalScroll(rememberScrollState())// Makes the content scrollable
 
         ) {
             // Back Button Section
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = { showBackPressed = true }) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Back",
-                        modifier = Modifier
-                            .background(Color.Gray.copy(alpha = 0.2f), shape = CircleShape)
-                            .padding(10.dp)
-                    )
-                }
-                Spacer(modifier = Modifier.width(48.dp))
-                CustomMontserratText(
-                    text = "FAQ'S",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
-                )
-            }
+            Spacer(modifier = Modifier.height(15.dp)) // Spacing before content
+            QuestionAnswer(question = "What is Sora?", answer = "Sora is a trusted e-commerce platform that sells toys, kids' products, and accessories.")
 
-            Spacer(modifier = Modifier.height(24.dp))
 
-            // Introduction section
-            CustomMontserratText(
-                text = "What is Sora?",
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                color = Color.Black
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            CustomMontserratText(
-                text = "Sora is a trusted e-commerce platform that sells toys, kids' products, and accessories.",
-                fontSize = 14.sp,
-                color = AppTextGray
-            )
+            QuestionAnswer(question = "Where does Sora operate?", answer = "Currently, Sora is designed for residents of Kuwait and follows the local laws and regulations.")
 
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Acceptance of Privacy Policy section
-            CustomMontserratText(
-                text = "Where does Sora operate?",
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                color = Color.Black
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            CustomMontserratText(
-                text = "Currently, Sora is designed for residents of Kuwait and follows the local laws and regulations.",
-                fontSize = 14.sp,
-                color = AppTextGray
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Eligibility section
-            CustomMontserratText(
-                text = "Who can use the Sora app?",
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                color = Color.Black
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            CustomMontserratText(
-                text = "• You must be at least 18 years old to use the app independently.\n" +
+       QuestionAnswer(question="Who can use the Sora app?", answer="• You must be at least 18 years old to use the app independently.\n" +
                         "• Users under 18 can use the app with parental consent.\n"+
-                        "• The app is intended for individuals aged 12 and above (as per the privacy policy). \n",
+                        "• The app is intended for individuals aged 12 and above (as per the privacy policy).\n")
 
-                fontSize = 14.sp,
-                color = AppTextGray
-            )
+       QuestionAnswer(question="How do I create an account?", answer="Simply download the Sora app, sign up with your details, and start shopping!")
 
-            Spacer(modifier = Modifier.height(16.dp))
 
-            // Information We Collect section
-            CustomMontserratText(
-                text = "How do I create an account?",
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                color = Color.Black
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            CustomMontserratText(
-                text = "Simply download the Sora app, sign up with your details, and start shopping!",
-                fontSize = 14.sp,
-                color = AppTextGray
-            )
+QuestionAnswer(question="How do I place an order?", answer="Browse products, add items to your cart, and proceed to checkout with a secure payment option.")
 
-            Spacer(modifier = Modifier.height(16.dp))
-            // Information We Collect section
-            CustomMontserratText(
-                text = "How do I place an order?",
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                color = Color.Black
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            CustomMontserratText(
-                text = "Browse products, add items to your cart, and proceed to checkout with a secure payment option.",
-                fontSize = 14.sp,
-                color = AppTextGray
-            )
+QuestionAnswer(question="What payment methods does Sora accept?", answer="Sora supports various payment methods, including credit/debit cards and other secure online payment options.")
 
-            Spacer(modifier = Modifier.height(16.dp))
 
-            CustomMontserratText(
-                text = "What payment methods does Sora accept?",
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                color = Color.Black
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            CustomMontserratText(
-                text = "Sora supports various payment methods, including credit/debit cards and other secure online payment options.",
-                fontSize = 14.sp,
-                color = AppTextGray
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
         }
 
         // Background image at the bottom
@@ -173,5 +90,25 @@ fun FaqScreen() {
                 .height(300.dp), // Adjust the height as needed
             contentScale = ContentScale.Fit
         )
+    }
+}
+@Composable
+fun QuestionAnswer(question:String, answer:String) {
+    Column(){
+        CustomMontserratText(
+            text = question,
+            fontWeight = FontWeight(600),
+            fontSize = 16.sp,
+            color = Color.Black
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        CustomMontserratText(
+            text = answer,
+            fontSize = 14.sp,
+            color = AppTextGray,
+            fontWeight = FontWeight(400)
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
     }
 }

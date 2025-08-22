@@ -221,7 +221,7 @@ fun AppTextField2(
             .fillMaxWidth()
             .clip(RoundedCornerShape(24.dp))  // Set the corner radius for clipping
             .background(
-                color = Color(0xB5FF0000),  // Background color
+                color = Color(0x0DB58353),  // Background color
                 shape = RoundedCornerShape(24.dp)  // Same shape for background
             )
             .border(
@@ -252,7 +252,7 @@ fun AppTextField2(
         colors = TextFieldDefaults.textFieldColors(
             focusedLabelColor = Color.Black,
             cursorColor = PrimaryColor,
-            containerColor = TextFieldColor,
+            containerColor =  Color(0x0DB58353),
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Transparent,
