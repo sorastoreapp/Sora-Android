@@ -1,10 +1,28 @@
 package com.sora.sora.features.category.screen
 
-/**BY NOW ONLY WORKING CODE */
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
+import com.sora.sora.R
+import com.sora.sora.ui.theme.AppTextGray
+import com.sora.sora.core.customText.CustomMontserratText
+
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -12,30 +30,44 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.sora.sora.R
+import com.sora.sora.core.customText.CustomMontserratText
 import com.sora.sora.features.dashboard.Product
 import com.sora.sora.core.widgets.ProductCard
+import com.sora.sora.ui.theme.PrimaryColor
+import com.sora.sora.ui.theme.SecondaryColor100
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ColorFilter.Companion.tint
 
+
+/** Working but there is no bottom bar**/
+
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun CategoryDetailScreen() {
+
+    var themeColor = Color(0xFFFADA7A)
     val filters = listOf("All", "Soft & Cuddly", "Action & Adventure", "Educational", "Outdoor")
     var selectedFilter by remember { mutableStateOf(filters[0]) }
 
@@ -55,15 +87,15 @@ fun CategoryDetailScreen() {
     val minHeaderHeight = 80.dp
 
     // Teddy parameters
-    val maxTeddySize = 55.dp
-    val minTeddySize = 28.dp
-    val maxTeddyTopPadding = 36.dp
-    val minTeddyTopPadding = 8.dp
-    val maxTeddyStartPadding = 12.dp  // Fine-tuning for the transition from below the title
-    val minTeddyStartPadding = 0.dp   // The final position near the title
+    val maxTeddySize = 100.dp
+    val minTeddySize = 45.dp
+    val maxTeddyTopPadding = 85.dp
+    val minTeddyTopPadding = 20.dp
+    val maxTeddyStartPadding = 0.dp  // Initially at the center horizontally
+    val minTeddyStartPadding = -115.dp // Move it to the left
 
     val maxTitleStartPadding = 0.dp
-    val minTitleStartPadding = 36.dp
+    val minTitleStartPadding = 20.dp
 
     // Scroll progress calculation
     val scrollPx = gridState.firstVisibleItemScrollOffset.toFloat()
@@ -82,101 +114,134 @@ fun CategoryDetailScreen() {
     val teddyScale = 1f - 0.25f * collapseFraction
     val teddyAlpha = 1f - 0.2f * collapseFraction
     val titleStartPadding by animateDpAsState(maxTitleStartPadding + (minTitleStartPadding - maxTitleStartPadding) * collapseFraction)
-    val titleVerticalOffset by animateDpAsState(10.dp * collapseFraction)
+
+    // Animated Spacer height
+    val spacerHeight by animateDpAsState(45.dp - (12.dp * collapseFraction)) // Spacer height shrinks as we scroll
+
+    val scrollState = rememberScrollState()
 
     Column(modifier = Modifier.fillMaxSize().padding(bottom = 40.dp)) {
         val topPadding = 22.dp
-        val topPaddingForTopBar = 44.dp
-        val bottomPadding = 16.dp
 
-        Box(
-            Modifier
-                .fillMaxWidth()
-                .height(headerHeight)
-                .background(Brush.verticalGradient(listOf(Color(0xFFF8DC82), Color.Transparent)))
-        ) {
-            Box(modifier = Modifier.fillMaxSize().padding(top = topPadding)) {
-                // Top bar - fixed height with top padding
-
-                Row(
-                    Modifier
-                        .padding(horizontal = 8.dp)
-                        .fillMaxWidth()
-                        .padding(top = 22.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    // Back Button
-                    IconButton(
-                        onClick = { /* Back logic */ },
-                        modifier = Modifier.size(40.dp)
-                    ) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = Color(0xFFA48963))
-                    }
-
-                    // Animated title
-                    Text(
-                        text = "Toys & Plushies",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF3A260C),
-                        modifier = Modifier
-                            .padding(start = titleStartPadding)
-                            .offset(y = titleVerticalOffset)
-                            .graphicsLayer {
-                                alpha = 1f // Optionally animate alpha
-                            }
-                    )
-                    Spacer(Modifier.weight(1f))
-                    // Cart
-                    IconButton(
-                        onClick = { /* cart */ },
-                        modifier = Modifier.size(40.dp)
-                    ) {
-                        Icon(Icons.Default.ShoppingCart, contentDescription = "Cart", tint = Color(0xFFA48963))
-                    }
-                }
-                // Teddy Icon with animated transition to the left of the title
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-//                        .padding(
-//                            start = teddyStartPadding,
-//                            top = teddyTopPadding,
-//                            end = 4.dp,
-//                            bottom = 4.dp
-//                        )
-//                        .size(teddySize)
-                        .offset(x = teddyStartPadding, y = titleVerticalOffset) // Horizontal movement
-                        .graphicsLayer {
-                            scaleX = teddyScale
-                            scaleY = teddyScale
-                            alpha = teddyAlpha
-                        }
-                ) {
-                    Image(
-                        painter = painterResource(R.drawable.img_temp_black_teddy),
-                        contentDescription = "Teddy",
-                        modifier = Modifier.fillMaxSize()
-                    )
-                }
-
-            }
-        }
-
-        // Filter Chips - pinned at bottom
-        LazyRow(
-            modifier = Modifier
-                .padding(start = 16.dp, bottom = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(filters) { filter ->
-                FilterChip(
-                    text = filter,
-                    isSelected = filter == selectedFilter,
-                    onClick = { selectedFilter = filter }
+        Column( Modifier.background(
+                Brush.verticalGradient(
+                    colors = listOf(
+                        themeColor.copy(alpha = 0.8f),        // Opaque at the top with 50% opacity
+//                        Color(0xFFFFFFFF),        // Opaque at the top
+                        themeColor.copy(alpha = 0f),  // Partially transparent mid-way
+                    ),
                 )
+                ).verticalScroll(scrollState)
+        ){
+
+            Box(
+                Modifier
+                    .fillMaxWidth()
+                    .height(headerHeight)
+            ) {
+                Box(modifier = Modifier.fillMaxSize().padding(top = topPadding)) {
+                    // Top bar - fixed height with top padding
+
+                    Row(
+                        Modifier
+                            .padding(horizontal = 16.dp)
+                            .fillMaxWidth()
+                            .padding(top = 30.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        // Back Button
+                        Box(
+                            modifier = Modifier
+                                .size(35.dp)
+                                .clip(CircleShape)
+                                .background(themeColor.copy(alpha = 0.1f))
+
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.ArrowBack,
+                                contentDescription = "Back",
+                                tint = themeColor,
+                                modifier = Modifier
+                                    .align(Alignment.Center)
+                                    .size(30.dp)
+                            )
+                        }
+
+                        Spacer(Modifier.weight(1f))
+                        // Animated title
+                        Text(
+                            text = "Toys & Plushies",
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF3A260C),
+                            modifier = Modifier
+                                .padding(start = titleStartPadding)
+                                .graphicsLayer {
+                                    alpha = 1f // Optionally animate alpha
+                                }
+                        )
+                        Spacer(Modifier.weight(1f))
+                        // Cart
+                        Box(
+                            modifier = Modifier
+                                .size(35.dp)
+                                .clip(CircleShape)
+                                .background(themeColor.copy(alpha = 0.1f))
+                        ) {
+                            Image(painter = painterResource(R.drawable.ic_empty_order), colorFilter = tint(themeColor) ,modifier = Modifier
+                                .align(Alignment.Center)
+                                .size(30.dp), contentDescription = "Cart", )
+                        }
+                    }
+                    // Teddy Icon with animated transition to the left of the title
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .fillMaxWidth() // Ensure it takes up the full width for centering
+                            .offset(x = teddyStartPadding, y = teddyTopPadding) // Horizontal movement
+                            .graphicsLayer {
+                                scaleX = teddyScale
+                                scaleY = teddyScale
+                                alpha = teddyAlpha
+                            }
+                    ) {
+                        Image(
+                            painter = painterResource(R.drawable.ic_cat_toy),
+                            contentDescription = "Teddy",
+                            modifier = Modifier.size(teddySize)
+                        )
+                    }
+                }
             }
+
+            // Dynamic Spacer height as we scroll
+            Spacer(modifier = Modifier.height(spacerHeight)) // This spacer height shrinks as we scroll
+
+
+
+            // Filter Chips - pinned at bottom
+            LazyRow(
+                modifier = Modifier
+                    .padding(start = 16.dp, bottom = 5.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(filters) { filter ->
+                    FilterChips(
+                        text = filter,
+                        isSelected = filter == selectedFilter,
+                        themeColor = themeColor,
+                        onClick = { selectedFilter = filter }
+                    )
+                }
+            }
+
+            CategoryResultRow(resultCount = products.size)
+            //            CategoryResultRow(resultCount = products.size, onApplyFilter = { _, _, _, _ -> })
+            Spacer(modifier = Modifier.height(10.dp))
+
         }
+
+
 
         // Product grid scrollable content
         LazyVerticalGrid(
@@ -187,32 +252,401 @@ fun CategoryDetailScreen() {
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.fillMaxSize()
         ) {
+
             items(products) { product ->
-                ProductCard(product)
+                var qty by remember { mutableIntStateOf(0) }
+                ProductCard(product = product,  onFavorite = { /* … */ },
+                    onShare = { /* … */ },
+                    onAddToCart = { qty++ },
+                    onRemoveFromCart = { if (qty > 0) qty-- },
+                    color = themeColor,
+                    quantity = qty)
             }
+
         }
     }
 }
 
-
-
 @Composable
-fun FilterChip(text: String, isSelected: Boolean, onClick: () -> Unit) {
+fun FilterChips(text: String, isSelected: Boolean,themeColor : Color, onClick: () -> Unit) {
     Surface(
-        modifier = Modifier.clickable(onClick = onClick),
-        shape = RoundedCornerShape(50),
-        color = if (isSelected) Color.White else Color(0xFFF2F2F2),
-        elevation = 2.dp
+        modifier = Modifier
+            .padding(vertical = 5.dp)
+            .pointerInput(Unit) {
+            detectTapGestures(
+                onPress = { offset ->
+                    onClick()
+                    awaitRelease()
+                }
+            )
+        },
+        shape = RoundedCornerShape(40),
+        color = if (isSelected) themeColor else  Color(0xFF8A4C3D).copy(alpha = 0.1f),
     ) {
-        Text(
+        CustomMontserratText(
             text = text,
-            fontSize = 14.sp,
-            fontWeight = if(isSelected) FontWeight.Bold else FontWeight.Normal,
-            color = if (isSelected) Color.Black else Color.Gray,
+            fontSize = 12.sp,
+            fontWeight = if(isSelected) FontWeight.SemiBold else FontWeight.W500,
+            color = if (isSelected) Color.White else Color.Black,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         )
     }
 }
+
+
+/**Working Code without space management and gradient sizer */
+//@OptIn(ExperimentalMaterialApi::class)
+//@Composable
+//fun CategoryDetailScreen() {
+//    val filters = listOf("All", "Soft & Cuddly", "Action & Adventure", "Educational", "Outdoor")
+//    var selectedFilter by remember { mutableStateOf(filters[0]) }
+//
+//    val products = listOf(
+//        Product(1, "Soft Plush Bear Toy", "1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_teddy)),
+//        Product(2, "Kids colorful car toy", "1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_multi_toy)),
+//        Product(3, "Multiple Kids toys Collection", "1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_multi_toy)),
+//        Product(4, "Blue teddy bear wearing", "1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_tshirt)),
+//        Product(5, "Colorful building blocks castle", "1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_multi_toy)),
+//        Product(6, "Adorable teddy bear loves", "1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_multi_toy))
+//    )
+//
+//    val gridState = rememberLazyGridState()
+//
+//    // Header heights in dp
+//    val maxHeaderHeight = 170.dp
+//    val minHeaderHeight = 80.dp
+//
+//    // Teddy parameters
+//    val maxTeddySize = 100.dp
+//    val minTeddySize = 40.dp
+//    val maxTeddyTopPadding = 70.dp
+//    val minTeddyTopPadding = 25.dp
+//    val maxTeddyStartPadding = 0.dp  // Initially at the center horizontally
+//    val minTeddyStartPadding = -135.dp // Move it to the left
+//
+//    val maxTitleStartPadding = 0.dp
+//    val minTitleStartPadding = 20.dp
+//
+//    // Scroll progress calculation
+//    val scrollPx = gridState.firstVisibleItemScrollOffset.toFloat()
+//    val isPastFirstItem = gridState.firstVisibleItemIndex > 0
+//    val collapseRangePx = with(LocalDensity.current) { (maxHeaderHeight - minHeaderHeight).toPx() }
+//    val collapseFraction = when {
+//        isPastFirstItem -> 1f
+//        else -> (scrollPx / collapseRangePx).coerceIn(0f, 1f)
+//    }
+//
+//    // Animated values for transformations
+//    val headerHeight by animateDpAsState(maxHeaderHeight - (maxHeaderHeight - minHeaderHeight) * collapseFraction)
+//    val teddySize by animateDpAsState(maxTeddySize - (maxTeddySize - minTeddySize) * collapseFraction)
+//    val teddyTopPadding by animateDpAsState(maxTeddyTopPadding - (maxTeddyTopPadding - minTeddyTopPadding) * collapseFraction)
+//    val teddyStartPadding by animateDpAsState(maxTeddyStartPadding + (minTeddyStartPadding - maxTeddyStartPadding) * collapseFraction)
+//    val teddyScale = 1f - 0.25f * collapseFraction
+//    val teddyAlpha = 1f - 0.2f * collapseFraction
+//    val titleStartPadding by animateDpAsState(maxTitleStartPadding + (minTitleStartPadding - maxTitleStartPadding) * collapseFraction)
+////    val titleVerticalOffset by animateDpAsState(10.dp * collapseFraction)
+//
+//    Column(modifier = Modifier.fillMaxSize().padding(bottom = 40.dp)) {
+//        val topPadding = 22.dp
+//
+//        Box(
+//            Modifier
+//                .fillMaxWidth()
+//                .height(headerHeight)
+//                .background(Brush.verticalGradient(listOf(Color(0xFFF8DC82), Color.Transparent)))
+//        ) {
+//            Box(modifier = Modifier.fillMaxSize().padding(top = topPadding)) {
+//                // Top bar - fixed height with top padding
+//
+//                Row(
+//                    Modifier
+//                        .padding(horizontal = 8.dp)
+//                        .fillMaxWidth()
+//                        .padding(top = 22.dp),
+//                    verticalAlignment = Alignment.CenterVertically
+//                ) {
+//                    // Back Button
+//                    IconButton(
+//                        onClick = { /* Back logic */ },
+//                        modifier = Modifier.size(40.dp)
+//                    ) {
+//                        Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = Color(0xFFA48963))
+//                    }
+//
+//                    Spacer(Modifier.weight(1f))
+//                    // Animated title
+//                    Text(
+//                        text = "Toys & Plushies",
+//                        fontSize = 20.sp,
+//                        fontWeight = FontWeight.Bold,
+//                        color = Color(0xFF3A260C),
+//                        modifier = Modifier
+//                            .padding(start = titleStartPadding)
+////                            .offset(y = titleVerticalOffset)
+//                            .graphicsLayer {
+//                                alpha = 1f // Optionally animate alpha
+//                            }
+//                    )
+//                    Spacer(Modifier.weight(1f))
+//                    // Cart
+//                    IconButton(
+//                        onClick = { /* cart */ },
+//                        modifier = Modifier.size(40.dp)
+//                    ) {
+//                        Icon(Icons.Default.ShoppingCart, contentDescription = "Cart", tint = Color(0xFFA48963))
+//                    }
+//                }
+//                // Teddy Icon with animated transition to the left of the title
+//                Box(
+//                    contentAlignment = Alignment.Center,
+//                    modifier = Modifier
+//                        .fillMaxWidth() // Ensure it takes up the full width for centering
+//                        .offset(x = teddyStartPadding, y = teddyTopPadding) // Horizontal movement
+//                        .graphicsLayer {
+//                            scaleX = teddyScale
+//                            scaleY = teddyScale
+//                            alpha = teddyAlpha
+//                        }
+//                ) {
+//                    Image(
+//                        painter = painterResource(R.drawable.img_temp_teddy),
+//                        contentDescription = "Teddy",
+//                        modifier = Modifier.size(teddySize)
+//                    )
+//                }
+//
+//            }
+//        }
+//
+//        Spacer(modifier = Modifier.height(70.dp)) // i want this space to be dynamic shrink and degrade
+//        // Filter Chips - pinned at bottom
+//        LazyRow(
+//            modifier = Modifier
+//                .padding(start = 16.dp, bottom = 16.dp),
+//            horizontalArrangement = Arrangement.spacedBy(8.dp)
+//        ) {
+//            items(filters) { filter ->
+//                FilterChips(
+//                    text = filter,
+//                    isSelected = filter == selectedFilter,
+//                    onClick = { selectedFilter = filter }
+//                )
+//            }
+//        }
+//
+//        // Product grid scrollable content
+//        LazyVerticalGrid(
+//            state = gridState,
+//            columns = GridCells.Fixed(2),
+//            contentPadding = PaddingValues(16.dp),
+//            verticalArrangement = Arrangement.spacedBy(16.dp),
+//            horizontalArrangement = Arrangement.spacedBy(16.dp),
+//            modifier = Modifier.fillMaxSize()
+//        ) {
+//            items(products) { product ->
+//                ProductCard(product)
+//            }
+//        }
+//    }
+//}
+
+
+/** WORKING Without center to left movement of the teddy  */
+//import androidx.compose.animation.core.animateDpAsState
+//import androidx.compose.foundation.Image
+//import androidx.compose.foundation.background
+//import androidx.compose.foundation.clickable
+//import androidx.compose.foundation.layout.*
+//import androidx.compose.foundation.lazy.LazyRow
+//import androidx.compose.foundation.lazy.grid.GridCells
+//import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+//import androidx.compose.foundation.lazy.grid.items
+//import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+//import androidx.compose.foundation.lazy.items
+//import androidx.compose.foundation.shape.CircleShape
+//import androidx.compose.foundation.shape.RoundedCornerShape
+//import androidx.compose.material.*
+//import androidx.compose.material.icons.Icons
+//import androidx.compose.material.icons.filled.ArrowBack
+//import androidx.compose.material.icons.filled.ShoppingCart
+//import androidx.compose.runtime.*
+//import androidx.compose.ui.Alignment
+//import androidx.compose.ui.Modifier
+//import androidx.compose.ui.graphics.Brush
+//import androidx.compose.ui.graphics.Color
+//import androidx.compose.ui.graphics.graphicsLayer
+//import androidx.compose.ui.layout.ContentScale
+//import androidx.compose.ui.platform.LocalDensity
+//import androidx.compose.ui.res.painterResource
+//import androidx.compose.ui.text.font.FontWeight
+//import androidx.compose.ui.unit.dp
+//import androidx.compose.ui.unit.sp
+//import com.sora.sora.R
+//import com.sora.sora.features.dashboard.Product
+//import com.sora.sora.core.widgets.ProductCard
+//
+//@Composable
+//fun CategoryDetailScreen() {
+//    val filters = listOf("All", "Soft & Cuddly", "Action & Adventure", "Educational", "Outdoor")
+//    var selectedFilter by remember { mutableStateOf(filters[0]) }
+//
+//    val products = listOf(
+//        Product(1, "Soft Plush Bear Toy", "1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_teddy)),
+//        Product(2, "Kids colorful car toy", "1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_multi_toy)),
+//        Product(3, "Multiple Kids toys Collection", "1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_multi_toy)),
+//        Product(4, "Blue teddy bear wearing", "1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_tshirt)),
+//        Product(5, "Colorful building blocks castle", "1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_multi_toy)),
+//        Product(6, "Adorable teddy bear loves", "1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_multi_toy))
+//    )
+//
+//    val gridState = rememberLazyGridState()
+//
+//    // Header heights in dp
+//    val maxHeaderHeight = 170.dp
+//    val minHeaderHeight = 80.dp
+//
+//    // Teddy parameters
+//    val maxTeddySize = 55.dp
+//    val minTeddySize = 28.dp
+//    val maxTeddyTopPadding = 36.dp
+//    val minTeddyTopPadding = 8.dp
+//    val maxTeddyStartPadding = 12.dp  // Fine-tuning for the transition from below the title
+//    val minTeddyStartPadding = 0.dp   // The final position near the title
+//
+//    val maxTitleStartPadding = 0.dp
+//    val minTitleStartPadding = 36.dp
+//
+//    // Scroll progress calculation
+//    val scrollPx = gridState.firstVisibleItemScrollOffset.toFloat()
+//    val isPastFirstItem = gridState.firstVisibleItemIndex > 0
+//    val collapseRangePx = with(LocalDensity.current) { (maxHeaderHeight - minHeaderHeight).toPx() }
+//    val collapseFraction = when {
+//        isPastFirstItem -> 1f
+//        else -> (scrollPx / collapseRangePx).coerceIn(0f, 1f)
+//    }
+//
+//    // Animated values for transformations
+//    val headerHeight by animateDpAsState(maxHeaderHeight - (maxHeaderHeight - minHeaderHeight) * collapseFraction)
+//    val teddySize by animateDpAsState(maxTeddySize - (maxTeddySize - minTeddySize) * collapseFraction)
+//    val teddyTopPadding by animateDpAsState(maxTeddyTopPadding - (maxTeddyTopPadding - minTeddyTopPadding) * collapseFraction)
+//    val teddyStartPadding by animateDpAsState(maxTeddyStartPadding + (minTeddyStartPadding - maxTeddyStartPadding) * collapseFraction)
+//    val teddyScale = 1f - 0.25f * collapseFraction
+//    val teddyAlpha = 1f - 0.2f * collapseFraction
+//    val titleStartPadding by animateDpAsState(maxTitleStartPadding + (minTitleStartPadding - maxTitleStartPadding) * collapseFraction)
+//    val titleVerticalOffset by animateDpAsState(10.dp * collapseFraction)
+//
+//    Column(modifier = Modifier.fillMaxSize().padding(bottom = 40.dp)) {
+//        val topPadding = 22.dp
+//        val topPaddingForTopBar = 44.dp
+//        val bottomPadding = 16.dp
+//
+//        Box(
+//            Modifier
+//                .fillMaxWidth()
+//                .height(headerHeight)
+//                .background(Brush.verticalGradient(listOf(Color(0xFFF8DC82), Color.Transparent)))
+//        ) {
+//            Box(modifier = Modifier.fillMaxSize().padding(top = topPadding)) {
+//                // Top bar - fixed height with top padding
+//
+//                Row(
+//                    Modifier
+//                        .padding(horizontal = 8.dp)
+//                        .fillMaxWidth()
+//                        .padding(top = 22.dp),
+//                    verticalAlignment = Alignment.CenterVertically
+//                ) {
+//                    // Back Button
+//                    IconButton(
+//                        onClick = { /* Back logic */ },
+//                        modifier = Modifier.size(40.dp)
+//                    ) {
+//                        Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = Color(0xFFA48963))
+//                    }
+//
+//                    // Animated title
+//                    Text(
+//                        text = "Toys & Plushies",
+//                        fontSize = 20.sp,
+//                        fontWeight = FontWeight.Bold,
+//                        color = Color(0xFF3A260C),
+//                        modifier = Modifier
+//                            .padding(start = titleStartPadding)
+//                            .offset(y = titleVerticalOffset)
+//                            .graphicsLayer {
+//                                alpha = 1f // Optionally animate alpha
+//                            }
+//                    )
+//                    Spacer(Modifier.weight(1f))
+//                    // Cart
+//                    IconButton(
+//                        onClick = { /* cart */ },
+//                        modifier = Modifier.size(40.dp)
+//                    ) {
+//                        Icon(Icons.Default.ShoppingCart, contentDescription = "Cart", tint = Color(0xFFA48963))
+//                    }
+//                }
+//                // Teddy Icon with animated transition to the left of the title
+//                Box(
+//                    contentAlignment = Alignment.Center,
+//                    modifier = Modifier
+////                        .padding(
+////                            start = teddyStartPadding,
+////                            top = teddyTopPadding,
+////                            end = 4.dp,
+////                            bottom = 4.dp
+////                        )
+////                        .size(teddySize)
+//                        .offset(x = teddyStartPadding, y = titleVerticalOffset) // Horizontal movement
+//                        .graphicsLayer {
+//                            scaleX = teddyScale
+//                            scaleY = teddyScale
+//                            alpha = teddyAlpha
+//                        }
+//                ) {
+//                    Image(
+//                        painter = painterResource(R.drawable.img_temp_black_teddy),
+//                        contentDescription = "Teddy",
+//                        modifier = Modifier.fillMaxSize()
+//                    )
+//                }
+//
+//            }
+//        }
+//
+//        // Filter Chips - pinned at bottom
+//        LazyRow(
+//            modifier = Modifier
+//                .padding(start = 16.dp, bottom = 16.dp),
+//            horizontalArrangement = Arrangement.spacedBy(8.dp)
+//        ) {
+//            items(filters) { filter ->
+//                FilterChip(
+//                    text = filter,
+//                    isSelected = filter == selectedFilter,
+//                    onClick = { selectedFilter = filter }
+//                )
+//            }
+//        }
+//
+//        // Product grid scrollable content
+//        LazyVerticalGrid(
+//            state = gridState,
+//            columns = GridCells.Fixed(2),
+//            contentPadding = PaddingValues(16.dp),
+//            verticalArrangement = Arrangement.spacedBy(16.dp),
+//            horizontalArrangement = Arrangement.spacedBy(16.dp),
+//            modifier = Modifier.fillMaxSize()
+//        ) {
+//            items(products) { product ->
+//                ProductCard(product)
+//            }
+//        }
+//    }
+//}
+//
+//
+//
 
 
 /**Totally New Approach */
