@@ -1,6 +1,6 @@
 package com.sora.sora.core.navigations
 
-import CategoryDetailScreen
+import com.sora.sora.features.category.screen.CategoryDetailScreen
 import CreateAccountScreen
 import ForgetPasswordScreen
 import NewPasswordScreen
@@ -62,7 +62,7 @@ fun MainNavigation(modifier: Modifier = Modifier) {
 
     NavHost(
         navController = navController,
-        startDestination = Dest.SignIn::class.toRoute(),
+        startDestination = Dest.CategoryDetailScreen::class.toRoute(),
         modifier = modifier
     ) {
          composable(Dest.OnboardingScreen::class.toRoute()) {
@@ -146,6 +146,7 @@ fun MainNavigation(modifier: Modifier = Modifier) {
         composable(Dest.CartScreen::class.toRoute()) { CartScreen()}
         composable(Dest.ItemDetailScreen::class.toRoute()) { ItemDetailScreen()}
         composable(Dest.CategoryDetailScreen::class.toRoute()) { CategoryDetailScreen()}
+
         composable(Dest.ProfileScreen::class.toRoute()) { ProfileScreen()}
         composable(Dest.OrdersScreen::class.toRoute()) { OrdersScreen()}
         composable(Dest.MyAddressScreen::class.toRoute()) { MyAddressesScreen() }
@@ -166,4 +167,5 @@ fun MainNavigation(modifier: Modifier = Modifier) {
             }
         }
     }
+
 }
