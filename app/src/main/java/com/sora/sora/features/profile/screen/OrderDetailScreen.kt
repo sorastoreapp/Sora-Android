@@ -71,16 +71,16 @@ fun OrderDetailScreen(status: String ="Processing", ) {
 
     Box(
         modifier = Modifier
-        .fillMaxSize()
-        .background(color = Color.White)) {
-           CustomAppBar(
+            .fillMaxSize()
+            .background(color = Color.White)) {
+        CustomAppBar(
             title = "Order Details",
             onBackClick = {
                 // Handle back click, navigate back or pop from the navigation stack
                 navController.popBackStack()
             },
             modifier = Modifier.align(Alignment.TopCenter)// Aligning app bar at the top
-           )
+        )
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -210,8 +210,8 @@ fun OrderDetailScreen(status: String ="Processing", ) {
                     textColor = PrimaryColor,
 
                     )
-                    Spacer(modifier = Modifier.width(hFactor(12)))
-              //  }
+                Spacer(modifier = Modifier.width(hFactor(12)))
+                //  }
 
                 Spacer(
                     modifier = Modifier
@@ -433,11 +433,11 @@ fun OrderDetailRow(label: String, value: String, status: Boolean = false) {
 
         if (status) {
 
-          OrderStatusWidget(status = OrderStatusEnum.fromText(value))
+            OrderStatusWidget(status = OrderStatusEnum.fromText(value))
         } else {
             CustomMontserratText(value,
                 fontSize = 14.sp, textAlign = TextAlign.End,
-                )
+            )
         }
     }
 }
@@ -473,12 +473,12 @@ fun OrderDetailCard(order: OrderItem) {
                         painter = painterResource(id = order.image),
                         contentDescription = "Product Image",
 
-                                modifier =
-                                Modifier
+                        modifier =
+                            Modifier
                                 .width(74.dp)
-                            .height(74.dp)
-                            .background(color = ImageBackgroundColor, shape = RoundedCornerShape(size = 8.dp))
-                            .padding(start = 4.32432.dp, top = 4.32432.dp, end = 4.32432.dp, bottom = 4.32432.dp)
+                                .height(74.dp)
+                                .background(color = ImageBackgroundColor, shape = RoundedCornerShape(size = 8.dp))
+                                .padding(start = 4.32432.dp, top = 4.32432.dp, end = 4.32432.dp, bottom = 4.32432.dp)
                     )
                     Spacer(modifier = Modifier.width(hFactor(10)))
 

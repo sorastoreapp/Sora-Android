@@ -145,16 +145,24 @@ fun ProfileScreen() {
                 Spacer(modifier = Modifier.height(6.dp).weight(1f))
 
 
+
                 CustomMontserratText(
                     text = "Create account",
+
                     fontSize = 14.sp,
                     color = PrimaryColor,
                     fontWeight = FontWeight(500),
                     lineHeight = 20.sp,
                     textAlign = TextAlign.Right,
-                    modifier = Modifier.clickable {
+                    modifier = Modifier.
+                        pointerInput(Unit) {
+                            detectTapGestures(
+                                onPress = { offset ->
+                                    navController.navigate(Dest.EditProfileScreen::class.toRoute())
+                                }
+                            )
+                        })
 
-                    })
             }
 
             Spacer(modifier = Modifier.height(26.dp))

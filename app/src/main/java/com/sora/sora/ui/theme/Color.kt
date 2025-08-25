@@ -1,5 +1,6 @@
 package com.sora.sora.ui.theme
 
+import androidx.compose.material.TextFieldColors
 import androidx.compose.ui.graphics.Color
 
 val Purple80 = Color(0xFFD0BCFF)
@@ -22,6 +23,9 @@ val AppTextGray = Color(0xFF928C8A)
 val DividerGray = Color(0xFFE5E5E5)
 val LightBrown = Color(0xFFFEF7F2)
 val ImageBackgroundColor = Color(0xFFF6F1EF)
+val TextFieldBackgroundColors = Color(0x0DB58353)
+val TextFieldBorderColors = Color(0xFFB58353)
+
 
 
 //
