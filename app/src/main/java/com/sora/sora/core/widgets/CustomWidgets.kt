@@ -65,6 +65,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.sora.sora.R
 import com.sora.sora.core.AppTexts
+import com.sora.sora.ui.theme.ProductCardColor
 import kotlinx.coroutines.delay
 
 
@@ -119,7 +120,7 @@ fun ProductSection(title: String, products: List<Product>) {
                 text = AppTexts.seeAll,
                 color = PrimaryColor,
                 fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.clickable {  }
             )
         }
@@ -394,7 +395,7 @@ fun ProductCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(cardHeight * 0.6f)
-                    .background(Color(0xFFFDF6F0))
+                    .background(ProductCardColor)
             ) {
                 Image(
                     painter = product.image,
@@ -480,7 +481,7 @@ fun AnimatedAddToCart(
     color: Color = PrimaryColor,
     autoCollapseMillis: Long = 2000L,
     maxQty: Int = 5,
-    minQty: Int = 0
+    minQty: Int = 0,
 ) {
     var expanded by remember { mutableStateOf(false) }
     var pressed by remember { mutableStateOf(false) }
