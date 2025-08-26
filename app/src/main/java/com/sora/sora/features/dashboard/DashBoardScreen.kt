@@ -220,9 +220,9 @@ fun BottomNavigationBar(
 ) {
     val items = listOf(
         NavItem("Home", R.drawable.ic_unselected_home, R.drawable.ic_selected_home),
-        NavItem("Category", R.drawable.ic_unselected_categories, R.drawable.ic_selected_categories),
+        NavItem("Categories", R.drawable.ic_unselected_categories, R.drawable.ic_selected_categories),
         NavItem("Cart", R.drawable.ic_unselected_cart, R.drawable.ic_selected_cart),
-        NavItem("Favorites", R.drawable.ic_unselected_favorite, R.drawable.ic_selected_favorite),
+        NavItem("Favorite", R.drawable.ic_unselected_favorite, R.drawable.ic_selected_favorite),
         NavItem("Profile", R.drawable.ic_unselected_profile, R.drawable.ic_selected_profile)
     )
     Surface(
