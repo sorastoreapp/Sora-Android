@@ -52,14 +52,17 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 
 import androidx.compose.ui.unit.dp
@@ -366,7 +369,7 @@ fun ProductSection(title: String, products: List<Product>) {
 //    }
 //}
 
-/** CODE WITH EXPANDABLE CARD WITHOUT COUNT INCREASE DECREASE */
+
 @Composable
 fun ProductCard(
     product: Product,
@@ -374,12 +377,13 @@ fun ProductCard(
     onShare: () -> Unit = {},
     onAddToCart: () -> Unit = {},
     onRemoveFromCart: () -> Unit = {},
+    isFavoriteScreen : Boolean = false,
     color : Color = PrimaryColor,
     quantity: Int = 0 // <- add this (default keeps old calls working)
 ) {
     val cardWidth = 190.dp
     val cardHeight = 263.dp
-
+    var isFavourite by remember { mutableStateOf(isFavoriteScreen) }
     Card(
         modifier = Modifier
             .width(cardWidth)
@@ -414,7 +418,18 @@ fun ProductCard(
                         .clickable { onFavorite() },
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(Icons.Default.FavoriteBorder, contentDescription = null, tint = PrimaryColor, modifier = Modifier.padding(7.dp))
+                    Icon(if(isFavourite)Icons.Default.Favorite else Icons.Default.FavoriteBorder, contentDescription = null, tint = PrimaryColor,
+                        modifier = Modifier.padding(7.dp).pointerInput(Unit) {
+                            detectTapGestures(
+                                onTap = {
+                                    onFavorite()
+                                    isFavourite = !isFavourite
+                                }
+                            )
+                        }
+                    )
+
+
                 }
 
                 // Share
@@ -452,7 +467,7 @@ fun ProductCard(
                     text = product.title,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
-                    fontWeight = FontWeight.W500,
+                    fontWeight = FontWeight.Bold,
                     fontSize = 14.sp,
                     color = Color(0xFF383B3E)
                 )
@@ -486,6 +501,7 @@ fun AnimatedAddToCart(
     var expanded by remember { mutableStateOf(false) }
     var pressed by remember { mutableStateOf(false) }
     val scale by animateFloatAsState(if (pressed) 0.95f else 1f, label = "press-scale")
+
 
     // Collapse when qty hits min
     LaunchedEffect(quantity) {

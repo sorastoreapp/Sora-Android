@@ -48,6 +48,7 @@ import com.google.accompanist.pager.rememberPagerState
 import com.sora.sora.core.customButtons.CountButton
 import com.sora.sora.core.customButtons.PrimaryButton
 import com.sora.sora.core.customText.CustomMontserratText
+import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.widgets.AnimatedAddToCart
 import com.sora.sora.core.widgets.ProductCard
 import com.sora.sora.features.favourites.widgets.RatingReviews
@@ -97,6 +98,9 @@ fun ItemDetailScreen(
                     .size(35.dp)
                     .clip(CircleShape)
                     .background(PrimaryColor100)
+                    .clickable {
+                        navController.popBackStack()
+                    }
 
             ) {
                 androidx.compose.material3.Icon(
@@ -645,10 +649,7 @@ fun ItemSlider(
                         )
                 }
 
-
                 }
-
-
 
                 Box(
                     modifier = Modifier
