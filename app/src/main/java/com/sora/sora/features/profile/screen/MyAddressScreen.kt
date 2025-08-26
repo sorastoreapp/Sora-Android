@@ -115,7 +115,9 @@ fun MyAddressesScreen(
             CustomButton(
                 icon = R.drawable.ic_add_brown ,
                 label = "Add new address",
-                onClick = {},
+                onClick = {
+                    navController.navigate(Dest.AddNewAddressScreen::class.toRoute() )
+                },
                 containerColor = LightBrown,
                 textColor = PrimaryColor,
 
