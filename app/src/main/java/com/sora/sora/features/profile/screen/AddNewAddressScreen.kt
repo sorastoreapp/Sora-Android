@@ -6,9 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -18,7 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -26,10 +26,15 @@ import com.sora.sora.core.CustomAppBar
 import com.sora.sora.core.CustomTopBar2
 import com.sora.sora.core.customButtons.CustomButton
 import com.sora.sora.core.customText.CustomMontserratText
+import com.sora.sora.core.hFactor
 import com.sora.sora.core.navigations.NavigationManager.navController
+import com.sora.sora.core.vFactor
 import com.sora.sora.ui.components.AppTextField2
 import com.sora.sora.ui.theme.PrimaryColor
+import com.sora.sora.ui.theme.TextFieldBackgroundColors
+import com.sora.sora.ui.theme.TextFieldBorderColors
 import com.sora.sora.ui.theme.TextFieldColor
+import com.sora.sora.ui.theme.TextHintColor
 
 /**working butw save toast not showing [error]*/
 //@Composable
@@ -251,6 +256,7 @@ fun AddNewAddressScreen() {
     var block by remember { mutableStateOf("") }
     var houseNo by remember { mutableStateOf("") }
     var additionalDetails by remember { mutableStateOf("") }
+    var selectedCountry by remember { mutableStateOf(Country("🇸🇦", "+966", "Saudi Arabia")) }
 
     val governorates = listOf("Kuwait City", "Hawally", "Salmiya", "Jahra")
     var expandedGov by remember { mutableStateOf(false) }
@@ -259,7 +265,7 @@ fun AddNewAddressScreen() {
     var expandedArea by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color.White)
@@ -275,20 +281,19 @@ fun AddNewAddressScreen() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 56.dp) //
-                .statusBarsPadding()
-                .padding(horizontal = 20.dp, )
-                .verticalScroll(rememberScrollState())//
+            //    .statusBarsPadding()
+                .padding(horizontal = hFactor(20))
         ) {
+            Spacer(modifier = Modifier.height(vFactor(24)))
 
 
 
 
-            Spacer(modifier = Modifier.height(24.dp))
+
 
             // Name Field
             AppTextField2(
-                placeholder = "Enter Name",
+                placeholder = "Faisal Alajmi",
                 value = name,
                 onValueChange = { name = it },
                 keyboardType = KeyboardType.Text,
@@ -296,15 +301,14 @@ fun AddNewAddressScreen() {
             )
 
             Spacer(modifier = Modifier.height(16.dp))
-
-            // Phone Number Field
-            AppTextField2(
-                placeholder = "Phone number",
-                value = phoneNumber,
-                onValueChange = { phoneNumber = it },
-                keyboardType = KeyboardType.Phone,
-                modifier = Modifier.fillMaxWidth()
+            PhoneNumberInputField(
+                selectedCountry = selectedCountry,
+                onCountrySelected = { selectedCountry = it },
+                phoneNumber = phoneNumber,
+                onPhoneNumberChange = { phoneNumber = it }
             )
+
+
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -347,6 +351,15 @@ fun AddNewAddressScreen() {
 
             // House No Field
             AppTextField2(
+                placeholder = "Street",
+                value = houseNo,
+                onValueChange = { houseNo = it },
+                keyboardType = KeyboardType.Text,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+            AppTextField2(
                 placeholder = "House No",
                 value = houseNo,
                 onValueChange = { houseNo = it },
@@ -365,7 +378,7 @@ fun AddNewAddressScreen() {
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(vFactor(40)))
 
             // Save Button
             CustomButton(
@@ -374,7 +387,7 @@ fun AddNewAddressScreen() {
                     Toast.makeText(context, "New Address Saved", Toast.LENGTH_SHORT).show()
                     navController.popBackStack()  //
                 },
-                required = true,
+
                 modifier = Modifier.padding(bottom = 8.dp) // Optional custom modifier
             )
 
@@ -397,24 +410,24 @@ fun CustomDropdown(
     onExpandChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // Dropdown Menu
     Box(modifier = modifier) {
         TextField(
             value = selectedItem,
             onValueChange = {},
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp)
-                .clip(RoundedCornerShape(24.dp))  // Same corner radius as AppTextField2
+                .height(52.dp)
+                .clip(RoundedCornerShape(12.dp)) // Same corner radius as AppTextField2
                 .background(
-                    color = Color(0xFFB583530D),  // Set the background color similar to AppTextField2
-                    shape = RoundedCornerShape(24.dp)  // Same corner radius for the background
+                    color = TextFieldBackgroundColors, // Set the background color similar to AppTextField2
+                    shape = RoundedCornerShape(12.dp) // Same corner radius for the background
                 )
                 .border(
                     width = 1.dp,
-                    color = if (selectedItem.isNotEmpty()) PrimaryColor else Color.Transparent,  // Border color when selected
-                    shape = RoundedCornerShape(24.dp)  // Same shape for border as the background
-                ),
+                    color = if (selectedItem.isNotEmpty()) TextFieldBorderColors else Color.Transparent, // Border color when selected
+                    shape = RoundedCornerShape(12.dp) // Same shape for border as the background
+                )
+                .clickable { onExpandChanged(true) }, // Make TextField clickable to expand the dropdown
             singleLine = true,
             readOnly = true,
             trailingIcon = {
@@ -427,14 +440,16 @@ fun CustomDropdown(
             placeholder = {
                 CustomMontserratText(
                     text = label,
-                    color = Color.Gray,
-                    fontSize = 16.sp
+                    color = TextHintColor,
+                    fontWeight = FontWeight(500),
+                    fontSize = 14.sp,
+                    textAlign = TextAlign.Start,
                 )
             },
             colors = TextFieldDefaults.textFieldColors(
                 focusedLabelColor = Color.Transparent,  // Remove label color animation
                 cursorColor = PrimaryColor,
-                containerColor = TextFieldColor,
+                containerColor = TextFieldBackgroundColors,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent,
@@ -444,27 +459,27 @@ fun CustomDropdown(
         // Dropdown items menu
         DropdownMenu(
             expanded = expanded,
-            onDismissRequest = { onExpandChanged(false) }
+            onDismissRequest = { onExpandChanged(false) } // Close dropdown when clicking outside
         ) {
             items.forEach { item ->
                 DropdownMenuItem(
                     onClick = {
                         onItemSelected(item)
-                        onExpandChanged(false)
+                        onExpandChanged(false) // Close dropdown after item is selected
                     },
-                    text = { CustomMontserratText( // Use CustomMontserratText for the dropdown item
-                        text = item,
-                        color = PrimaryColor,
-                        fontSize = 16.sp
-                    )}
+                    text = {
+                        CustomMontserratText( // Use CustomMontserratText for the dropdown item
+                            text = item,
+                            color = PrimaryColor,
+                            fontSize = 16.sp
+                        )
+                    }
                 )
             }
         }
     }
-
-    // Handle the dropdown expansion state when clicked
-    Modifier.clickable { onExpandChanged(true) }
 }
+
 
 
 

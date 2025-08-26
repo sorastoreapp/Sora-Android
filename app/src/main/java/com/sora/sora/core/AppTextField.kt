@@ -28,6 +28,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -41,8 +42,10 @@ import com.sora.sora.core.customText.CustomMontserratText
 import com.sora.sora.ui.theme.PrimaryColor
 import com.sora.sora.ui.theme.PrimaryColor100
 import com.sora.sora.ui.theme.SecondaryColor100
+import com.sora.sora.ui.theme.TextFieldBackgroundColors
+import com.sora.sora.ui.theme.TextFieldBorderColors
 import com.sora.sora.ui.theme.TextFieldColor
-import com.sora.sora.ui.theme.TextFieldColorX
+
 import com.sora.sora.ui.theme.TextHintColor
 
 
@@ -219,22 +222,23 @@ fun AppTextField2(
         modifier = modifier
             .height(height ?: 56.dp)
             .fillMaxWidth()
-            .clip(RoundedCornerShape(24.dp))  // Set the corner radius for clipping
+            .clip(RoundedCornerShape(12.dp))  // Set the corner radius for clipping
             .background(
-                color = Color(0x0DB58353),  // Background color
-                shape = RoundedCornerShape(24.dp)  // Same shape for background
+                color = TextFieldBackgroundColors,  // Background color
+                shape = RoundedCornerShape(12.dp)  // Same shape for background
             )
             .border(
                 width = 1.dp,
-                color = if (value.isNotEmpty()) PrimaryColor else Color.Transparent,  // Set border color based on focus
-                shape = RoundedCornerShape(24.dp)  // Same shape for border
+                color = if (value.isNotEmpty()) TextFieldBorderColors else Color.Transparent,  // Set border color based on focus
+                shape = RoundedCornerShape(12.dp)  // Same shape for border
             ),
         singleLine = false, // Ensure it allows multi-line text
         maxLines = 5, // Set the max lines as needed
         placeholder = {
             CustomMontserratText(  // Use the CustomMontserratText for placeholder
                 text = placeholder,
-                color = Color.Gray,
+                color = TextHintColor,
+                fontWeight = FontWeight(500),
                 fontSize = 14.sp,
                 textAlign = TextAlign.Start, // Explicitly set placeholder alignment
             )
@@ -252,7 +256,7 @@ fun AppTextField2(
         colors = TextFieldDefaults.textFieldColors(
             focusedLabelColor = Color.Black,
             cursorColor = PrimaryColor,
-            containerColor =  Color(0x0DB58353),
+            containerColor = TextFieldBackgroundColors,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Transparent,

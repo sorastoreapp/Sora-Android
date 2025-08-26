@@ -30,7 +30,6 @@ import com.sora.sora.core.CustomTopBar2
 import com.sora.sora.core.customButtons.CustomButton
 import com.sora.sora.core.customText.CustomMontserratText
 import com.sora.sora.core.navigations.Dest
-import com.sora.sora.core.navigations.NavigationManager
 import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.navigations.toRoute
 import com.sora.sora.core.vFactor
@@ -117,8 +116,8 @@ fun MyAddressesScreen(
                 icon = R.drawable.ic_add_brown ,
                 label = "Add new address",
                 onClick = {
-                    NavigationManager.navigateTo(Dest.AddNewAddressScreen::class.toRoute())
-                          },
+                    navController.navigate(Dest.AddNewAddressScreen::class.toRoute() )
+                },
                 containerColor = LightBrown,
                 textColor = PrimaryColor,
 
