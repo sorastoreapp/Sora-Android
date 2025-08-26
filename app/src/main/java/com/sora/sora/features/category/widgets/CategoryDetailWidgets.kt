@@ -391,7 +391,14 @@ fun CategoryResultRow(resultCount: Int = 23) {
                         fontWeight = FontWeight.Normal
                     )
                     Spacer(modifier = Modifier.weight(1f))
-                    Switch(checked  = showOffers, onCheckedChange = { showOffers = it })
+                    Switch(
+                        checked  = showOffers,
+                        onCheckedChange = { showOffers = it },
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = Color.White,
+                            checkedTrackColor = PrimaryColor
+                        )
+                    )
                 }
 
                 Row(
@@ -406,7 +413,10 @@ fun CategoryResultRow(resultCount: Int = 23) {
                         fontWeight = FontWeight.Normal
                     )
                     Spacer(modifier = Modifier.weight(1f))
-                    Switch(checked = hideOutOfStock, onCheckedChange = { hideOutOfStock = it })
+                    Switch(checked = hideOutOfStock, onCheckedChange = { hideOutOfStock = it },  colors = SwitchDefaults.colors(
+                        checkedThumbColor = Color.White,
+                        checkedTrackColor = PrimaryColor
+                    ))
                 }
 
                 Spacer(modifier = Modifier.height(20.dp))
@@ -421,20 +431,21 @@ fun CategoryResultRow(resultCount: Int = 23) {
                                 showFilterSheet = false
                             }
                         },
-                        modifier = Modifier.width(150.dp).height(50.dp)
+                        modifier = Modifier.width(160.dp).height(60.dp)
                         )
                     Spacer(modifier = Modifier.weight(1f))
                     PrimaryButton(
                         text = "Clear",
                         backgroundColor = Color.White,
                         textColor = PrimaryColor,
+                        borderColor = PrimaryColor,
                         onClick = {
                             coroutineScope.launch {
                                 filterSheetState.hide()
                                 showFilterSheet = false
                             }
                         },
-                        modifier = Modifier.width(150.dp).height(50.dp)
+                        modifier = Modifier.width(160.dp).height(60.dp)
                     )
                 }
 

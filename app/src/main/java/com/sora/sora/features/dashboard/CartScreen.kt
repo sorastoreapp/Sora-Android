@@ -3,6 +3,7 @@ package com.sora.sora.features.dashboard
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -25,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
@@ -36,11 +38,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
+import com.sora.sora.core.customButtons.CustomButton
+import com.sora.sora.core.customText.CustomMontserratText
 import com.sora.sora.core.navigations.Dest
 import com.sora.sora.core.navigations.NavigationManager
+import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.navigations.toRoute
 import com.sora.sora.ui.components.AppTextField
+import com.sora.sora.ui.theme.IconBackgroundColor
 import com.sora.sora.ui.theme.PrimaryColor
+import com.sora.sora.ui.theme.ProductCardColor
 import com.sora.sora.ui.theme.YellowApp
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -75,219 +82,273 @@ fun CartScreen() {
     // 2) Entire screen as one LazyColumn (header + all parts)
     // ------------------------------------------------------
     Scaffold { paddingValues ->
-        LazyColumn(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(top = 16.dp)
+                .padding(horizontal = 16.dp)
                 .systemBarsPadding()
-                .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(bottom = 32.dp) // so bottom button isn't cut off
         ) {
-            // ----- Item 0: Screen Title -----
-            item {
-                Text(
-                    text = "Cart",
-                    style = androidx.compose.material3.MaterialTheme.typography.headlineMedium,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 10.dp),
-                    color = Color.Black,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 30.sp,
-                    textAlign = TextAlign.Center
-                )
-            }
+            CustomMontserratText(
+                text = "Cart",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 10.dp),
+                color = Color.Black,
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                textAlign = TextAlign.Center
+            )
 
-            // ----- Items 1..N: Cart items with SwipeToDismiss -----
-            itemsIndexed(
-                items = cartItems,
-                key = { index, item -> item.name + index } // unique key
-            ) { index, item ->
-                val dismissState = rememberDismissState(
-                    confirmStateChange = { newState ->
-                        if (newState == DismissValue.DismissedToStart) {
-                            // Remove item from the list
-                            cartItems = cartItems.toMutableList().also { it.removeAt(index) }
-                        }
-                        true
-                    }
-                )
-
-                SwipeToDismiss(
-                    state = dismissState,
-                    directions = setOf(DismissDirection.EndToStart),
-                    background = {
-                        Box(
-                            Modifier
-                                .fillMaxSize()
-                                .padding(vertical = 4.dp)
-                                .clip(RoundedCornerShape(16.dp))
-                                .background(Color(0xFFFF3B30))
-                                .padding(end = 20.dp),
-                            contentAlignment = Alignment.CenterEnd
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Delete,
-                                contentDescription = "Delete",
-                                tint = Color.White,
-                                modifier = Modifier.size(28.dp)
-                            )
-                        }
-                    },
-                    dismissContent = {
-                        CartItemCard(
-                            item = item,
-                            onIncrease = {
-                                cartItems = cartItems.toMutableList().also {
-                                    it[index] = it[index].copy(quantity = it[index].quantity + 1)
-                                }
-                            },
-                            onDecrease = {
-                                if (item.quantity > 1) {
-                                    cartItems = cartItems.toMutableList().also {
-                                        it[index] = it[index].copy(quantity = it[index].quantity - 1)
-                                    }
-                                }
-                            }
-                        )
-                    },
-                    modifier = Modifier.padding(vertical = 4.dp)
-                )
-            }
-
-            // If the cart is empty, you might want to show a “Your cart is empty” message:
-            if (cartItems.isEmpty()) {
-                item {
-                    Text(
-                        "Your cart is empty",
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                contentPadding = PaddingValues(bottom = 32.dp) // so bottom button isn't cut off
+            ) {
+                item{
+                    CustomMontserratText(
+                        text = "Products",
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 24.dp),
-                        textAlign = TextAlign.Center,
-                        color = Color.Gray
+                            .padding(vertical = 10.dp),
+                        color = PrimaryColor,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp,
+                        textAlign = TextAlign.Start
+                    )
+
+                }
+
+
+                itemsIndexed(
+                    items = cartItems,
+                    key = { index, item -> item.name + index } // unique key
+                ) { index, item ->
+
+                    CartItemCard(
+                        cartItems = cartItems,
+                        index = index,
+                        item = item,
+                        onIncrease = {
+                            cartItems = cartItems.toMutableList().also {
+                                it[index] =
+                                    it[index].copy(quantity = it[index].quantity + 1)
+                            }
+                        },
+                        onDecrease = {
+                            if (item.quantity > 1) {
+                                cartItems = cartItems.toMutableList().also {
+                                    it[index] =
+                                        it[index].copy(quantity = it[index].quantity - 1)
+                                }
+                            }
+                        },
+                        onDelete = { i ->
+                            cartItems = cartItems.toMutableList().apply {
+                                removeAt(i)
+                            }
+                        }
                     )
                 }
-            }
 
-            // ----- Item N+1: Coupon Code Section -----
-            // ───── Inside your LazyColumn { … } ─────
-            item {
-                Spacer(modifier = Modifier.height(8.dp))
+                if (cartItems.isEmpty()) {
+                    item {
+                        Text(
+                            "Your cart is empty",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 24.dp),
+                            textAlign = TextAlign.Center,
+                            color = Color.Gray
+                        )
+                    }
+                }
 
-                Text(
-                    text = "Coupon Code",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 22.sp,
-                    color = PrimaryColor, // brown text
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(Color(0xFFF2F2F2))
-                        .border(1.dp, Color(0xFFF2F2F2), RoundedCornerShape(16.dp))
-                        .padding(horizontal = 12.dp, vertical = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    SmallCouponTextField(
-                        value = couponCode,
-                        onValueChange = { couponCode = it },
-                        placeholder = "Code (Optional)",
-                        modifier = Modifier.weight(1f)
+                item {
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    CustomMontserratText(
+                        text = "Address",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .pointerInput(Unit) {
+                                detectTapGestures(
+                                    onPress = { /* Unused */ },
+                                    onTap = {
+                                        navController.navigate(Dest.MyAddressScreen::class.toRoute())
+                                    }
+                                )
+                            }
+                            .padding(vertical = 10.dp),
+                        color = PrimaryColor,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp,
+                        textAlign = TextAlign.Start
                     )
 
-                    Spacer(modifier = Modifier.width(12.dp))
 
-                    Button(
-                        onClick = { /* Apply coupon logic */ },
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF7B3F00)),
-                        shape = RoundedCornerShape(20.dp),
+                    //hey chatgpt i wnat row at the center of the box
+                    Box(
                         modifier = Modifier
-                            .height(40.dp)
-                            .width(100.dp)
+                            .fillMaxWidth()
+                            .height(57.dp)
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(ProductCardColor),
+                        contentAlignment = Alignment.Center // Centers Row both horizontally & vertically
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_location),
+                                tint = PrimaryColor,
+                                contentDescription = "location",
+                                modifier = Modifier.size(25.dp)
+                            )
+
+                            Spacer(modifier = Modifier.width(8.dp))
+
+                            CustomMontserratText(
+                                text = "Add your address",
+                                color = PrimaryColor,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 14.sp
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(14.dp))
+
+                    CustomMontserratText(
+                        text = "Coupon",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 10.dp),
+                        color = PrimaryColor,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp,
+                        textAlign = TextAlign.Start
+                    )
+
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(Color(0xFFF2F2F2))
+                            .height(57.dp)
+                            .border(1.dp, Color(0xFFF2F2F2), RoundedCornerShape(16.dp))
+                            .padding(start = 20.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_coupon),
+                            contentDescription = "coupon",
+                            tint = Color(0xff928C8A) ,
+                            modifier = Modifier.size(18.dp)
+                        )
+
+                        SmallCouponTextField(
+                            value = couponCode,
+                            onValueChange = { couponCode = it },
+                            placeholder = "Code (Optional)",
+                            modifier = Modifier.weight(1f)
+                        )
+
+                        Spacer(modifier = Modifier.width(12.dp))
+
+                        Button(
+                            onClick = { /* Apply coupon logic */ },
+                            colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF7B3F00)),
+                            shape = RoundedCornerShape(topEnd = 20.dp, bottomEnd = 20.dp),
+                            modifier = Modifier
+                                .height(57.dp)
+                                .width(100.dp)
+                        ) {
+                            Text(
+                                "Apply",
+                                color = Color.White,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+
+                }
+
+
+                item {
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    PriceRow(label = "Price ($itemCount Items)", value = "KD %.3f".format(subtotal))
+                    PriceRow(
+                        label = "Discount ($discountPercent%)",
+                        value = "KD %.3f".format(discountAmount)
+                    )
+                    PriceRow(label = "Delivery Charges", value = "KD %.3f".format(deliveryCharges))
+                    PriceRow(label = "Other Charges", value = "KD %.3f".format(otherCharges))
+
+                    Spacer(modifier = Modifier.height(8.dp))
+//                    Divider(color = Color.LightGray, thickness = 1.dp)
+//                    Spacer(modifier = Modifier.height(8.dp))
+
+                    // Total line
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            "Apply",
+                            text = "Total Amount",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp
+                        )
+                        Text(
+                            text = "KD %.3f".format(totalAmount),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp
+                        )
+                    }
+
+//                    Spacer(modifier = Modifier.height(8.dp))
+//                    Divider(color = Color.LightGray, thickness = 1.dp)
+                }
+
+
+//                item {
+//                    Spacer(modifier = Modifier.height(16.dp))
+//                    Text(
+//                        "Congratulations! You've saved KD %.3f!".format(discountAmount),
+//                        color = Color(0xFF0BC62B),
+//                        fontSize = 14.sp,
+//                        fontWeight = FontWeight.Normal,
+//                        fontStyle = FontStyle.Italic,        // <-- make it italic
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .padding(bottom = 24.dp),
+//                        textAlign = TextAlign.Start
+//                    )
+//                }
+
+
+                item {
+                    Button(
+                        onClick = { /* Continue action */ },
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF7B3F00)),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp),
+                        shape = RoundedCornerShape(16.dp)
+                    ) {
+                        CustomMontserratText(
+                            "Checkout",
                             color = Color.White,
-                            fontSize = 16.sp,
+                            fontSize = 18.sp,
                             fontWeight = FontWeight.Bold
                         )
                     }
+                    Spacer(modifier = Modifier.height(50.dp))
                 }
-
-            }
-
-
-            // ----- Item N+2: Price Breakdown (subtotal, discount, etc.) -----
-            item {
-                Spacer(modifier = Modifier.height(24.dp))
-
-                PriceRow(label = "Price ($itemCount Items)", value = "KD %.3f".format(subtotal))
-                PriceRow(label = "Discount ($discountPercent%)", value = "KD %.3f".format(discountAmount))
-                PriceRow(label = "Delivery Charges", value = "KD %.3f".format(deliveryCharges))
-                PriceRow(label = "Other Charges", value = "KD %.3f".format(otherCharges))
-
-                Spacer(modifier = Modifier.height(8.dp))
-                Divider(color = Color.LightGray, thickness = 1.dp)
-                Spacer(modifier = Modifier.height(8.dp))
-
-                // Total line
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = "Total Amount",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp
-                    )
-                    Text(
-                        text = "KD %.3f".format(totalAmount),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(8.dp))
-                Divider(color = Color.LightGray, thickness = 1.dp)
-            }
-
-            // ----- Item N+3: “Congratulations!…” saved text -----
-            item {
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    "Congratulations! You've saved KD %.3f!".format(discountAmount),
-                    color = Color(0xFF0BC62B),
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Normal,
-                    fontStyle = FontStyle.Italic,        // <-- make it italic
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 24.dp),
-                    textAlign = TextAlign.Start
-                )
-            }
-
-            // ----- Item N+4: Continue button -----
-            item {
-                Button(
-                    onClick = { /* Continue action */ },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF7B3F00)),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    shape = RoundedCornerShape(16.dp)
-                ) {
-                    Text(
-                        "Continue",
-                        color = Color.White,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-                Spacer(modifier = Modifier.height(38.dp))
             }
         }
     }
@@ -299,75 +360,117 @@ fun CartScreen() {
 
 @Composable
 fun CartItemCard(
+    cartItems:  List<CartItem>, // Use List, not MutableList
+    index: Int,
     item: CartItem,
     onIncrease: () -> Unit,
-    onDecrease: () -> Unit
+    onDecrease: () -> Unit,
+    onDelete: (Int) -> Unit
 ) {
     Card(
         shape = RoundedCornerShape(16.dp),
-        elevation = 8.dp,
-        modifier = Modifier.fillMaxWidth().clickable {
-            NavigationManager.navigateTo(Dest.ItemDetailScreen::class.toRoute())
-        }
+        elevation = 1.dp,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                NavigationManager.navigateTo(Dest.ItemDetailScreen::class.toRoute())
+            }
     ) {
         Row(
             Modifier
-                .padding(16.dp),
+                .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            androidx.compose.foundation.Image(
-                painter = painterResource(id = item.imageRes),
-                contentDescription = item.name,
+            Box(
                 modifier = Modifier
-                    .size(90.dp)
-                    .clip(RoundedCornerShape(16.dp)),
-                contentScale = ContentScale.Fit
-            )
+                    .background(color = IconBackgroundColor, shape = RoundedCornerShape(16.dp))
+                    .padding(10.dp)
+            ){
+                androidx.compose.foundation.Image(
+                    painter = painterResource(id = item.imageRes),
+                    contentDescription = item.name,
+                    modifier = Modifier
+                        .size(68.dp)
+                        .clip(RoundedCornerShape(16.dp)),
+                    contentScale = ContentScale.Fit
+                )
+            }
 
             Spacer(Modifier.width(12.dp))
 
             Column(
                 modifier = Modifier.weight(1f)
             ) {
-                Text(
-                    text = item.name,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 18.sp,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    color = Color.Black
-                )
+                Row {
+                    CustomMontserratText(
+                        text = item.name,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 14.sp,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        color = Color.Black,
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
+
+                    Spacer(modifier = Modifier.weight(1f))
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_delete_bucket,),
+                        contentDescription = "Decrease",
+                        tint = Color.Red,
+                        modifier = Modifier.size(18.dp) .clickable { onDelete(index) }
+                    )
+
+                }
 
                 Spacer(Modifier.height(6.dp))
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(6.dp)
-                ) {
-                    Text(
-                        "KD6.500",
-                        style = LocalTextStyle.current.copy(
-                            textDecoration = TextDecoration.LineThrough,
-                            color = Color.Gray,
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Normal
+
+
+
+                Row {
+                    Column(
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            CustomMontserratText(
+                                "KD 5.500",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 12.sp,
+                                color = Color(0xFF605755)
+                            )
+                            Text(
+                                "KD6.500",
+                                style = LocalTextStyle.current.copy(
+                                    textDecoration = TextDecoration.LineThrough,
+                                    color = Color.Gray,
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Normal
+                                )
+                            )
+                            CustomMontserratText(
+                                "10%",
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 12.sp,
+                                color = Color.Red
+                            )
+
+                        }
+                        Spacer(Modifier.height(6.dp))
+                        CustomMontserratText(
+                            "Size: S",
+                            fontSize = 12.sp,
+                            color = Color(0xFF605755)
                         )
-                    )
-                    Text(
-                        "KD 5.500",
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 16.sp,
-                        color = PrimaryColor
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
+                    QuantitySelector(
+                        quantity = item.quantity,
+                        onIncrease = onIncrease,
+                        onDecrease = onDecrease
                     )
                 }
-
-                Spacer(Modifier.height(12.dp))
-
-                QuantitySelector(
-                    quantity = item.quantity,
-                    onIncrease = onIncrease,
-                    onDecrease = onDecrease
-                )
             }
         }
     }
@@ -379,19 +482,21 @@ fun QuantitySelector(
     onIncrease: () -> Unit,
     onDecrease: () -> Unit
 ) {
+    var size = 20.dp
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .clip(RoundedCornerShape(20.dp))
-            .background(PrimaryColor)
+            .background(IconBackgroundColor)
             .padding(horizontal = 6.dp, vertical = 4.dp)
     ) {
         // Decrease Button
         Box(
             modifier = Modifier
-                .size(28.dp)
+                .size(size)
                 .clip(CircleShape)
-                .background(YellowApp)
+//                .background(YellowApp)
                 .clickable(enabled = quantity > 1) {
                     if (quantity > 1) onDecrease()
                 }
@@ -399,10 +504,12 @@ fun QuantitySelector(
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_remove,),
+                painter = painterResource(id = R.drawable.ic_remove_bar,),
                 contentDescription = "Decrease",
-                tint = Color.White,
-                modifier = Modifier.size(16.dp)
+                tint = PrimaryColor,
+                modifier = Modifier.size(size).clickable(enabled = quantity > 1) {
+                    if (quantity > 1) onDecrease()
+                }
             )
         }
 
@@ -410,16 +517,16 @@ fun QuantitySelector(
             "$quantity",
             fontWeight = FontWeight.SemiBold,
             fontSize = 14.sp,
-            color = Color.White,
+            color = Color.Black,
             modifier = Modifier.padding(horizontal = 10.dp)
         )
 
         // Increase Button
         Box(
             modifier = Modifier
-                .size(28.dp)
+                .size(size)
                 .clip(CircleShape)
-                .background(YellowApp)
+                .background(PrimaryColor)
                 .clickable { onIncrease() }
                 .padding(4.dp),
             contentAlignment = Alignment.Center
@@ -428,7 +535,7 @@ fun QuantitySelector(
                 imageVector = Icons.Default.Add,
                 contentDescription = "Increase",
                 tint = Color.White,
-                modifier = Modifier.size(16.dp)
+                modifier = Modifier.size(size)
             )
         }
     }
@@ -442,8 +549,8 @@ fun PriceRow(label: String, value: String) {
             .padding(vertical = 4.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(label, color = Color.Gray, fontSize = 14.sp)
-        Text(value, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
+        CustomMontserratText(label, color = Color.Gray, fontSize = 14.sp)
+        CustomMontserratText(value, fontWeight = FontWeight.W600, fontSize = 14.sp)
     }
 }
 

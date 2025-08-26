@@ -22,6 +22,9 @@ val AppGray = Color(0xFFDCD9D9)
 val AppTextGray = Color(0xFF928C8A)
 val DividerGray = Color(0xFFE5E5E5)
 
+val ProductCardColor = Color(0xFFFDF6F0)
+val IconBackgroundColor = Color(0xFFF7F3ED)
+
 //
 val TextHintColor = Color.Black.copy(alpha = 0.6f)
 val AppSubTextColor = Color.Black.copy(alpha = 0.7f)
