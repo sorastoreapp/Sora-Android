@@ -172,6 +172,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -223,15 +224,21 @@ fun BottomNavigationBar(
         NavItem("Categories", R.drawable.ic_unselected_categories, R.drawable.ic_selected_categories),
         NavItem("Cart", R.drawable.ic_unselected_cart, R.drawable.ic_selected_cart),
         NavItem("Favorite", R.drawable.ic_unselected_favorite, R.drawable.ic_selected_favorite),
-        NavItem("Profile", R.drawable.ic_unselected_profile, R.drawable.ic_selected_profile)
+        NavItem("Settings", R.drawable.ic_unselected_settings, R.drawable.ic_selected_settings)
     )
     Surface(
         color = Color.White,
         modifier = modifier
             .fillMaxWidth()
             .navigationBarsPadding()
-            .then(Modifier.shadow(10.dp, shape = RoundedCornerShape(16.dp), clip = false)) // Apply shadow only on top
-
+            .then(
+                Modifier.graphicsLayer {
+                    shadowElevation = 10.dp.toPx() // Controls the size of the shadow
+                    shape = RoundedCornerShape(16.dp)
+                    clip = false
+                    translationY = 15.dp.toPx() // Pushes the element upwards to give the appearance of shadow only from the top
+                }
+            )
     ) {
         Row(
             modifier = Modifier
