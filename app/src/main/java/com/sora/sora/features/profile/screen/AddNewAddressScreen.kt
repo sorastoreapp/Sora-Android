@@ -396,9 +396,6 @@ fun AddNewAddressScreen() {
     }
 }
 
-
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomDropdown(
@@ -411,78 +408,75 @@ fun CustomDropdown(
     modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier) {
-        TextField(
-            value = selectedItem,
-            onValueChange = {},
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(52.dp)
-                .clip(RoundedCornerShape(12.dp)) // Same corner radius as AppTextField2
-                .background(
-                    color = TextFieldBackgroundColors, // Set the background color similar to AppTextField2
-                    shape = RoundedCornerShape(12.dp) // Same corner radius for the background
-                )
-                .border(
-                    width = 1.dp,
-                    color = if (selectedItem.isNotEmpty()) TextFieldBorderColors else Color.Transparent, // Border color when selected
-                    shape = RoundedCornerShape(12.dp) // Same shape for border as the background
-                )
-                .clickable { onExpandChanged(true) }, // Make TextField clickable to expand the dropdown
-            singleLine = true,
-            readOnly = true,
-            trailingIcon = {
-                Icon(
-                    imageVector = Icons.Filled.KeyboardArrowDown,
-                    contentDescription = "Dropdown Arrow",
-                    tint = Color.Gray,
-                )
-            },
-            placeholder = {
-                CustomMontserratText(
-                    text = label,
-                    color = TextHintColor,
-                    fontWeight = FontWeight(500),
-                    fontSize = 14.sp,
-                    textAlign = TextAlign.Start,
-                )
-            },
-            colors = TextFieldDefaults.textFieldColors(
-                focusedLabelColor = Color.Transparent,  // Remove label color animation
-                cursorColor = PrimaryColor,
-                containerColor = TextFieldBackgroundColors,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent,
-            ),
-        )
-
-        // Dropdown items menu
-        DropdownMenu(
+        ExposedDropdownMenuBox(
             expanded = expanded,
-            onDismissRequest = { onExpandChanged(false) } // Close dropdown when clicking outside
+            onExpandedChange = { onExpandChanged(!expanded) } // Toggle dropdown on click
         ) {
-            items.forEach { item ->
-                DropdownMenuItem(
-                    onClick = {
-                        onItemSelected(item)
-                        onExpandChanged(false) // Close dropdown after item is selected
-                    },
-                    text = {
-                        CustomMontserratText( // Use CustomMontserratText for the dropdown item
-                            text = item,
-                            color = PrimaryColor,
-                            fontSize = 16.sp
-                        )
-                    }
-                )
+            TextField(
+                value = selectedItem,
+                onValueChange = {},
+                modifier = Modifier
+                    .menuAnchor() // ⬅️ important: anchor the dropdown
+                    .fillMaxWidth()
+                    .height(52.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(
+                        color = TextFieldBackgroundColors,
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    .border(
+                        width = 1.dp,
+                        color = if (selectedItem.isNotEmpty()) TextFieldBorderColors else Color.Transparent,
+                        shape = RoundedCornerShape(12.dp)
+                    ),
+                readOnly = true,
+                singleLine = true,
+                trailingIcon = {
+                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                },
+                placeholder = {
+                    CustomMontserratText(
+                        text = label,
+                        color = TextHintColor,
+                        fontWeight = FontWeight(500),
+                        fontSize = 14.sp,
+                        textAlign = TextAlign.Start,
+                    )
+                },
+                colors = TextFieldDefaults.textFieldColors(
+                    focusedLabelColor = Color.Transparent,
+                    cursorColor = PrimaryColor,
+                    containerColor = TextFieldBackgroundColors,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent,
+                ),
+            )
+
+            // Dropdown items
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { onExpandChanged(false) }
+            ) {
+                items.forEach { item ->
+                    DropdownMenuItem(
+                        text = {
+                            CustomMontserratText(
+                                text = item,
+                                color = PrimaryColor,
+                                fontSize = 16.sp
+                            )
+                        },
+                        onClick = {
+                            onItemSelected(item)
+                            onExpandChanged(false)
+                        }
+                    )
+                }
             }
         }
     }
 }
-
-
-
-
 
 /**Working code withou dropdown*/
 //@Composable
