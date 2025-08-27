@@ -51,11 +51,13 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
+import com.sora.sora.core.CustomAppBar
 import com.sora.sora.core.customButtons.CustomButton
 import com.sora.sora.core.customText.CustomMontserratText
 import com.sora.sora.core.navigations.Dest
 import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.navigations.toRoute
+import com.sora.sora.ui.theme.LightBrown
 import com.sora.sora.ui.theme.PrimaryColor
 
 @Preview(showBackground = true)
@@ -67,269 +69,249 @@ fun ProfileScreen() {
     var selectedLanguage by remember { mutableStateOf("English") }
     var showLanguageSheet by remember { mutableStateOf(false) }
 
-    Column(
+
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .statusBarsPadding()
-            .verticalScroll(rememberScrollState())
-            // Add top padding for status bar
-            .padding(horizontal = 20.dp, vertical = 12.dp)
+            .background(color = Color.White)
     ) {
+        CustomAppBar(
+            title = "Settings",
+            isBackButton = false,
 
+            onBackClick = {
+                // navController.navigate(Dest.Home.toRoute())
+            }
+        )
 
-        Box(
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            contentAlignment = Alignment.Center
+                .fillMaxSize()
+                .statusBarsPadding()
+                .padding(top = 20.dp)
+                .verticalScroll(rememberScrollState())
+                .systemBarsPadding()
+                .padding(horizontal = 20.dp, vertical = 12.dp)
         ) {
-            CustomMontserratText(
-                text = "Settings",
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp,
-                color = Color.Black,
-                textAlign = TextAlign.Center
-            )
-        }
-        Spacer(modifier = Modifier.height(10.dp))
 
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_profile_icon), // Your profile photo drawable
-                contentDescription = "Profile Photo",
-                contentScale = ContentScale.Crop,
+
+//        Box(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(16.dp),
+//            contentAlignment = Alignment.Center
+//        ) {
+//            CustomMontserratText(
+//                text = "Settings",
+//                fontWeight = FontWeight.Bold,
+//                fontSize = 16.sp,
+//                color = Color.Black,
+//                textAlign = TextAlign.Center
+//            )
+//        }
+            Spacer(modifier = Modifier.height(20.dp))
 
 
-                modifier = Modifier
-                    .size(48.dp)
-                    .clip(CircleShape)
-                    .background(Color(0xFFF3EDEC)) // Fondo claro marrón
-
-                    .padding(6.dp)
-
-
-            )
-
-            Spacer(modifier = Modifier.width(16.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_profile_icon), // Your profile photo drawable
+                    contentDescription = "Profile Photo",
+                    contentScale = ContentScale.Crop,
 
 
-            CustomMontserratText(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(CircleShape)
+                        .background(Color(0xFFF3EDEC)) // Fondo claro marrón
+
+                        .padding(6.dp)
+
+
+                )
+
+                Spacer(modifier = Modifier.width(16.dp))
+
+
+                CustomMontserratText(
                     text = "Visitor",
-                    fontWeight = FontWeight.Medium,
+                    fontWeight = FontWeight(500),
                     fontSize = 16.sp,
                     color = Color.Black
                 )
-            Spacer(modifier = Modifier.height(6.dp).weight(1f))
+                Spacer(modifier = Modifier.height(6.dp).weight(1f))
 
+
+
+                CustomMontserratText(
+                    text = "Create account",
+
+                    fontSize = 14.sp,
+                    color = PrimaryColor,
+                    fontWeight = FontWeight(500),
+                    lineHeight = 20.sp,
+                    textAlign = TextAlign.Right,
+                    modifier = Modifier.
+                        pointerInput(Unit) {
+                            detectTapGestures(
+                                onPress = { offset ->
+                                    navController.navigate(Dest.EditProfileScreen::class.toRoute())
+                                }
+                            )
+                        })
+
+            }
+
+            Spacer(modifier = Modifier.height(26.dp))
+
+            // Section Title
+            CustomMontserratText(
+                text = "Account",
+                fontWeight = FontWeight(600),
+                fontSize = 16.sp,
+                color = PrimaryColor
+            )
+
+            Spacer(modifier = Modifier.height(5.dp))
+
+            // Account items
+            ProfileMenuItem(
+                iconRes = R.drawable.ic_orders,
+                title = "My orders",
+                onClick = {
+                    navController.navigate(Dest.OrdersScreen::class.toRoute()) {
+                        popUpTo(Dest.OrdersScreen::class.toRoute()) { inclusive = true }
+                    }
+                }
+            )
+            CommonDivider()
+
+            ProfileMenuItem(
+                showArrow = true,
+                iconRes = R.drawable.ic_address,
+                title = "My Addresses",
+                onClick = {
+                    navController.navigate(Dest.MyAddressScreen::class.toRoute()) {
+                        popUpTo(Dest.OrdersScreen::class.toRoute()) { inclusive = true }
+                    }
+                }
+            )
+            CommonDivider()
+            var notificationsEnabled by remember { mutableStateOf(true) }
+            var switchEnabled by remember { mutableStateOf(true) } // control disabled state
+
+            ProfileMenuItem(
+                iconRes = R.drawable.ic_notifications,
+                title = "Notifications",
+                trailingContent = {
+                    MinimalSwitch(
+                        checked = notificationsEnabled,
+                        onCheckedChange = { notificationsEnabled = it },
+                        enabled = switchEnabled
+                    )
+                },
+                onClick = {
+                    // Example: toggle whether the switch is enabled/disabled
+                    // switchEnabled = !switchEnabled
+                    navController.navigate(Dest.NotificationScreen::class.toRoute())
+                }
+            )
+
+
+
+            CommonDivider()
+
+            ProfileMenuItem(
+                iconRes = R.drawable.ic_language,
+                title = "Languages",
+
+                trailingText = "English",
+                onClick = {
+                    showLanguageSheet = true
+                    // Language selection bottom sheet
+                }
+            )
+            if (showLanguageSheet) {
+                LanguageSelectionBottomSheet(
+                    onDismiss = { showLanguageSheet = false },
+                    onLanguageSelected = { language ->
+                        selectedLanguage = language
+                        showLanguageSheet = false
+                    })
+            }
+            CommonDivider()
+
+
+            Spacer(modifier = Modifier.height(22.dp))
 
             CustomMontserratText(
-                text = "Create account",
-                fontSize = 14.sp,
-                color = PrimaryColor,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.clickable {
+                text = "Others",
+                fontWeight = FontWeight(600),
+                fontSize = 16.sp,
+                color = PrimaryColor
+            )
 
-                })
-        }
+            Spacer(modifier = Modifier.height(5.dp))
 
-        Spacer(modifier = Modifier.height(26.dp))
-
-        // Section Title
-        CustomMontserratText(
-            text = "Account",
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp,
-            color = Color(0xFF8A4C3D)
-        )
-
-        Spacer(modifier = Modifier.height(5.dp))
-
-        // Account items
-        ProfileMenuItem(
-            iconRes = R.drawable.ic_orders,
-            title = "My orders",
-            onClick = {
-                navController.navigate(Dest.OrdersScreen::class.toRoute()) {
-                    popUpTo(Dest.OrdersScreen::class.toRoute()) { inclusive = true }
+            ProfileMenuItem(
+                iconRes = R.drawable.ic_tnc,
+                title = "Terms & Conditions",
+                onClick = {
+                    navController.navigate(Dest.TermConditionScreen::class.toRoute())
                 }
-            }
-        )
-        CommonDivider()
+            )
+            CommonDivider()
 
-        ProfileMenuItem(
-            showArrow = true,
-            iconRes = R.drawable.ic_address,
-            title = "My Addresses",
-            onClick = {
-                navController.navigate(Dest.MyAddressScreen::class.toRoute()) {
-                    popUpTo(Dest.OrdersScreen::class.toRoute()) { inclusive = true }
+            ProfileMenuItem(
+                iconRes = R.drawable.ic_pp,
+                title = "Privacy policies",
+                onClick = {
+                    navController.navigate(Dest.PrivacyPolicyScreen::class.toRoute())
                 }
-            }
-        )
-CommonDivider()
-        var notificationsEnabled by remember { mutableStateOf(true) }
-        var switchEnabled by remember { mutableStateOf(true) } // control disabled state
+            )
+            CommonDivider()
 
-        ProfileMenuItem(
-            iconRes = R.drawable.ic_notifications,
-            title = "Notifications",
-            trailingContent = {
-                MinimalSwitch(
-                    checked = notificationsEnabled,
-                    onCheckedChange = { notificationsEnabled = it },
-                    enabled = switchEnabled
+            ProfileMenuItem(
+                iconRes = R.drawable.ic_faq,
+                title = "FAQ’s",
+                onClick = {
+                    navController.navigate(Dest.FaqScreen::class.toRoute())
+                }
+            )
+            CommonDivider()
+
+            ProfileMenuItem(
+                iconRes = R.drawable.ic_about_us,
+                title = "About Us",
+                onClick = {
+                    navController.navigate(Dest.AboutUsScreen::class.toRoute())
+                }
+            )
+            Spacer(modifier = Modifier.height(22.dp))
+            CustomButton(
+                label = "Log in",
+                onClick = {},
+                containerColor = LightBrown,
+                textColor = PrimaryColor,
+
                 )
-            },
-            onClick = {
-                // Example: toggle whether the switch is enabled/disabled
-                // switchEnabled = !switchEnabled
-                navController.navigate(Dest.NotificationScreen::class.toRoute())
-            }
-        )
 
 
+            Spacer(modifier = Modifier.height(16.dp))
+            CustomButton(
+                label = "Have an issue? Contact us",
+                onClick = { /* Handle Click */ },
+                containerColor = Color(0xFFF2FBF8),
+                textColor = Color(0xFF07BD74),
+                icon = R.drawable.img_whatsapp // Pass the resource ID of the icon
+            )
+            Spacer(modifier = Modifier.height(200.dp))
 
-        CommonDivider()
 
-        ProfileMenuItem(
-            iconRes = R.drawable.ic_language,
-            title = "Languages",
-
-            trailingText = "English",
-            onClick = {
-                showLanguageSheet = true
-                // Language selection bottom sheet
-            }
-        )
-        if (showLanguageSheet) {
-            LanguageSelectionBottomSheet(
-                onDismiss = { showLanguageSheet = false },
-                onLanguageSelected = { language ->
-                    selectedLanguage = language
-                    showLanguageSheet = false
-                })
         }
-        CommonDivider()
-
-
-        Spacer(modifier = Modifier.height(22.dp))
-
-        CustomMontserratText(
-            text = "Others",
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp,
-            color = Color(0xFF8A4C3D)
-        )
-
-        Spacer(modifier = Modifier.height(5.dp))
-
-        ProfileMenuItem(
-            iconRes = R.drawable.ic_tnc,
-            title = "Terms & Conditions",
-            onClick = {
-                navController.navigate(Dest.TermConditionScreen::class.toRoute())
-            }
-        )
-        CommonDivider()
-
-        ProfileMenuItem(
-            iconRes = R.drawable.ic_pp,
-            title = "Privacy policies",
-            onClick = {
-                navController.navigate(Dest.PrivacyPolicyScreen::class.toRoute())
-            }
-        )
-        CommonDivider()
-
-        ProfileMenuItem(
-            iconRes = R.drawable.ic_faq,
-            title = "FAQ’s",
-            onClick = {
-                navController.navigate(Dest.FaqScreen::class.toRoute())
-            }
-        )
-        CommonDivider()
-
-        ProfileMenuItem(
-            iconRes = R.drawable.ic_about_us,
-            title = "About Us",
-            onClick = {
-                navController.navigate(Dest.AboutUsScreen::class.toRoute())
-            }
-        )
-        Spacer(modifier = Modifier.height(22.dp))
-
-        Button(
-            onClick = {
-              //  navController.navigate(Dest.LoginScreen::class.toRoute())
-            },
-            shape = RoundedCornerShape(20.dp),
-            colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color(0xFFFEF7F2),
-                contentColor = Color(0xFF8A4C3D)
-            ),
-            elevation = ButtonDefaults.elevation(
-                defaultElevation = 0.1.dp,
-                pressedElevation = 0.dp,
-                disabledElevation = 0.dp,
-                hoveredElevation = 0.dp,
-                focusedElevation = 0.dp,
-
-
-            ),
-
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp).padding(horizontal = 2.dp)
-        ) {
-            CustomMontserratText(text = "Log in", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = PrimaryColor)
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(
-            onClick = {
-             //   navController.navigate(Dest.ContactUsScreen::class.toRoute())
-            },
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color(0xFFF2FBF8),
-                contentColor = Color(0xFF07BD74)
-            ),
-            elevation = ButtonDefaults.elevation(
-                defaultElevation = 0.1.dp,
-                pressedElevation = 0.dp,
-                disabledElevation = 0.dp,
-                hoveredElevation = 0.dp,
-                focusedElevation = 0.dp,
-
-
-                ),
-            shape = RoundedCornerShape(20.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp)
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    painter = painterResource(id = R.drawable.img_whatsapp),
-                    contentDescription = null,
-                    tint = Color(0xFF07BD74),
-                    modifier = Modifier.size(20.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                CustomMontserratText(text = "Have an issue? Contact us", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color(0xFF07BD74))
-
-            }
-        }
-
-
-
-
-        Spacer( modifier = Modifier.height(100.dp))
     }
 
 }
@@ -366,7 +348,8 @@ fun ProfileMenuItem(
         CustomMontserratText(
             text = title,
             fontSize = 14.sp,
-            fontWeight = FontWeight.W600,
+            lineHeight = 18.sp,
+            fontWeight = FontWeight(400),
             color = Color.Black,
             modifier = Modifier.weight(1f)
         )
@@ -374,7 +357,8 @@ fun ProfileMenuItem(
             CustomMontserratText(
                 text = trailingText,
                 color = Color(0xFF8A4C3D),
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight(500),
+                lineHeight = 18.sp,
                 fontSize = 12.sp
             )
 

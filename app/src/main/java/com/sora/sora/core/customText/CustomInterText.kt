@@ -1,7 +1,6 @@
 package com.sora.sora.core.customText
 
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.material.Text // import material Text instead of BasicText
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,9 +15,8 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
 
-
 @Composable
-fun CustomMontserratText(
+fun CustomInterText(
     text: String,
     modifier: Modifier = Modifier,
     fontSize: TextUnit = 25.sp,  // use fixed font size or pass explicitly
@@ -34,7 +32,7 @@ fun CustomMontserratText(
         text = text,
         modifier = modifier,
         style = TextStyle(
-            fontFamily = MontserratFontFamily,
+            fontFamily =InterFontFamily,
             fontSize = fontSize,
             fontWeight =  fontWeight ?: FontWeight.Medium,
             color = color,
@@ -48,12 +46,12 @@ fun CustomMontserratText(
 }
 
 
-val MontserratFontFamily = FontFamily(
-    Font(R.font.montserrat_bold, FontWeight.Bold),
-    Font(R.font.montserrat_extrabold, FontWeight.ExtraBold),
-    Font(R.font.montserrat_medium, FontWeight.Medium),
-    Font(R.font.montserrat_regular, FontWeight.Normal),
-    Font(R.font.montserrat_semibold, FontWeight.SemiBold),
+
+val InterFontFamily = FontFamily(
+    Font(R.font.inter_bold, FontWeight.Bold),
+    Font(R.font.inter_thin, FontWeight.Thin),
+    Font(R.font.inter_extrabold, FontWeight.ExtraBold),
+    Font(R.font.inter_medium, FontWeight.Medium),
+    Font(R.font.inter_regular, FontWeight.Normal),
+    Font(R.font.inter_semibold, FontWeight.SemiBold),
 )
-
-

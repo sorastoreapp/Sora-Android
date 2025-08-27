@@ -6,8 +6,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -18,13 +20,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.graphics.toColor
 import com.sora.sora.R
+import com.sora.sora.core.CustomAppBar
 import com.sora.sora.core.CustomTopBar2
+import com.sora.sora.core.customButtons.CustomButton
+import com.sora.sora.core.customText.CustomMontserratText
 import com.sora.sora.core.navigations.Dest
 import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.navigations.toRoute
+import com.sora.sora.core.vFactor
+import com.sora.sora.ui.theme.LightBrown
 import com.sora.sora.ui.theme.PrimaryColor
 import com.sora.sora.ui.theme.PrimaryColorFaded
 import com.sora.sora.ui.theme.TextFieldColor2
@@ -37,12 +46,15 @@ data class Address(
 )
 
 // Main screen for displaying My Addresses
+
+@Preview(showBackground = true)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyAddressesScreen(
 
 ) {
     val addresses = listOf(
-        Address(name = "Leslie Alexander", address = "1234 Palm Street, Apartment 5B, Downtown Kuwait, 13001", phone = "+965 9876 5432"),
+        Address(name = "Nasser AL-Quraini", address = "House 12, Street 4, Block 5 Jabriya, Hawally  Kuwait ", phone = "+965 9876 5432"),
         Address(name = "Michael Thompson", address = "4321 Ocean Drive, Floor 3, Hawally, Kuwait, 15002", phone = "+965 9765 4321"),
         Address(name = "Sophia Martinez", address = "7890 Pearl Tower, Apartment 21A, Fahaheel, Kuwait, 30010", phone = "+965 9543 6789")
     )
@@ -52,12 +64,22 @@ fun MyAddressesScreen(
             .fillMaxSize()
             .background(color = Color.White)
     ){
+
+        CustomAppBar(
+            title = "My Address",
+            onBackClick = {
+                // Handle back click, navigate back or pop from the navigation stack
+                navController.popBackStack()
+            },
+            modifier = Modifier.align(Alignment.TopCenter)// Aligning app bar at the top
+        )
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
-                .background(Color.White)  // Set background color to white
+                .padding(top = 56.dp) // Adjust to make space for the app bar
                 .statusBarsPadding()
+                .padding(horizontal = 20.dp, )
+                .verticalScroll(rememberScrollState())
         ) {
             // Back Button Section
 //            Row(verticalAlignment = Alignment.CenterVertically) {
@@ -79,18 +101,27 @@ fun MyAddressesScreen(
 //                )
 //            }
 
-            CustomTopBar2(title = "My Addresses")
-            Spacer(modifier = Modifier.height(16.dp))
 
-            Spacer(modifier = Modifier.height(16.dp))
 
+
+
+            Spacer(modifier = Modifier.height(vFactor(17)))
             // Address List
             addresses.forEach { address ->
                 AddressCard(address = address)
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(vFactor(12)))
             }
+            Spacer(modifier = Modifier.height(vFactor(35)))
+            CustomButton(
+                icon = R.drawable.ic_add_brown ,
+                label = "Add new address",
+                onClick = {
+                    navController.navigate(Dest.AddNewAddressScreen::class.toRoute() )
+                },
+                containerColor = LightBrown,
+                textColor = PrimaryColor,
 
-            AddNewAddressButton()
+                )
 
         }
     }
@@ -103,7 +134,7 @@ fun AddressCard(address: Address) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(150.dp),
+            .height(vFactor(156)),
         shape = RoundedCornerShape(15.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White)
@@ -116,14 +147,11 @@ fun AddressCard(address: Address) {
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Spacer(modifier = Modifier.width(2.dp)) // Push icons to the right
-                Text(
+                CustomMontserratText(
                     text = address.name,
-                    fontSize = 16.sp,
+                    fontSize = 14.sp,
                     color = Color.Black,
-                    maxLines = 2,
-                    fontWeight = FontWeight.Bold,
-//                    fontStyle = FontStyle.Italic,
-                    overflow = TextOverflow.Ellipsis
+                    fontWeight = FontWeight(600),
                 )
 
                 Spacer(modifier = Modifier.weight(1f)) // Push icons to the right
@@ -142,7 +170,7 @@ fun AddressCard(address: Address) {
                             .padding(4.dp) // Padding inside the circle to ensure the icon has space around it
                     ) {
                         Image(
-                            painter = painterResource(id = R.drawable.ic_edit_bar),
+                            painter = painterResource(id = R.drawable.ic_edit_icon),
                             contentDescription = "Edit Profile",
                             modifier = Modifier
                                 .fillMaxSize() // Make the image fill the size of the container
@@ -154,43 +182,48 @@ fun AddressCard(address: Address) {
 
 
             // Address Details with Location Icon
-            Row(    horizontalArrangement = Arrangement.Start // Align all children to the start
+            Row(
+                modifier = Modifier.fillMaxWidth()
+                    .padding(end = 100.dp),
+
+                horizontalArrangement = Arrangement.Start // Align all children to the start
+
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_location_blue),
+                    painter = painterResource(id = R.drawable.ic_map_pin),
                     contentDescription = "Location Icon",
                     modifier = Modifier.size(22.dp),
                     tint = PrimaryColor // Set the tint color to PrimaryColor
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(
+                CustomMontserratText(
                     text = address.address,
                     fontSize = 14.sp,
-                    color = Color.Black,
-                    maxLines = 2,
+                    color = Color(0xB21C0F0C),
+                    maxLines = 3,
 //                    fontStyle = FontStyle.Italic,
                     overflow = TextOverflow.Ellipsis
                 )
             }
 
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             // Phone Number with Phone Icon and Edit/Delete Icons
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_call_green),
+                    painter = painterResource(id = R.drawable.ic_call_outline),
                     contentDescription = "Phone Icon",
                     modifier = Modifier.size(24.dp),
                     tint = PrimaryColor // Set the tint color to PrimaryColor
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(
+                CustomMontserratText(
                     text = address.phone,
                     fontSize = 14.sp,
                     color = Color.Black,
-                    maxLines = 2,
-//                    fontStyle = FontStyle.Italic,
-                    overflow = TextOverflow.Ellipsis
+                    fontWeight = FontWeight(400),
+
+//
                 )
             }
         }
@@ -198,47 +231,6 @@ fun AddressCard(address: Address) {
 }
 
 
-@Composable
-fun AddNewAddressButton() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(75.dp)
-            .padding(4.dp)
-            .background(TextFieldColor2, shape = RoundedCornerShape(20.dp))
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 1.dp)
-                .clickable {
-                navController.navigate(Dest.AddNewAddressScreen::class.toRoute()) {
-                    popUpTo(Dest.OrdersScreen::class.toRoute()) { inclusive = true }
-                }
-            },
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center // Aligning content to the start
-        ) {
-            // Add Icon
-            Icon(
-                imageVector = Icons.Default.Add, // You can replace with your own icon
-                contentDescription = "Add New Address Icon",
-                modifier = Modifier.size(24.dp),
-                tint = PrimaryColor
-            )
-
-            Spacer(modifier = Modifier.width(8.dp)) // Spacer between icon and text
-
-            // Add new address text
-            Text(
-                text = "Add new address",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                color = PrimaryColor,
-            )
-        }
-    }
-}
 
 
 

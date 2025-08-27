@@ -17,12 +17,17 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
+import com.sora.sora.core.CustomAppBar
 import com.sora.sora.core.customText.CustomMontserratText
+import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.ui.theme.AppTextGray
 
+@Preview(showBackground = true)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutUsScreen() {
     val context = LocalContext.current
@@ -31,50 +36,48 @@ fun AboutUsScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .statusBarsPadding()
+
             .background(Color.White) // Background for the entire screen
     ) {
+        CustomAppBar(
+            title = "About Us",
+            onBackClick = {
+                // Handle back click, navigate back or pop from the navigation stack
+                navController.popBackStack()
+            },
+            modifier = Modifier.align(Alignment.TopCenter) // Aligning app bar at the top
+        )
         // Column for text content with vertical scrolling enabled
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState()) // Makes the content scrollable
+                .padding(top = 56.dp) //
+                .statusBarsPadding()
+                .padding(horizontal = 20.dp, )
+                .verticalScroll(rememberScrollState())//  Makes the content scrollable
         ) {
             // Back Button Section
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = { showBackPressed = true }) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Back",
-                        modifier = Modifier
-                            .background(Color.Gray.copy(alpha = 0.2f), shape = CircleShape)
-                            .padding(10.dp)
-                    )
-                }
-                Spacer(modifier = Modifier.width(48.dp))
-                CustomMontserratText(
-                    text = "About Us",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
-                )
-            }
 
-            Spacer(modifier = Modifier.height(24.dp))
+
+            Spacer(modifier = Modifier.height(15.dp))
 
             // Introduction section
             CustomMontserratText(
                 text = "About Us – Sora",
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
+                fontSize = 16.sp,
+
+                fontWeight = FontWeight(600),
                 color = Color.Black
             )
             Spacer(modifier = Modifier.height(8.dp))
             CustomMontserratText(
-                text = "Welcome to Sora, your go-to destination for premium toys, kids' products, and accessories! We are dedicated to bringing joy and excitement to children while ensuring convenience and reliability for parents.\n ",
+                text = "Welcome to Sora, your go-to destination for premium toys, kids' products, and accessories! We are dedicated to bringing joy and excitement to children while ensuring convenience and reliability for parents.\n" +
+                        "\n" +
+                        "At Sora, we believe in providing high-quality, safe, and innovative products that cater to every child’s needs. Our carefully curated selection features the latest trends in toys, educational items, and everyday essentials for kids of all ages.",
+
                 fontSize = 14.sp,
-                color = AppTextGray
+                color = AppTextGray,
+                fontWeight = FontWeight(400)
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -82,8 +85,9 @@ fun AboutUsScreen() {
             // Why Choose Sora? section
             CustomMontserratText(
                 text = "Why Choose Sora?",
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
+                fontSize = 16.sp,
+
+                fontWeight = FontWeight(600),
                 color = Color.Black
             )
             Spacer(modifier = Modifier.height(8.dp))

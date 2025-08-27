@@ -127,6 +127,7 @@ import kotlinx.coroutines.delay
 //    }
 //}
 @OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true)
 @Composable
 fun OtpScreen() {
     var otpValue by remember { mutableStateOf("") }

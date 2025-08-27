@@ -45,7 +45,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
-import com.sora.sora.core.customButtons.CountButton
+
 import com.sora.sora.core.customButtons.PrimaryButton
 import com.sora.sora.core.customText.CustomMontserratText
 import com.sora.sora.core.navigations.NavigationManager.navController
@@ -332,7 +332,7 @@ fun ItemDetailScreen(
               //        }
 
 
-              CountButton()
+
 
 
               //        Spacer(modifier = Modifier.height(12.dp))

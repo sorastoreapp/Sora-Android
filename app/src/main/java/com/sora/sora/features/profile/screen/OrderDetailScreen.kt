@@ -3,6 +3,7 @@ package com.sora.sora.features.profile.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,29 +15,39 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
-import com.sora.sora.core.CustomTopBar2
-import com.sora.sora.core.OrderStatusEnum
+import com.sora.sora.core.CustomAppBar
+import com.sora.sora.utils.constant.OrderStatusEnum
 import com.sora.sora.core.customButtons.CustomButton
 import com.sora.sora.core.customText.CustomMontserratText
+import com.sora.sora.core.hFactor
 import com.sora.sora.core.navigations.Dest
 import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.navigations.toRoute
+import com.sora.sora.core.vFactor
+import com.sora.sora.core.widgets.OrderStatusWidget
 import com.sora.sora.features.profile.widgets.OrderCancelBottomSheet
 import com.sora.sora.ui.theme.AppTextGray
+import com.sora.sora.ui.theme.ImageBackgroundColor
+import com.sora.sora.ui.theme.LightBrown
 import com.sora.sora.ui.theme.PrimaryColor
-import com.sora.sora.ui.theme.SecondaryColor
 import com.sora.sora.ui.theme.TextFieldColor3
 
+
+@Preview(showBackground = true)
+@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
-fun OrderDetailScreen(status: String, ) {
+fun OrderDetailScreen(status: String ="Processing", ) {
     // Convert the incoming status string to the corresponding enum
     val orderStatusEnum = OrderStatusEnum.fromText(status)
 
@@ -47,37 +58,48 @@ fun OrderDetailScreen(status: String, ) {
     val purchaseDate = "March 28, 2025"
     val transactionId = "TXN9876543210"
     val totalAmount = "KD 49.99"
-    val shippingMethod = "Standard Delivery (5-7 Business Days)"
+    val shippingMethod = "Standard Deliveryh"
     val contactName = "Fahad Alajmi"
     val contactPhone = "+965 9876 5432"
     val contactAddress = "Block 2, Street 10, House 15, Salmiya, Hawalli, Kuwait"
 
     val items = listOf(
-        OrderItem("Soft Plush Bear Toy", "KD 5.500", 2, R.drawable.img_temp_teddy),
-        OrderItem("Brown Men Full T-shirt", "KD 5.500", 1, R.drawable.img_temp_tshirt),
-        OrderItem("Basket of clean towels", "KD 5.500", 1, R.drawable.img_temp_clean_towel)
+        OrderItem("Soft Plush Bear Toy", "KD 5.500", 2, R.drawable.img_temp_teddy_without_bg),
+        OrderItem("Brown Men Full T-shirt", "KD 5.500", 1, R.drawable.img_temp_kids_toy),
+        OrderItem("Basket of clean towels", "KD 5.500", 1, R.drawable.img_temp_wooden_building)
     )
 
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(color = Color.White)) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.White)) {
+        CustomAppBar(
+            title = "Order Details",
+            onBackClick = {
+                // Handle back click, navigate back or pop from the navigation stack
+                navController.popBackStack()
+            },
+            modifier = Modifier.align(Alignment.TopCenter)// Aligning app bar at the top
+        )
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(top = 56.dp)
+                .padding(horizontal = 16.dp)
                 .statusBarsPadding()
                 .background(color = Color.White)
         ) {
             item {
+
                 // Back Button Section
-                CustomTopBar2("Order Details")
+
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 CustomMontserratText(
                     text = "Order Details",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight(700),
                     color = PrimaryColor
                 )
 
@@ -95,16 +117,16 @@ fun OrderDetailScreen(status: String, ) {
                 OrderDetailRow(label = "Total Amount", value = totalAmount)
                 OrderDetailRow(label = "Shipping Method", value = shippingMethod)
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(vFactor(28)))
 
                 // Contact Details Section
                 CustomMontserratText(
                     "Contact Details",
                     fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight(700),
                     color = PrimaryColor
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(vFactor(12)))
                 CustomMontserratText(
                     "$contactName",
                     fontSize = 14.sp,
@@ -116,7 +138,8 @@ fun OrderDetailScreen(status: String, ) {
                 Spacer(modifier = Modifier.height(4.dp))
                 CustomMontserratText("$contactAddress", fontSize = 14.sp, color = AppTextGray)
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(vFactor(28)))
+
 
                 // Items List Section
                 CustomMontserratText(
@@ -136,8 +159,9 @@ fun OrderDetailScreen(status: String, ) {
                     } else {
                         OrderDetailReviewCard(item)
                     }
-                    Spacer(modifier = Modifier.height(12.dp))
+
                 }
+                Spacer(modifier = Modifier.height(vFactor(36)))
 
                 // Cancel Order Button for specific statuses
                 if (orderStatusEnum == OrderStatusEnum.Processing) {
@@ -153,7 +177,7 @@ fun OrderDetailScreen(status: String, ) {
                         textColor = Color(0xFFDB5A5A),
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
-                    Spacer(modifier = Modifier.width(10.dp))
+                    Spacer(modifier = Modifier.width(hFactor(16)))
                 }
 
                 // Conditional button text for specific order statuses
@@ -166,46 +190,28 @@ fun OrderDetailScreen(status: String, ) {
                         OrderStatusEnum.Completed
                     )
                 ) {
-
-                    Button(
-                        onClick = {},
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(65.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF2FBF8)) ,
-
-                        shape = MaterialTheme.shapes.medium
-                    ) {
-                        // Button Text
-                        Row {
-                            Image(
-                                painter = painterResource(id = R.drawable.img_whatsapp),
-                                contentDescription = "",
-                                Modifier.size(20.dp)
-                            )
-                            Spacer(modifier = Modifier.width(10.dp))
-                            Text(
-                                text = "Have an issue? Contact us ",
-                                color = Color(0xFF07BD74),
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(10.dp))
-                }
-
-                if (orderStatusEnum == OrderStatusEnum.Shipped || orderStatusEnum == OrderStatusEnum.Delivered || orderStatusEnum == OrderStatusEnum.Canceled) {
                     CustomButton(
-                        label = "Return request",
-                        onClick = {},
-                        required = true,
-                        secondaryButton = true,
-                        modifier = Modifier.padding(bottom = 8.dp)
+                        label = "Have an issue? Contact us",
+                        onClick = { /* Handle Click */ },
+                        containerColor = Color(0xFFF2FBF8),
+                        textColor = Color(0xFF07BD74),
+                        icon = R.drawable.img_whatsapp // Pass the resource ID of the icon
                     )
-                    Spacer(modifier = Modifier.width(10.dp))
+
+                    Spacer(modifier = Modifier.height(hFactor(16)))
                 }
+
+
+                CustomButton(
+
+                    label = "Return request",
+                    onClick = {},
+                    containerColor = LightBrown,
+                    textColor = PrimaryColor,
+
+                    )
+                Spacer(modifier = Modifier.width(hFactor(12)))
+                //  }
 
                 Spacer(
                     modifier = Modifier
@@ -416,31 +422,22 @@ fun OrderDetailRow(label: String, value: String, status: Boolean = false) {
     Row(
         Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp),
+            .padding(vertical = vFactor(7)),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Box(modifier = Modifier.width(200.dp)) {
-            CustomMontserratText(label, color = Color.Gray, fontSize = 14.sp)
+            CustomMontserratText(label, color = Color(0xB21C0F0C), fontSize = 14.sp,fontWeight = FontWeight(400))
         }
 
+
+
         if (status) {
-            Box(
-                modifier = Modifier
-//                    .background(color = orderStatusEnum?.color?.copy(alpha = 0.05f) ?: PrimaryColor, shape = RoundedCornerShape(20.dp))
-                    .background(color = Color(0xFF07BD74).copy(alpha = 0.05f), shape = RoundedCornerShape(20.dp))
-            ) {
-                CustomMontserratText(
-                    text = value,
-                    fontSize = 14.sp,
-                    color = orderStatusEnum?.color ?: SecondaryColor,
-                    textAlign = TextAlign.End,
-                    modifier = Modifier
-                        .background(color = TextFieldColor3, shape = RoundedCornerShape(20.dp))
-                        .padding(horizontal = 8.dp, vertical = 8.dp)
-                )
-            }
+
+            OrderStatusWidget(status = OrderStatusEnum.fromText(value))
         } else {
-            CustomMontserratText(value, fontSize = 14.sp, textAlign = TextAlign.End)
+            CustomMontserratText(value,
+                fontSize = 14.sp, textAlign = TextAlign.End,
+            )
         }
     }
 }
@@ -449,70 +446,74 @@ fun OrderDetailRow(label: String, value: String, status: Boolean = false) {
 fun OrderDetailCard(order: OrderItem) {
     Card(
         modifier = Modifier
+            .shadow(elevation = 24.dp, spotColor = Color(0x0D000000), ambientColor = Color(0x0D000000))
+            .border(width = 1.dp, color = Color.Black.copy(alpha = 0.1f), shape = RoundedCornerShape(size = 15.dp))
+            .padding(1.dp)
             .fillMaxWidth()
-            .height(130.dp),
-        shape = RoundedCornerShape(15.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+            .height(vFactor(80))
+            .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(size = 15.dp)),
+
+
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(4.dp)
+                .padding(start = hFactor(8), end = hFactor(16), top = vFactor(8), bottom = vFactor(8))
         ) {
             // Order Details Column
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(16.dp)
+
             ) {
                 Row() {
                     // Product Image
                     Image(
                         painter = painterResource(id = order.image),
                         contentDescription = "Product Image",
-                        modifier = Modifier
-                            .size(100.dp)
-                            .align(Alignment.CenterVertically)
-                            .padding(end = 16.dp)
+
+                        modifier =
+                            Modifier
+                                .width(74.dp)
+                                .height(74.dp)
+                                .background(color = ImageBackgroundColor, shape = RoundedCornerShape(size = 8.dp))
+                                .padding(start = 4.32432.dp, top = 4.32432.dp, end = 4.32432.dp, bottom = 4.32432.dp)
                     )
+                    Spacer(modifier = Modifier.width(hFactor(10)))
 
                     Column() {
                         // Product Name
-                        Text(
+                        CustomMontserratText(
                             text = order.name,
-                            fontWeight = FontWeight.Bold,
+                            fontWeight = FontWeight(500),
                             fontSize = 14.sp,
                             color = Color.Black,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
-
-                        // Amount Paid
-                        Text(
-                            text = "Amount Paid: ${order.amount}",
-                            fontSize = 15.sp,
-                            color = Color.Black
-                        )
-
-                        Spacer(modifier = Modifier.height(4.dp))
+                        Spacer(modifier = Modifier.height(vFactor(4)))
 
                         // Order Status Button
-                        Box(
-                            modifier = Modifier
-                                .background(
-                                    color = TextFieldColor3,
-                                    shape = RoundedCornerShape(20.dp)
-                                )
-                                .padding(horizontal = 20.dp, vertical = 1.dp)
-                        ) {
-                            Text(
-                                text = "Qty - ${order.quantity}",
-                                fontSize = 13.sp,
-                                color = Color.Black,
-                                fontWeight = FontWeight.SemiBold
-                            )
-                        }
+
+                        CustomMontserratText(
+                            text = "Qty - ${order.quantity}",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight(400),
+                            color = AppTextGray
+                        )
+                        Spacer(modifier = Modifier.height(vFactor(4)))
+                        CustomMontserratText(
+                            text = "${order.amount}",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight(400),
+                            color = AppTextGray
+                        )
+
+
+
+
+
                     }
                 }
             }
