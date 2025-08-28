@@ -149,7 +149,9 @@ fun OrderDetailScreen(status: String ="Processing", ) {
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.height(12.dp))
+
                 items.forEach { item ->
+
                     // Depending on the order status, display the appropriate item card
                     if (orderStatusEnum == OrderStatusEnum.Processing ||
                         orderStatusEnum == OrderStatusEnum.Shipped ||
@@ -160,7 +162,10 @@ fun OrderDetailScreen(status: String ="Processing", ) {
                         OrderDetailReviewCard(item)
                     }
 
+                    // Add 12dp height spacing after each item
+                    Spacer(modifier = Modifier.height(vFactor(12)))
                 }
+
                 Spacer(modifier = Modifier.height(vFactor(36)))
 
                 // Cancel Order Button for specific statuses

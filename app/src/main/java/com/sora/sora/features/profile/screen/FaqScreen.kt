@@ -81,17 +81,20 @@ QuestionAnswer(question="What payment methods does Sora accept?", answer="Sora s
         }
 
         // Background image at the bottom
-        Image(
-            painter = painterResource(id = R.drawable.img_bg_bottom_transparent), // Replace with your image
-            contentDescription = "Background",
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
+        BackgrountOtherImage(
+            modifier = Modifier.align(Alignment.BottomCenter)
                 .fillMaxWidth()
-                .height(300.dp), // Adjust the height as needed
-            contentScale = ContentScale.Fit
         )
     }
 }
+/* <<<<<<<<<<<<<<  ✨ Windsurf Command ⭐ >>>>>>>>>>>>>>>> */
+/**
+ * Composable function to display a question and its answer in the FAQ screen.
+ *
+ * @param question the question to be displayed
+ * @param answer the answer to the question
+ */
+/* <<<<<<<<<<  d78256bd-6042-4cbd-8a48-f55e3c2fc6a0  >>>>>>>>>>> */
 @Composable
 fun QuestionAnswer(question:String, answer:String) {
     Column(){

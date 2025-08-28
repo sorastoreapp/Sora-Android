@@ -36,18 +36,15 @@ import com.sora.sora.core.vFactor
 import com.sora.sora.ui.theme.AppGray
 import com.sora.sora.ui.theme.AppTextGray
 import com.sora.sora.ui.theme.SecondaryColor
+import com.sora.sora.ui.theme.SecondaryColor100
+import com.sora.sora.ui.theme.TextFieldBackgroundColors
 
 @Preview(showBackground = true)
 @Composable
 fun NotificationScreen() {
     var showBackPressed by remember { mutableStateOf(false) }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .padding(horizontal = hFactor(20))// Background for the entire screen
-    ) {
+    Column {
         CustomAppBar(
             title = "Notifications",
             onBackClick = {
@@ -56,44 +53,52 @@ fun NotificationScreen() {
             },
 
             )
-        // Image Background
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Notifications List
-        val notifications = listOf(
-            NotificationItem(
-                icon = Icons.Default.ShoppingCart,
-                title = "Big Savings Alert!",
-                description = "Get up to 50% off on your favorite toys & kids' accessories. Hurry, limited time only",
-                time = "10 hr ago"
-            ),
-            NotificationItem(
-                icon = Icons.Default.ShoppingCart,
-                title = "Order Delivered!",
-                description = "Yay! Your order #12345 has been delivered. We hope your little one loves it! Let us know what you think!",
-                time = "Yesterday"
-            ),
-            NotificationItem(
-                icon = Icons.Default.FavoriteBorder,
-                title = "New Arrivals Just Landed!",
-                description = "Discover the latest toys & trendy accessories for your little ones. Shop now!",
-                time = "Yesterday"
-            )
-        )
-
-        LazyColumn (
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)
+                .padding(horizontal = hFactor(20))// Background for the entire screen
         ) {
-            items(notifications) { item ->
-                NotificationCard(item)
+
+            // Image Background
+            Spacer(modifier = Modifier.height(vFactor(16)))
+
+            // Notifications List
+            val notifications = listOf(
+                NotificationItem(
+                    icon = R.drawable.ic_notification_outline,
+                    title = "Big Savings Alert!",
+                    description = "Get up to 50% off on your favorite toys & kids' accessories. Hurry, limited time only",
+                    time = "10 hr ago"
+                ),
+                NotificationItem(
+                    icon = R.drawable.ic_truck,
+                    title = "Order Delivered!",
+                    description = "Yay! Your order #12345 has been delivered. We hope your little one loves it! Let us know what you think!",
+                    time = "Yesterday"
+                ),
+                NotificationItem(
+                    icon = R.drawable.ic_favorite_outline,
+                    title = "New Arrivals Just Landed!",
+                    description = "Discover the latest toys & trendy accessories for your little ones. Shop now!",
+                    time = "Yesterday"
+                )
+            )
+
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(vFactor(12))
+            ) {
+                items(notifications) { item ->
+                    NotificationCard(item)
+                }
             }
         }
     }
 }
 
 data class NotificationItem(
-    val icon: ImageVector,
+    val icon: Int,
     val title: String,
     val description: String,
     val time: String
@@ -111,24 +116,21 @@ fun NotificationCard(item: NotificationItem) {
             modifier = Modifier.padding(vertical = vFactor(12), horizontal = hFactor(8)),
             verticalAlignment = Alignment.Top
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_email),
+            Icon(
+                painter = painterResource(id = item.icon, ),
                 contentDescription = null,
+                tint = SecondaryColor,
                 modifier = Modifier
                     .width(36.dp)
                     .height(36.dp)
-                    .background(color = Color(0x0DB58353), shape = RoundedCornerShape(size = 20.dp))
+                    .background(
+                        color = SecondaryColor100,
+                        shape = RoundedCornerShape(size = 20.dp)
+                    )
 
-                    .padding(start = 5.dp, top = 8.dp, end = 5.dp, bottom = 8.dp)
             )
-            Icon(
-                imageVector = item.icon,
-                contentDescription = item.title,
-                tint = SecondaryColor, // Accent color (light brown)
-                modifier = Modifier
-                    .size(36.dp)
-                    .padding( 8.dp)
-            )
+            Spacer(modifier = Modifier.width(hFactor(12)))
+
             Column(
                 modifier = Modifier.weight(1f)
             ) {
