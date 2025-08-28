@@ -1,11 +1,13 @@
 package com.sora.sora.features.category.screen
 
 import android.util.Log
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -14,11 +16,16 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextGranularity
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
@@ -27,9 +34,15 @@ import com.sora.sora.core.customButtons.CustomButton
 import com.sora.sora.core.customButtons.PrimaryButton
 import com.sora.sora.ui.theme.AppTextGray
 import com.sora.sora.core.customText.CustomMontserratText
+import com.sora.sora.core.hFactor
+import com.sora.sora.core.vFactor
+import com.sora.sora.features.category.widgets.BubbleShape
+import com.sora.sora.features.profile.screen.CommonDivider
+import com.sora.sora.features.profile.screen.MinimalSwitch
 import com.sora.sora.ui.theme.AppGray
 import com.sora.sora.ui.theme.PrimaryColor
-
+import com.sora.sora.ui.theme.PrimaryColor100
+import com.sora.sora.ui.theme.SecondaryColor
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -222,24 +235,30 @@ fun CategoryResultRow(resultCount: Int = 23) {
             val priceRange = remember { mutableStateOf(minPrice to maxPrice) }
             var showOffers by remember { mutableStateOf(false) }
             var hideOutOfStock by remember { mutableStateOf(false) }
+            val minValueFraction = (priceRange.value.first - minPrice) / (maxPrice - minPrice)
+            val maxValueFraction = (priceRange.value.second - minPrice) / (maxPrice - minPrice)
 
             Column(modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 16.dp, horizontal = 16.dp)) {
+                ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 2.dp),
+                        .padding(vertical = vFactor(2), horizontal = hFactor(12)),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.Top
                 ) {
-                    Spacer(modifier = Modifier.weight(1f))
+                    Box(
+                        modifier = Modifier.size(0.dp)
+                    )
+
                     CustomMontserratText(
                         text = "Filter by",
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 14.sp
+                        fontWeight = FontWeight(500),
+                        fontSize = 14.sp,
+                        textAlign = TextAlign.Center
                     )
-                    Spacer(modifier = Modifier.weight(1f))
+
                     IconButton(
                         onClick = {
                             coroutineScope.launch {
@@ -257,31 +276,128 @@ fun CategoryResultRow(resultCount: Int = 23) {
                         )
                     }
                 }
-
                 Divider(color = AppGray, thickness = 1.dp)
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(20.dp))
+                Column (modifier = Modifier.padding(horizontal = hFactor(20))){
+
+                     Box(modifier = Modifier.fillMaxWidth()) {
+                        val trackWidth =
+                            with(LocalDensity.current) { (352.dp - 32.dp).toPx() } // slider width minus padding
+                        val minThumbX = minValueFraction * trackWidth
+                        val maxThumbX = maxValueFraction * trackWidth
+                        Box(
+                            modifier = Modifier
+                                .height(40.dp)
+                                .width(50.dp)
+                                .offset { IntOffset(minThumbX.toInt(), 0) }
+
+                                .background(
+                                    Color.Gray.copy(alpha = 0.55f), BubbleShape(
+                                        cornerRadius = 24.0f,
+                                        pointerWidth = 24.0f,
+                                        pointerHeight = 20.0f
+                                    )
+                                )
+                                .padding(start = 10.dp, end = 10.dp, top = 3.dp, bottom = 5.dp)
+                        ) {
+                            CustomMontserratText(
+                                text = priceRange.value.first.toInt().toString(),
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight(400),
+                                color = Color.Black,
+                                modifier = Modifier.align(Alignment.Center)
+                            )
+                        }
+                        Box(
+                            modifier = Modifier
+                                .height(40.dp)
+                                .width(50.dp)
+                                .offset { IntOffset(maxThumbX.toInt(), 0) }
+                                .background(
+                                    Color.Gray.copy(alpha = 0.55f), BubbleShape(
+                                        cornerRadius = 24.0f,
+                                        pointerWidth = 24.0f,
+                                        pointerHeight = 20.0f
+                                    )
+                                )
+                                .padding(start = 10.dp, end = 10.dp, top = 3.dp, bottom = 5.dp)
+                        ) {
+
+                            CustomMontserratText(
+                                text = priceRange.value.second.toInt().toString(),
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight(400),
+                                color = Color.Black,
+                                modifier = Modifier.align(Alignment.Center)
+                            )
+                        }
 
 
-                RangeSlider(
-                    value = priceRange.value.first..priceRange.value.second,
-                    onValueChange = { priceRange.value = it.start to it.endInclusive },
-                    valueRange = 0f..1200f,
-                    colors = SliderDefaults.colors(
-                        thumbColor = PrimaryColor, // Color for the thumb
-                        activeTrackColor = PrimaryColor, // Color for the active track (slider)
-                        inactiveTrackColor = Color.Gray // Color for the inactive track (slider)
-                    ),
-
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                )
+                        RangeSlider(
+                            value = priceRange.value.first..priceRange.value.second,
+                            onValueChange = { priceRange.value = it.start to it.endInclusive },
+                            valueRange = 0f..1200f,
 
 
-                Row(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp), horizontalArrangement = Arrangement.SpaceBetween) {
-                    CustomMontserratText(text = "Min : KD 0.0",color = AppTextGray, fontSize = 12.sp)
-                    CustomMontserratText(text = "Max : KD 1200.0",color = AppTextGray, fontSize = 12.sp)
-                }
+                            startThumb = { state ->
+                                Box(
+                                    modifier = Modifier
+                                        .size(24.dp)  // Set the size of the thumb
+                                        .clip(CircleShape)  // Make it circular
+                                        .background(Color.White)  // Set the background color to white
+                                        .border(
+                                            6.dp,
+                                            PrimaryColor,
+                                            CircleShape
+                                        )  // Set the border to brown (PrimaryColor)
+                                        .shadow(0.dp, CircleShape)  // Remove the shadow
+                                )
+                            },
+
+                            endThumb = { state ->
+                                Box(
+                                    modifier = Modifier
+                                        .size(24.dp)  // Set the size of the thumb
+                                        .clip(CircleShape)  // Make it circular
+                                        .background(Color.White)  // Set the background color to white
+                                        .border(
+                                            6.dp,
+                                            PrimaryColor,
+                                            CircleShape
+                                        )  // Set the border to brown (PrimaryColor)
+                                        .shadow(0.dp, CircleShape)  // Remove the shadow
+                                )
+                            },
+
+
+                            colors = SliderDefaults.colors(
+                                thumbColor = Color.Transparent,  // Thumb color is already handled via startThumb and endThumb
+                                activeTrackColor = PrimaryColor,  // Active track color
+                                inactiveTrackColor = PrimaryColor.copy(alpha = 0.4f),  // Inactive track color
+                                activeTickColor = Color.Transparent,  // Active tick color
+                                inactiveTickColor = Color.Transparent  // Inactive tick color
+                            ),
+
+                            modifier = Modifier
+                                .padding(top = 32.dp, start = 12.dp, end = 24.dp)
+
+                                .shadow(elevation = 0.dp)  // Remove the overall shadow
+                        )
+
+
+                    }
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+
+
+
+                    Row(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+                        CustomMontserratText(text = "Min : KD 0.0",color = AppTextGray, fontSize = 12.sp)
+                        CustomMontserratText(text = "Max : KD 1200.0",color = AppTextGray, fontSize = 12.sp)
+                    }
 
 //                Row(
 //                    modifier = Modifier.fillMaxWidth(),
@@ -307,153 +423,178 @@ fun CategoryResultRow(resultCount: Int = 23) {
 //                    )
 //                }
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 16.dp) // Padding around the entire row
-                        .padding(end = 16.dp,), // Padding inside the box
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    // "From" Box with Label and Value
                     Row(
                         modifier = Modifier
-                            .weight(1f)
-                            .padding(8.dp) // Padding inside the box
-                            .border(1.dp, AppGray, RoundedCornerShape(8.dp)) // Border for the box
-                            .padding(horizontal = 16.dp, vertical = 14.dp), // Padding inside the box
-                        verticalAlignment = Alignment.CenterVertically
+
+                            .padding( top = vFactor(10), bottom = vFactor(14)) ,// Padding around the entire row
+                             // Padding inside the box
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        // "From" Box with Label and Value
+                        Row(
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(8.dp) // Padding inside the box
+                                .border(1.dp, AppGray, RoundedCornerShape(8.dp)) // Border for the box
+                                .padding(horizontal = 16.dp, vertical = 14.dp), // Padding inside the box
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            CustomMontserratText(
+                                text = "from",
+                                fontSize = 16.sp,
+                                color = Color.Black,
+                                fontWeight = FontWeight.Normal
+                            )
+                            Spacer(modifier = Modifier.width(8.dp)) // Space between label and value
+                            CustomMontserratText(
+                                text = "${priceRange.value.first.toInt()}",
+                                fontSize = 16.sp,
+                                color = Color.Black
+                            )
+                            Spacer(modifier = Modifier.weight(1f))
+                            CustomMontserratText(
+                                text = "KD",
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.W500,
+                                color = Color.Black
+                            )
+                        }
+
+
+
+
+                        // "To" Box with Label and Value
+                        Row(
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(8.dp) // Padding inside the box
+                                .border(1.dp, AppGray, RoundedCornerShape(8.dp)) // Border for the box
+                                .padding(horizontal = 16.dp, vertical = 14.dp), // Padding inside the box
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            CustomMontserratText(
+                                text = "to",
+                                fontSize = 16.sp,
+                                color = Color.Black,
+                                fontWeight = FontWeight.Normal
+                            )
+                            Spacer(modifier = Modifier.width(8.dp)) // Space between label and value
+                            CustomMontserratText(
+                                text = "${priceRange.value.second.toInt()}",
+                                fontSize = 16.sp,
+                                color = Color.Black
+                            )
+                            Spacer(modifier = Modifier.weight(1f))
+                            CustomMontserratText(
+                                text = "KD",
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.W500,
+                                color = Color.Black
+                            )
+                        }
+                    }
+
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
                     ) {
                         CustomMontserratText(
-                            text = "from",
+                            text = "Offers",
                             fontSize = 16.sp,
                             color = Color.Black,
                             fontWeight = FontWeight.Normal
                         )
-                        Spacer(modifier = Modifier.width(8.dp)) // Space between label and value
-                        CustomMontserratText(
-                            text = "${priceRange.value.first.toInt()}",
-                            fontSize = 16.sp,
-                            color = Color.Black
-                        )
                         Spacer(modifier = Modifier.weight(1f))
-                        CustomMontserratText(
-                            text = "KD",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.W500,
-                            color = Color.Black
+                        var switchEnabled by remember { mutableStateOf(true) }
+                        MinimalSwitch(
+                            checked  = showOffers,
+                            onCheckedChange = { showOffers = it },
+                            enabled = switchEnabled
                         )
+
                     }
+                    Spacer(modifier = Modifier.height(8.dp))
 
-
-                    Spacer(modifier = Modifier.width(8.dp)) // Space between the two fields
-
-                    // "To" Box with Label and Value
                     Row(
                         modifier = Modifier
-                            .weight(1f)
-                            .padding(8.dp) // Padding inside the box
-                            .border(1.dp, AppGray, RoundedCornerShape(8.dp)) // Border for the box
-                            .padding(horizontal = 16.dp, vertical = 14.dp), // Padding inside the box
-                        verticalAlignment = Alignment.CenterVertically
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 10.dp)
                     ) {
                         CustomMontserratText(
-                            text = "to",
+                            text = "Hide Out of Stock",
                             fontSize = 16.sp,
                             color = Color.Black,
                             fontWeight = FontWeight.Normal
                         )
-                        Spacer(modifier = Modifier.width(8.dp)) // Space between label and value
-                        CustomMontserratText(
-                            text = "${priceRange.value.second.toInt()}",
-                            fontSize = 16.sp,
-                            color = Color.Black
-                        )
                         Spacer(modifier = Modifier.weight(1f))
-                        CustomMontserratText(
-                            text = "KD",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.W500,
-                            color = Color.Black
+                        var switchEnabled by remember { mutableStateOf(true) }
+                        MinimalSwitch(
+                            checked = hideOutOfStock,
+                            onCheckedChange = { hideOutOfStock = it },
+                            enabled = switchEnabled
                         )
+
+
                     }
-                }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row (
+                        modifier = Modifier
+                            .fillMaxWidth().
+                        padding(horizontal = hFactor(10))
 
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                ) {
-                    CustomMontserratText(
-                        text = "Offers",
-                        fontSize = 16.sp,
-                        color = Color.Black,
-                        fontWeight = FontWeight.Normal
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-                    Switch(
-                        checked  = showOffers,
-                        onCheckedChange = { showOffers = it },
-                        colors = SwitchDefaults.colors(
-                            checkedThumbColor = Color.White,
-                            checkedTrackColor = PrimaryColor
+
+                    ){
+                        PrimaryButton(
+                            text = "Apply",
+                            onClick = {
+                                coroutineScope.launch {
+                                    filterSheetState.hide()
+                                    showFilterSheet = false
+                                }
+                            },
+                            borderColor = PrimaryColor,
+
+                            modifier = Modifier
+                                .width(170.dp)
+                                .height(60.dp)
                         )
-                    )
-                }
+                        Spacer(modifier = Modifier.weight(2f))
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 10.dp)
-                ) {
-                    CustomMontserratText(
-                        text = "Hide Out of Stock",
-                        fontSize = 16.sp,
-                        color = Color.Black,
-                        fontWeight = FontWeight.Normal
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-                    Switch(checked = hideOutOfStock, onCheckedChange = { hideOutOfStock = it },  colors = SwitchDefaults.colors(
-                        checkedThumbColor = Color.White,
-                        checkedTrackColor = PrimaryColor
-                    ))
-                }
-
-                Spacer(modifier = Modifier.height(20.dp))
-                Row (
-
-                ){
-                    PrimaryButton(
-                        text = "Apply",
-                        onClick = {
-                            coroutineScope.launch {
-                                filterSheetState.hide()
-                                showFilterSheet = false
-                            }
-                        },
-                        modifier = Modifier.width(160.dp).height(60.dp)
+                        PrimaryButton(
+                            text = "Clear",
+                            backgroundColor = Color.White,
+                            textColor = PrimaryColor,
+                            borderColor = PrimaryColor,
+                            onClick = {
+                                coroutineScope.launch {
+                                    filterSheetState.hide()
+                                    showFilterSheet = false
+                                }
+                            },
+                            modifier = Modifier
+                                .width(170.dp)
+                                .height(60.dp)
                         )
-                    Spacer(modifier = Modifier.weight(1f))
-                    PrimaryButton(
-                        text = "Clear",
-                        backgroundColor = Color.White,
-                        textColor = PrimaryColor,
-                        borderColor = PrimaryColor,
-                        onClick = {
-                            coroutineScope.launch {
-                                filterSheetState.hide()
-                                showFilterSheet = false
-                            }
-                        },
-                        modifier = Modifier.width(160.dp).height(60.dp)
-                    )
+                }
+
+
+
                 }
 
 
             }
         }
     }
+
 }
+
+
+
+
 
 
 /**working but bottom bar issue */
