@@ -104,14 +104,9 @@ fun AboutUsScreen() {
         }
 
         // Background image at the bottom
-        Image(
-            painter = painterResource(id = R.drawable.img_bg_bottom_transparent), // Replace with your image
-            contentDescription = "Background",
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
+        BackgrountOtherImage(
+            modifier = Modifier.align(Alignment.BottomCenter)
                 .fillMaxWidth()
-                .height(300.dp), // Adjust the height as needed
-            contentScale = ContentScale.Fit
         )
     }
 }
