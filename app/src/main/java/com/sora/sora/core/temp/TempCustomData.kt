@@ -67,3 +67,10 @@ class TempCustomData {
         )
     )
 }
+
+
+data class SeeAllModel(
+    val title: String,
+    val list: List<String>
+)
+

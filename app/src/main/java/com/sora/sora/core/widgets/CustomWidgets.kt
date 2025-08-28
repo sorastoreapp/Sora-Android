@@ -1,5 +1,6 @@
 package com.sora.sora.core.widgets
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -68,6 +69,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.sora.sora.R
 import com.sora.sora.core.AppTexts
+import com.sora.sora.core.navigations.NavigationManager.navController
+import com.sora.sora.core.temp.SeeAllModel
 import com.sora.sora.ui.theme.ProductCardColor
 import kotlinx.coroutines.delay
 
@@ -106,10 +109,12 @@ import kotlinx.coroutines.delay
 //}
 
 @Composable
-fun ProductSection(title: String, products: List<Product>) {
+fun ProductSection(title: String, products: List<Product>, categoryList: List<String> = emptyList()) {
     Column {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -117,21 +122,33 @@ fun ProductSection(title: String, products: List<Product>) {
                 text = title,
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 16.sp,
-                color = Color.Black
+                color = Color.Black,
             )
             CustomMontserratText(
                 text = AppTexts.seeAll,
                 color = PrimaryColor,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.clickable {  }
+                modifier = Modifier.pointerInput(Unit) {
+                    detectTapGestures(
+                        onTap = {
+
+                            val seeAllModel = SeeAllModel(title = title, list = categoryList.takeIf { it.isNotEmpty() } ?: emptyList())
+                            val encodedList = seeAllModel.list.joinToString(",")  // Encoding the list as a string
+
+
+                            Log.d("MyTag", "-----------------${encodedList}")
+                            navController.navigate("${Dest.SeeAllProductScreen::class.toRoute()}?title=${seeAllModel.title}&list=$encodedList")
+                        }
+                    )
+                }
             )
         }
         Spacer(modifier = Modifier.height(12.dp))
 
 
 
-        LazyRow(contentPadding = PaddingValues(start = 12.dp), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+        LazyRow(contentPadding = PaddingValues(start = 12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             items(products) { product ->
                 var qty by remember { mutableIntStateOf(0) }
                 ProductCard(product = product,  onFavorite = { /* … */ },
@@ -140,8 +157,12 @@ fun ProductSection(title: String, products: List<Product>) {
                     onRemoveFromCart = { if (qty > 0) qty-- },
                     quantity = qty)
             }
+            item{
+                Spacer(modifier = Modifier.width(12.dp))
+            }
         }
     }
+
 }
 
 
@@ -387,10 +408,18 @@ fun ProductCard(
     Card(
         modifier = Modifier
             .width(cardWidth)
-            .height(cardHeight),
+            .height(cardHeight)
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onTap = {
+                        navController.navigate(Dest.ItemDetailScreen::class.toRoute())
+                    }
+                )
+            }
+        ,
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(Color.White),
-        elevation = CardDefaults.cardElevation(2.dp),
+        elevation = CardDefaults.cardElevation(1.dp),
         border = BorderStroke(1.dp, Color(0xFFEADFD0))
     ) {
         Column(Modifier.fillMaxSize()) {
@@ -405,7 +434,10 @@ fun ProductCard(
                     painter = product.image,
                     contentDescription = product.title,
                     contentScale = ContentScale.Fit,
-                    modifier = Modifier.align(Alignment.Center).height(110.dp).width(97.dp)
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .height(110.dp)
+                        .width(97.dp)
                 )
 
                 // Heart
@@ -419,14 +451,16 @@ fun ProductCard(
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(if(isFavourite)Icons.Default.Favorite else Icons.Default.FavoriteBorder, contentDescription = null, tint = PrimaryColor,
-                        modifier = Modifier.padding(7.dp).pointerInput(Unit) {
-                            detectTapGestures(
-                                onTap = {
-                                    onFavorite()
-                                    isFavourite = !isFavourite
-                                }
-                            )
-                        }
+                        modifier = Modifier
+                            .padding(7.dp)
+                            .pointerInput(Unit) {
+                                detectTapGestures(
+                                    onTap = {
+                                        onFavorite()
+                                        isFavourite = !isFavourite
+                                    }
+                                )
+                            }
                     )
 
 
@@ -467,7 +501,7 @@ fun ProductCard(
                     text = product.title,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.W500,
                     fontSize = 14.sp,
                     color = Color(0xFF383B3E)
                 )
@@ -475,7 +509,7 @@ fun ProductCard(
                 Spacer(Modifier.height(4.dp))
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("KD ${product.price}", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = PrimaryColor)
+                    CustomMontserratText("KD ${product.price}", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = PrimaryColor)
                     Spacer(Modifier.width(4.dp))
                     CustomMontserratText(product.oldPrice, fontSize =  12.sp, color = Color.Gray, textDecoration = TextDecoration.LineThrough)
                     Spacer(Modifier.width(4.dp))

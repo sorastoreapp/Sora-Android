@@ -16,9 +16,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.sora.sora.AccountDetailsScreen
+import com.sora.sora.core.temp.SeeAllModel
 import com.sora.sora.features.static_screens.OnboardingScreen
 import com.sora.sora.core.temp.TempCustomData
+import com.sora.sora.features.category.CategoryDetailModel
 import com.sora.sora.features.category.screen.CategoryModel
+import com.sora.sora.features.common.view.screen.SeeAllProductScreen
 import com.sora.sora.features.dashboard.CartScreen
 import com.sora.sora.features.dashboard.CategoryScreen
 import com.sora.sora.features.dashboard.DashboardScreen
@@ -40,6 +43,7 @@ import com.sora.sora.features.profile.screen.ProfileScreen
 import com.sora.sora.features.profile.screen.TermsAndConditionsScreen
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
+import java.net.URLDecoder
 import kotlin.reflect.KClass
 
 @Parcelize
@@ -142,11 +146,34 @@ fun MainNavigation(modifier: Modifier = Modifier) {
             val categories = TempCustomData().categories
             CategoryScreen(  categories = categories )
         }
+//
+//        composable(Dest.SeeAllProductScreen::class.toRoute()) {
+//            val categories = TempCustomData().categories
+//            CategoryScreen(  categories = categories )
+//        }
+
+        composable(Dest.SeeAllProductScreen::class.toRoute() + "?title={title}&list={list}") { backStackEntry ->
+            val title = backStackEntry.arguments?.getString("title") ?: ""
+            val list = backStackEntry.arguments?.getString("list")?.split(",") ?: listOf()
+            SeeAllProductScreen(seeAllModel = SeeAllModel(title = title, list = list))
+        }
+
+        composable(Dest.CategoryDetailScreen::class.toRoute() + "?title={title}&themeColor={themeColor}") { backStackEntry ->
+            val title = backStackEntry.arguments?.getString("title") ?: ""
+            val encodedThemeColor = backStackEntry.arguments?.getString("themeColor") ?: ""
+
+            // Decode the themeColor from the URL encoding
+            val themeColor = URLDecoder.decode(encodedThemeColor, "UTF-8")
+
+            // Pass the decoded themeColor to CategoryDetailScreen
+            CategoryDetailScreen(categoryDetailModel = CategoryDetailModel(title = title, themeColor = themeColor))
+        }
+
 
         composable(Dest.FavoritesScreen::class.toRoute()) { FavoritesScreen()}
         composable(Dest.CartScreen::class.toRoute()) { CartScreen()}
         composable(Dest.ItemDetailScreen::class.toRoute()) { ItemDetailScreen()}
-        composable(Dest.CategoryDetailScreen::class.toRoute()) { CategoryDetailScreen()}
+//        composable(Dest.CategoryDetailScreen::class.toRoute()) { CategoryDetailScreen()}
 
         composable(Dest.ProfileScreen::class.toRoute()) { ProfileScreen()}
         composable(Dest.OrdersScreen::class.toRoute()) { OrdersScreen()}
@@ -161,6 +188,7 @@ fun MainNavigation(modifier: Modifier = Modifier) {
         composable(Dest.ReviewDetailScreen::class.toRoute()) { ReviewDetailScreen() }
         composable(Dest.SplashScreen::class.toRoute()) { SplashScreen() }
         composable(Dest.NotificationScreen::class.toRoute()) { NotificationScreen() }
+
         composable(Dest.OrderDetailScreen::class.toRoute() + "?status={status}") { backStackEntry ->
             val status = backStackEntry.arguments?.getString("status")
             if (status != null) {

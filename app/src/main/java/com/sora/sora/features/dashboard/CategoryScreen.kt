@@ -1,7 +1,9 @@
 package com.sora.sora.features.dashboard
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -43,7 +46,11 @@ import com.sora.sora.core.customText.CustomMontserratText
 import com.sora.sora.core.customText.CustomTextBubbleBobble
 import com.sora.sora.core.navigations.Dest
 import com.sora.sora.core.navigations.NavigationManager
+import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.navigations.toRoute
+import com.sora.sora.core.temp.SeeAllModel
+import com.sora.sora.features.category.CategoryDetailModel
+import java.net.URLEncoder
 
 /** WORKING WITHOUT REUSABLE DESIGN */
 //
@@ -217,6 +224,8 @@ fun CategoryScreen(
 
     }
 }
+
+
 @Composable
 fun CategoryCard(category: CategoryItemData) {
     val shape = RoundedCornerShape(16.dp)
@@ -227,11 +236,29 @@ fun CategoryCard(category: CategoryItemData) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(110.dp)  // Adjust the height of the card
-                .clickable {
-                    // Navigate to category details screen
-                    NavigationManager.navigateTo(Dest.CategoryDetailScreen::class.toRoute())
+//                .clickable {
+//                    // Navigate to category details screen
+//                    NavigationManager.navigateTo(Dest.CategoryDetailScreen::class.toRoute())
+//                },
+                .pointerInput(Unit) {
+                    detectTapGestures(
+                        onTap = {
+                            val categoryDetailModel = CategoryDetailModel(
+                                title = category.title,
+                                themeColor = category.colorCode1,  // e.g., "#FFFADA7A"
+                            )
+
+                            // URL encode the themeColor
+                            val encodedThemeColor = URLEncoder.encode(categoryDetailModel.themeColor, "UTF-8")
+
+                            Log.d("MyTag", "CategoryCard: ------------------${categoryDetailModel.themeColor}")
+
+                            // Pass the encoded themeColor in the navigation URL
+                            navController.navigate("${Dest.CategoryDetailScreen::class.toRoute()}?title=${categoryDetailModel.title}&themeColor=$encodedThemeColor")
+                        }
+                    )
                 },
-            shape = shape,
+             shape = shape,
             colors = CardDefaults.cardColors(
                 containerColor = Color(android.graphics.Color.parseColor(category.colorCode1))
             ) // Apply colorCode1 as the background color
@@ -243,7 +270,8 @@ fun CategoryCard(category: CategoryItemData) {
                     painter = painterResource(id = R.drawable.ic_category_shade),
                     contentDescription = null,
                     modifier = Modifier
-                        .align(Alignment.TopEnd).height(100.dp), // Align the image to the top right corner
+                        .align(Alignment.TopEnd)
+                        .height(100.dp), // Align the image to the top right corner
                     colorFilter = ColorFilter.tint(Color(android.graphics.Color.parseColor(category.colorCode2))) // Apply colorCode2 as tint
                 )
 
