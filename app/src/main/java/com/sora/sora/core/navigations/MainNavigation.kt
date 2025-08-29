@@ -81,7 +81,7 @@ fun MainNavigation(modifier: Modifier = Modifier) {
                     navController.navigate(Dest.SignIn::class.toRoute())
                 },
                 onSignupClick = {
-                    navController.navigate(Dest.AccountDetailsScreen::class.toRoute())
+                    navController.navigate(Dest.CreateAccountScreen::class.toRoute())
                 },
                 onSkipClick = {
                     navController.navigate(Dest.DashBoardScreen::class.toRoute())
@@ -92,13 +92,13 @@ fun MainNavigation(modifier: Modifier = Modifier) {
         composable(Dest.SignIn::class.toRoute()) {
             SignInScreen(
                 onLoginClick = {
-                    navController.navigate(Dest.DashBoardScreen::class.toRoute())
+                    NavigationManager.navigateAndClearStack(Dest.DashBoardScreen::class.toRoute())
                 },
                 onRegisterClick = {
                     navController.navigate(Dest.AccountDetailsScreen::class.toRoute())
                 },
                 onSocialLoginClick = {
-                    navController.navigate(Dest.DashBoardScreen::class.toRoute())
+                    NavigationManager.navigateAndClearStack(Dest.DashBoardScreen::class.toRoute())
                 },
                 onCountryCodeChange = {}
             )
@@ -193,6 +193,7 @@ fun MainNavigation(modifier: Modifier = Modifier) {
         composable(Dest.SplashScreen::class.toRoute()) { SplashScreen() }
         composable(Dest.NotificationScreen::class.toRoute()) { NotificationScreen() }
 
+        /**Single Primitive Parameter*/
         composable(Dest.OrderDetailScreen::class.toRoute() + "?status={status}") { backStackEntry ->
             val status = backStackEntry.arguments?.getString("status")
             if (status != null) {

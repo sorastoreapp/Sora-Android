@@ -1,5 +1,6 @@
 package com.sora.sora.features.dashboard
 
+import android.util.Log
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -41,7 +42,12 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.sora.sora.core.hFactor
+import com.sora.sora.core.navigations.Dest
+import com.sora.sora.core.navigations.NavigationManager.navController
+import com.sora.sora.core.navigations.toRoute
 import com.sora.sora.core.vFactor
+import com.sora.sora.features.category.CategoryDetailModel
+import java.net.URLEncoder
 
 // Data classes
 data class Category(val id: Int, val title: String, val icon: Painter, val bgColor: Color)
@@ -261,13 +267,30 @@ fun BannerSlider(
                         modifier = Modifier.padding(bottom = 16.dp).widthIn(max = 200.dp)
                     )
                     Button(
-                            onClick = { /* Handle button click */ },
+                            onClick = {
+
+                                val categoryDetailModel = CategoryDetailModel(
+                                    title = "Toys",
+                                    themeColor = "#FFFADA7A"  // e.g., "#FFFADA7A"
+                                )
+
+                                // URL encode both the title and themeColor
+                                val encodedTitle = URLEncoder.encode(categoryDetailModel.title, "UTF-8")
+                                val encodedThemeColor = URLEncoder.encode(categoryDetailModel.themeColor, "UTF-8")
+
+                                Log.d("MyTag", "CategoryCard: ------------------${categoryDetailModel.title}")
+
+                                // Pass the encoded title and themeColor in the navigation URL
+                                navController.navigate("${Dest.CategoryDetailScreen::class.toRoute()}?title=$encodedTitle&themeColor=$encodedThemeColor")
+
+                            },
                     shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(PrimaryColor),
                     contentPadding = PaddingValues(0.dp), // Remove internal padding
                     modifier = Modifier
                         .width(105.dp) // Make button stretch across
                         .height(28.dp) // Adjust button height as needed
+
                     ) {
                     Text(
                         text = "Explore Now",
@@ -495,6 +518,7 @@ fun PreviewCategorySection(){
         Category(4, "Cups & Mugs", painterResource(R.drawable.img_temp_categories4), Color(0xFFF6FFF2)),
         Category(5, "Accessories", painterResource(R.drawable.img_temp_categories4), Color(0xFFFFF7F7))
     )
+
 //    CategorySection(categories = categories, onSeeAllClick = {})
 
     CategoryItem(categories[0])
@@ -575,7 +599,23 @@ fun OfferCard() {
                 modifier = Modifier.padding(bottom = 16.dp).widthIn(max = 200.dp)
             )
             Button(
-                onClick = { /* Handle button click */ },
+                onClick = {
+
+                    val categoryDetailModel = CategoryDetailModel(
+                        title = "Toys",
+                        themeColor = "#FFFADA7A"  // e.g., "#FFFADA7A"
+                    )
+
+                    // URL encode both the title and themeColor
+                    val encodedTitle = URLEncoder.encode(categoryDetailModel.title, "UTF-8")
+                    val encodedThemeColor = URLEncoder.encode(categoryDetailModel.themeColor, "UTF-8")
+
+                    Log.d("MyTag", "CategoryCard: ------------------${categoryDetailModel.title}")
+
+                    // Pass the encoded title and themeColor in the navigation URL
+                    navController.navigate("${Dest.CategoryDetailScreen::class.toRoute()}?title=$encodedTitle&themeColor=$encodedThemeColor")
+
+                },
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(PrimaryColor),
                 contentPadding = PaddingValues(0.dp), // Remove internal padding
