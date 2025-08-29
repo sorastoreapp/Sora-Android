@@ -32,15 +32,19 @@ import com.sora.sora.features.favourites.widgets.ReviewDetailScreen
 import com.sora.sora.features.profile.screen.AboutUsScreen
 import com.sora.sora.features.profile.screen.AddNewAddressScreen
 import com.sora.sora.features.profile.screen.AddReviewScreen
+
 import com.sora.sora.features.profile.screen.EditProfileScreen
 import com.sora.sora.features.profile.screen.FaqScreen
 import com.sora.sora.features.profile.screen.MyAddressesScreen
 import com.sora.sora.features.profile.screen.NotificationScreen
 import com.sora.sora.features.profile.screen.OrderDetailScreen
 import com.sora.sora.features.profile.screen.OrdersScreen
+import com.sora.sora.features.profile.screen.PaymentSuccessScreen
 import com.sora.sora.features.profile.screen.PrivacyPolicyScreen
 import com.sora.sora.features.profile.screen.ProfileScreen
 import com.sora.sora.features.profile.screen.TermsAndConditionsScreen
+
+
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import java.net.URLDecoder
@@ -200,6 +204,8 @@ fun MainNavigation(modifier: Modifier = Modifier) {
                 OrderDetailScreen(status = status)
             }
         }
+        composable(Dest.PaymentSuccessScreen::class.toRoute()) { PaymentSuccessScreen() }
+
 
 
     }

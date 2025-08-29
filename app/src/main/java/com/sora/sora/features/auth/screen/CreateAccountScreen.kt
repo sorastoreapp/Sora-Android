@@ -45,6 +45,7 @@ import com.sora.sora.ui.theme.PrimaryColor
 
 
 @OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true)
 @Composable
 fun CreateAccountScreen(
 ) {
