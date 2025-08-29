@@ -431,6 +431,8 @@ fun ItemDetailScreen(
 
           }
             ProductSection(title = "Similar Products", products = discountProductList)
+
+            Spacer(modifier = Modifier.height(100.dp)) // extra bottom padding
         }
 
     }

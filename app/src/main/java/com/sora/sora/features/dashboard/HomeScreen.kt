@@ -143,7 +143,7 @@ fun HomeScreen() {
                 ProductSection(title = "Cups & Mugs", products = mugs,categoryList = categoryList)
                 Spacer(modifier = Modifier.height(48.dp)) // extra bottom padding
                 ProductSection(title = "Discount Product", products = discountProducts,categoryList = categoryList)
-                Spacer(modifier = Modifier.height(65.dp)) // extra bottom padding
+                Spacer(modifier = Modifier.height(100.dp)) // extra bottom padding
             }
         }
     }

@@ -53,7 +53,7 @@ fun FaqScreen() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 56.dp) //
+                .padding(top = 56.dp,) //
                 .statusBarsPadding()
                 .padding(horizontal = 20.dp, )
                 .verticalScroll(rememberScrollState())// Makes the content scrollable
@@ -77,6 +77,7 @@ QuestionAnswer(question="How do I place an order?", answer="Browse products, add
 
 QuestionAnswer(question="What payment methods does Sora accept?", answer="Sora supports various payment methods, including credit/debit cards and other secure online payment options.")
 
+            Spacer(modifier = Modifier.height(100.dp)) // extra bottom padding
 
         }
 
@@ -87,14 +88,14 @@ QuestionAnswer(question="What payment methods does Sora accept?", answer="Sora s
         )
     }
 }
-/* <<<<<<<<<<<<<<  ✨ Windsurf Command ⭐ >>>>>>>>>>>>>>>> */
+
 /**
  * Composable function to display a question and its answer in the FAQ screen.
  *
  * @param question the question to be displayed
  * @param answer the answer to the question
  */
-/* <<<<<<<<<<  d78256bd-6042-4cbd-8a48-f55e3c2fc6a0  >>>>>>>>>>> */
+
 @Composable
 fun QuestionAnswer(question:String, answer:String) {
     Column(){
