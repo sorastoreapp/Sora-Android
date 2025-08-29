@@ -67,7 +67,7 @@ fun MainNavigation(modifier: Modifier = Modifier) {
 
     NavHost(
         navController = navController,
-        startDestination = Dest.DashBoardScreen::class.toRoute(),
+        startDestination = Dest.SplashScreen::class.toRoute(),
         modifier = modifier
     ) {
          composable(Dest.OnboardingScreen::class.toRoute()) {
@@ -159,18 +159,22 @@ fun MainNavigation(modifier: Modifier = Modifier) {
         }
 
         composable(Dest.CategoryDetailScreen::class.toRoute() + "?title={title}&themeColor={themeColor}") { backStackEntry ->
-            val title = backStackEntry.arguments?.getString("title") ?: ""
+            val encodedTitle = backStackEntry.arguments?.getString("title") ?: ""
             val encodedThemeColor = backStackEntry.arguments?.getString("themeColor") ?: ""
 
-            // Decode the themeColor from the URL encoding
+            // Decode the title and themeColor from the URL encoding
+            val title = URLDecoder.decode(encodedTitle, "UTF-8")
             val themeColor = URLDecoder.decode(encodedThemeColor, "UTF-8")
 
-            // Pass the decoded themeColor to CategoryDetailScreen
+            // Pass the decoded title and themeColor to CategoryDetailScreen
             CategoryDetailScreen(categoryDetailModel = CategoryDetailModel(title = title, themeColor = themeColor))
         }
 
 
-        composable(Dest.FavoritesScreen::class.toRoute()) { FavoritesScreen()}
+
+        composable(Dest.FavoritesScreen::class.toRoute()) {
+            FavoritesScreen()
+        }
         composable(Dest.CartScreen::class.toRoute()) { CartScreen()}
         composable(Dest.ItemDetailScreen::class.toRoute()) { ItemDetailScreen()}
 //        composable(Dest.CategoryDetailScreen::class.toRoute()) { CategoryDetailScreen()}

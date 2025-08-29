@@ -1,5 +1,6 @@
 package com.sora.sora.features.category.screen
 
+import android.util.Log
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -136,6 +137,8 @@ fun CategoryDetailScreen(categoryDetailModel : CategoryDetailModel) {
 
     val scrollState = rememberScrollState()
 
+    Log.d("MyTag", "--------${categoryDetailModel.title}---")
+
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(bottom = 40.dp)) {
@@ -235,9 +238,10 @@ fun CategoryDetailScreen(categoryDetailModel : CategoryDetailModel) {
                                 alpha = teddyAlpha
                             }
                     ) {
-                        Image(
+                        Icon(
                             painter = painterResource(R.drawable.ic_cat_toy),
                             contentDescription = "Teddy",
+                            tint = themeColor,
                             modifier = Modifier.size(teddySize)
                         )
                     }
@@ -246,8 +250,6 @@ fun CategoryDetailScreen(categoryDetailModel : CategoryDetailModel) {
 
             // Dynamic Spacer height as we scroll
             Spacer(modifier = Modifier.height(spacerHeight)) // This spacer height shrinks as we scroll
-
-
 
             // Filter Chips - pinned at bottom
             LazyRow(

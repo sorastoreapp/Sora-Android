@@ -245,20 +245,22 @@ fun CategoryCard(category: CategoryItemData) {
                         onTap = {
                             val categoryDetailModel = CategoryDetailModel(
                                 title = category.title,
-                                themeColor = category.colorCode1,  // e.g., "#FFFADA7A"
+                                themeColor = category.colorCode1  // e.g., "#FFFADA7A"
                             )
 
-                            // URL encode the themeColor
+                            // URL encode both the title and themeColor
+                            val encodedTitle = URLEncoder.encode(categoryDetailModel.title, "UTF-8")
                             val encodedThemeColor = URLEncoder.encode(categoryDetailModel.themeColor, "UTF-8")
 
-                            Log.d("MyTag", "CategoryCard: ------------------${categoryDetailModel.themeColor}")
+                            Log.d("MyTag", "CategoryCard: ------------------${categoryDetailModel.title}")
 
-                            // Pass the encoded themeColor in the navigation URL
-                            navController.navigate("${Dest.CategoryDetailScreen::class.toRoute()}?title=${categoryDetailModel.title}&themeColor=$encodedThemeColor")
+                            // Pass the encoded title and themeColor in the navigation URL
+                            navController.navigate("${Dest.CategoryDetailScreen::class.toRoute()}?title=$encodedTitle&themeColor=$encodedThemeColor")
                         }
                     )
                 },
-             shape = shape,
+
+                    shape = shape,
             colors = CardDefaults.cardColors(
                 containerColor = Color(android.graphics.Color.parseColor(category.colorCode1))
             ) // Apply colorCode1 as the background color

@@ -6,13 +6,13 @@ import com.sora.sora.features.dashboard.CategoryItemData
 class TempCustomData {
     val categories = listOf(
         CategoryItemData(
-            title = "Toys & Plushies",
+            title = "Toys",
             iconRes = R.drawable.ic_cat_toy,
             colorCode1 = "#FFFADA7A",
             colorCode2 = "#FFF8C844"
         ),
         CategoryItemData(
-            title = "Boy's & Girl's Pajamas",
+            title = "Clothing",
             iconRes = R.drawable.ic_cat_pajamas,
             colorCode1 = "#FFB7B1F2",
             colorCode2 = "#FF968EEC"
@@ -36,7 +36,7 @@ class TempCustomData {
             colorCode2 = "#FFD5D5"
         ),
         CategoryItemData(
-            title = "Towels",
+            title = "Robes & Towels",
             iconRes = R.drawable.ic_cat_towel,
             colorCode1 = "#C6E7FF",
             colorCode2 = "#ABDBFF"
