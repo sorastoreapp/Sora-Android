@@ -20,8 +20,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.ButtonElevation
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
@@ -30,20 +28,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.ColorFilter.Companion.tint
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.disabled
-import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -54,9 +46,11 @@ import com.sora.sora.R
 import com.sora.sora.core.CustomAppBar
 import com.sora.sora.core.customButtons.CustomButton
 import com.sora.sora.core.customText.CustomMontserratText
+import com.sora.sora.core.hFactor
 import com.sora.sora.core.navigations.Dest
 import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.navigations.toRoute
+import com.sora.sora.core.vFactor
 import com.sora.sora.ui.theme.LightBrown
 import com.sora.sora.ui.theme.PrimaryColor
 
@@ -318,16 +312,17 @@ fun ProfileScreen() {
 
 @Composable
 fun ProfileMenuItem(
-    iconRes: Int,
+    iconRes: Int? = null,
     title: String,
     trailingText: String? = null,
     showArrow: Boolean = true,
     trailingContent: (@Composable () -> Unit)? = null,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
+    modifier: Modifier? = null
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
+        modifier = modifier?:Modifier
             .fillMaxWidth()
             .height(48.dp)
             .pointerInput(Unit) {
@@ -338,6 +333,8 @@ fun ProfileMenuItem(
             }
             .padding(horizontal = 8.dp)
     ) {
+
+        if(iconRes!=null)
         Image(
             painter = painterResource(id = iconRes),
             contentDescription = title,
@@ -508,19 +505,21 @@ fun LanguageSelectionBottomSheet(
     val selectedLanguage = remember { mutableStateOf("English") }
 
     ModalBottomSheet(
-        onDismissRequest = onDismiss
+        onDismissRequest = onDismiss,
+        containerColor = Color.White,
+        shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp) // optional rounded corners
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(horizontal = hFactor(24), vertical = vFactor(8))
         ) {
             Row (
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ){
-                Text(
+                CustomMontserratText(
                     text = "Select Language",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight(600),
                     color = PrimaryColor,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
@@ -534,9 +533,23 @@ fun LanguageSelectionBottomSheet(
 
             languages.forEachIndexed { index, language ->
                 ProfileMenuItem(
-                    iconRes = languageIcons[index],
+                    showArrow = false,
+                      modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp)
+                        .pointerInput(Unit) {
+                            // Custom touch handling for Skip Button without ripple effect
+                            detectTapGestures {
+                                Log.d("ProfileScreen", "My orders clicked")
+                            }
+                        }
+                          .padding(start = 8.dp,end = 0.dp),
+
+
                     title = language,
-                    onClick = { Log.d("ProfileScreen", "My orders clicked")
+                    onClick = {
+                       // Log.d("ProfileScreen", "My orders clicked")
+
                     },
                     trailingContent = {
                         if (selectedLanguage.value == language) Box(
@@ -545,7 +558,10 @@ fun LanguageSelectionBottomSheet(
                                 .background(
                                     Color.Green.copy(alpha = 0.05f)
 
-                                )) {
+
+                                )
+
+                        ) {
                             Icon(
                                 imageVector = Icons.Filled.Check,
                                 contentDescription = "Selected",
@@ -554,7 +570,8 @@ fun LanguageSelectionBottomSheet(
                         } else Box(modifier = Modifier.size(0.dp))
                     }
                 )
-                DottedDivider(color = Color.Gray.copy(alpha = 0.5f))
+                if (selectedLanguage.value == language)
+                CommonDivider()
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -562,9 +579,9 @@ fun LanguageSelectionBottomSheet(
 
             // Save Button
             CustomButton(
-                label = "Continue",
+                label = "Save",
                 onClick = { onDismiss },
-                required = true,
+
                 modifier = Modifier.padding(bottom = 8.dp) // Optional custom modifier
             )
 
