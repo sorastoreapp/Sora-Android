@@ -505,8 +505,8 @@ fun ProductCard(
                     text = product.title,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
-                    fontWeight = FontWeight.W500,
-                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp,
                     color = Color(0xFF383B3E)
                 )
 
