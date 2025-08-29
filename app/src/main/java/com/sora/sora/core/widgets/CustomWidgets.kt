@@ -59,12 +59,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 
 import androidx.compose.ui.unit.dp
 import com.sora.sora.R
@@ -391,6 +393,7 @@ fun ProductSection(title: String, products: List<Product>, categoryList: List<St
 //}
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductCard(
     product: Product,
@@ -436,8 +439,8 @@ fun ProductCard(
                     contentScale = ContentScale.Fit,
                     modifier = Modifier
                         .align(Alignment.Center)
-                        .height(110.dp)
-                        .width(97.dp)
+                        .height(120.dp)
+                        .fillMaxWidth()
                 )
 
                 // Heart
@@ -476,19 +479,20 @@ fun ProductCard(
                         .clickable { onShare() },
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(Icons.Default.Share, contentDescription = null, tint = PrimaryColor, modifier = Modifier.padding(7.dp))
+                    Icon(painter = painterResource(id = R.drawable.ic_share),
+                        contentDescription = null, tint = PrimaryColor, modifier = Modifier.padding(7.dp))
                 }
 
                 // *** Animated [- qty +] control ***
-                AnimatedAddToCart(
-                    quantity = quantity,
-                    onAdd = onAddToCart,
-                    onRemove = onRemoveFromCart,
-                    color = color,
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(8.dp)
-                )
+//                AnimatedAddToCart(
+//                    quantity = quantity,
+//                    onAdd = onAddToCart,
+//                    onRemove = onRemoveFromCart,
+//                    color = color,
+//                    modifier = Modifier
+//                        .align(Alignment.BottomEnd)
+//                        .padding(8.dp)
+//                )
             }
 
             // BOTTOM

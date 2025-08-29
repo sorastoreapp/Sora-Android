@@ -154,6 +154,7 @@ data class OnboardingData(
 )
 
 @OptIn(ExperimentalPagerApi::class)
+
 @Composable
 fun OnboardingScreen(navController: NavController) {
     val pages = listOf(
@@ -167,7 +168,7 @@ fun OnboardingScreen(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .safeDrawingPadding()
+          //  .safeDrawingPadding()
     ) {
         HorizontalPager(state = pagerState, count = pages.size) { page ->
             val currentPageData = pages[page]

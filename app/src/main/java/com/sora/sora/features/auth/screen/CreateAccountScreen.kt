@@ -83,7 +83,7 @@ fun CreateAccountScreen(
                  onValueChange = { nameController = it },
                  placeholder = "Name",
                  suffix = {
-                     Icon(painter = painterResource(id = R.drawable.ic_profile2), contentDescription = "Some Icon")
+                     Icon(painter = painterResource(id = R.drawable.ic_profile2), contentDescription = "Some Icon",tint = PrimaryColor)
                  },
                  modifier = Modifier.fillMaxWidth()
              )
@@ -95,7 +95,7 @@ fun CreateAccountScreen(
                  onValueChange = { emailController = it },
                  placeholder = "Email",
                  suffix = {
-                     Icon(painter = painterResource(id = R.drawable.ic_email), contentDescription = "Some Icon")
+                     Icon(painter = painterResource(id = R.drawable.ic_email), contentDescription = "Some Icon",tint = PrimaryColor)
                  },
                  modifier = Modifier.fillMaxWidth()
              )

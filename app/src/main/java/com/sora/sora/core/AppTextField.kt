@@ -82,6 +82,7 @@ fun AppTextFieldWithSuffix(
                     id = if (passwordVisible) R.drawable.ic_eye_close else R.drawable.ic_eye_open
                 ),
                 contentDescription = "Password Visibility Toggle",
+                tint = PrimaryColor,
                 modifier = Modifier
                     .size(20.dp)
                     .clickable {
@@ -124,7 +125,7 @@ fun AppTextFieldWithSuffix(
         colors = TextFieldDefaults.textFieldColors(
             focusedLabelColor = Color.Black,
             cursorColor =  PrimaryColor,
-            containerColor = PrimaryColor100,  // Set the background color here
+            containerColor = TextFieldBackgroundColors,  // Set the background color here
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Transparent,

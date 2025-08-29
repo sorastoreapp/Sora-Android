@@ -87,7 +87,9 @@ fun PaymentSuccessScreen() {
 
             CustomButton(
                 label = "Done",
-                onClick = { /* TODO: Handle update logic */ }
+                onClick = {
+                    navController.popBackStack()
+                }
             )
         }
 
