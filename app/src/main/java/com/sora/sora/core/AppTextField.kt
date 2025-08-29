@@ -82,6 +82,7 @@ fun AppTextFieldWithSuffix(
                     id = if (passwordVisible) R.drawable.ic_eye_close else R.drawable.ic_eye_open
                 ),
                 contentDescription = "Password Visibility Toggle",
+                tint = PrimaryColor,
                 modifier = Modifier
                     .size(20.dp)
                     .clickable {
