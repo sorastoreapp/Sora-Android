@@ -6,6 +6,7 @@ import androidx.navigation.compose.rememberNavController
 object NavigationManager {
     lateinit var navController: NavController
 
+    /**Default*/
     fun navigateTo(route: String) {
         navController.navigate(route)
     }
@@ -33,7 +34,7 @@ object NavigationManager {
 
 //---------------how to use----------------
 // navController.navigate(Dest.DashBoardScreen::class.toRoute())
-// navController.navigateAndReplace(Dest.DashBoardScreen::class.toRoute()) //for push replacement
+// NavigationManager.navigateAndReplace(Dest.DashBoardScreen::class.toRoute()) //for push replacement
 // NavigationManager.navigateAndClearStack(Dest.SignIn::class.toRoute())
 
 

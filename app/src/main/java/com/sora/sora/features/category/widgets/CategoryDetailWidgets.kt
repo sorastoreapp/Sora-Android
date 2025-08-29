@@ -25,12 +25,12 @@ import androidx.compose.ui.text.TextGranularity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import com.sora.sora.R
-import com.sora.sora.core.customButtons.CustomButton
 import com.sora.sora.core.customButtons.PrimaryButton
 import com.sora.sora.ui.theme.AppTextGray
 import com.sora.sora.core.customText.CustomMontserratText
@@ -47,7 +47,7 @@ import com.sora.sora.ui.theme.SecondaryColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CategoryResultRow(resultCount: Int = 23) {
+fun CategoryResultRow(resultCount: Int = 23, verticalPadding: Dp = 8.dp, horizontalPadding: Dp = 25.dp) {
     val coroutineScope = rememberCoroutineScope()
 
     // BottomSheet States
@@ -64,7 +64,7 @@ fun CategoryResultRow(resultCount: Int = 23) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 25.dp, vertical = 8.dp),
+            .padding(horizontal = horizontalPadding, vertical = verticalPadding),
         verticalAlignment = Alignment.CenterVertically
     ) {
         CustomMontserratText(
@@ -580,7 +580,6 @@ fun CategoryResultRow(resultCount: Int = 23) {
                                 .height(60.dp)
                         )
                 }
-
 
 
                 }
@@ -1264,7 +1263,6 @@ fun CategoryResultRow(resultCount: Int = 23) {
 //        }
 //    }
 //}
-
 
 
 

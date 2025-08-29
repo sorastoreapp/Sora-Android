@@ -76,8 +76,6 @@ fun ItemDetailScreen(
         Product(3, "Stainless Steel Water Bottle", "1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_bottel))
     )
 
-
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -431,9 +429,10 @@ fun ItemDetailScreen(
               //        RatingReviews()
               Spacer(modifier = Modifier.height(16.dp))
 
-              ProductSection(title = "Similar Products", products = discountProductList)
           }
+            ProductSection(title = "Similar Products", products = discountProductList)
         }
+
     }
     }
 
@@ -472,57 +471,57 @@ fun ProductDetailRow(label: String, value: String) {
 }
 
 data class DiscountProduct(val title: String, val price: String, val imageRes: Int)
-
-@Composable
-fun DiscountProductCard(product: DiscountProduct) {
-    Card(
-        modifier = Modifier
-            .width(150.dp)
-            .height(220.dp),
-        shape = RoundedCornerShape(16.dp),
-        elevation = 4.dp
-    ) {
-        Column(modifier = Modifier.padding(12.dp)) {
-            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.TopEnd) {
-                IconButton(onClick = { /* Favorite action */ }) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_remove),
-                        contentDescription = "Favorite",
-                        tint = Color.Gray,
-                        modifier = Modifier.size(20.dp)
-                    )
-                }
-            }
-            Image(
-                painter = painterResource(product.imageRes),
-                contentDescription = product.title,
-                modifier = Modifier
-                    .size(100.dp)
-                    .clip(RoundedCornerShape(16.dp)),
-                contentScale = ContentScale.Crop
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            Text(product.title, fontWeight = FontWeight.Bold, fontSize = 14.sp)
-            Text(product.price, color = Color(0xFF7B3F00), fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.weight(1f))
-            Box(
-                modifier = Modifier
-                    .size(28.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(Color(0xFF7B3F00))
-                    .clickable { /* Add to cart */ },
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "Add",
-                    tint = Color.White,
-                    modifier = Modifier.size(16.dp)
-                )
-            }
-        }
-    }
-}
+//
+//@Composable
+//fun DiscountProductCard(product: DiscountProduct) {
+//    Card(
+//        modifier = Modifier
+//            .width(150.dp)
+//            .height(220.dp),
+//        shape = RoundedCornerShape(16.dp),
+//        elevation = 4.dp
+//    ) {
+//        Column(modifier = Modifier.padding(12.dp)) {
+//            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.TopEnd) {
+//                IconButton(onClick = { /* Favorite action */ }) {
+//                    Icon(
+//                        painter = painterResource(R.drawable.ic_remove),
+//                        contentDescription = "Favorite",
+//                        tint = Color.Gray,
+//                        modifier = Modifier.size(20.dp)
+//                    )
+//                }
+//            }
+//            Image(
+//                painter = painterResource(product.imageRes),
+//                contentDescription = product.title,
+//                modifier = Modifier
+//                    .size(100.dp)
+//                    .clip(RoundedCornerShape(16.dp)),
+//                contentScale = ContentScale.Crop
+//            )
+//            Spacer(modifier = Modifier.height(12.dp))
+//            Text(product.title, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+//            Text(product.price, color = Color(0xFF7B3F00), fontWeight = FontWeight.Bold)
+//            Spacer(modifier = Modifier.weight(1f))
+//            Box(
+//                modifier = Modifier
+//                    .size(28.dp)
+//                    .clip(RoundedCornerShape(12.dp))
+//                    .background(Color(0xFF7B3F00))
+//                    .clickable { /* Add to cart */ },
+//                contentAlignment = Alignment.Center
+//            ) {
+//                Icon(
+//                    imageVector = Icons.Default.Add,
+//                    contentDescription = "Add",
+//                    tint = Color.White,
+//                    modifier = Modifier.size(16.dp)
+//                )
+//            }
+//        }
+//    }
+//}
 
 
 @Preview

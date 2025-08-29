@@ -171,6 +171,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
@@ -180,19 +181,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.sora.sora.R
+import com.sora.sora.core.controller.GlobalController
 import com.sora.sora.core.temp.TempCustomData
 import com.sora.sora.features.profile.screen.ProfileScreen
 import com.sora.sora.ui.theme.PrimaryColor
 
 @Composable
 fun DashboardScreen(navController: NavController) {
-    var selectedIndex by remember { mutableStateOf(0) }
+//    var selectedIndex by remember { mutableStateOf(0) }
+    var selectedIndex   = GlobalController.selectedIndex.value
 
     Scaffold(
         bottomBar = {
             BottomNavigationBar(
                 selectedItem = selectedIndex,
-                onItemSelected = { selectedIndex = it }
+                onItemSelected = {
+//                    selectedIndex = it
+                    GlobalController.updateSelectedIndex(it)
+                }
             )
         },
         modifier = Modifier.fillMaxSize()
@@ -213,6 +219,9 @@ fun DashboardScreen(navController: NavController) {
     }
 }
 
+
+
+/**Second one */
 @Composable
 fun BottomNavigationBar(
     selectedItem: Int,
@@ -226,19 +235,13 @@ fun BottomNavigationBar(
         NavItem("Favorite", R.drawable.ic_unselected_favorite, R.drawable.ic_selected_favorite),
         NavItem("Settings", R.drawable.ic_unselected_settings, R.drawable.ic_selected_settings)
     )
+
     Surface(
         color = Color.White,
         modifier = modifier
             .fillMaxWidth()
-            .navigationBarsPadding()
-            .then(
-                Modifier.graphicsLayer {
-                    shadowElevation = 10.dp.toPx() // Controls the size of the shadow
-                    shape = RoundedCornerShape(16.dp)
-                    clip = false
-                    translationY = 15.dp.toPx() // Pushes the element upwards to give the appearance of shadow only from the top
-                }
-            )
+            .navigationBarsPadding()  // Ensure no padding around the bottom nav
+            .wrapContentSize(Alignment.BottomCenter)  // Position the bottom bar at the bottom
     ) {
         Row(
             modifier = Modifier
@@ -319,3 +322,110 @@ fun BottomNavigationBar(
     }
 }
 
+/**first code */
+//@Composable
+//fun BottomNavigationBar(
+//    selectedItem: Int,
+//    onItemSelected: (Int) -> Unit,
+//    modifier: Modifier = Modifier
+//) {
+//    val items = listOf(
+//        NavItem("Home", R.drawable.ic_unselected_home, R.drawable.ic_selected_home),
+//        NavItem("Categories", R.drawable.ic_unselected_categories, R.drawable.ic_selected_categories),
+//        NavItem("Cart", R.drawable.ic_unselected_cart, R.drawable.ic_selected_cart),
+//        NavItem("Favorite", R.drawable.ic_unselected_favorite, R.drawable.ic_selected_favorite),
+//        NavItem("Settings", R.drawable.ic_unselected_settings, R.drawable.ic_selected_settings)
+//    )
+//    Surface(
+//        color = Color.White,
+//        modifier = modifier
+//            .fillMaxWidth()
+//            .navigationBarsPadding()
+//            .then(
+//                Modifier.graphicsLayer {
+//                    shadowElevation = 10.dp.toPx() // Controls the size of the shadow
+//                    shape = RoundedCornerShape(16.dp)
+//                    clip = false
+//                    translationY = 15.dp.toPx() // Pushes the element upwards to give the appearance of shadow only from the top
+//                }
+//            )
+//    ) {
+//        Row(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(horizontal = 12.dp, vertical = 16.dp),
+//            horizontalArrangement = Arrangement.SpaceBetween,
+//            verticalAlignment = Alignment.CenterVertically
+//        ) {
+//            items.forEachIndexed { index, item ->
+//                val isSelected = selectedItem == index
+//
+//                // Use animateDpAsState for smooth width change for selected tab
+//                val paddingHorizontal by animateDpAsState(
+//                    targetValue = if (isSelected) 16.dp else 0.dp
+//                )
+//
+//                Box(
+//                    modifier = Modifier
+//                        .clip(RoundedCornerShape(10.dp))
+//                        .background(if (isSelected) PrimaryColor else Color.Transparent)
+//                        .pointerInput(Unit) {
+//                            detectTapGestures(
+//                                onPress = { /* No animation on press */ },
+//                                onTap = { onItemSelected(index) }
+//                            )
+//                        }
+//                        .padding(vertical = 8.dp, horizontal = paddingHorizontal)
+//                        .wrapContentWidth(align = Alignment.CenterHorizontally),  // Allow text to dynamically fit width
+//                    contentAlignment = Alignment.Center
+//                ) {
+//                    Row(
+//                        verticalAlignment = Alignment.CenterVertically,
+//                        horizontalArrangement = Arrangement.Center
+//                    ) {
+//                        // Unselected icon with smooth fade and scale
+//                        AnimatedVisibility(visible = !isSelected) {
+//                            Icon(
+//                                painter = painterResource(id = item.icon),
+//                                contentDescription = item.title,
+//                                modifier = Modifier.size(24.dp),
+//                                tint = Color.Gray
+//                            )
+//                        }
+//
+//                        // Selected icon with smooth fade and scale
+//                        AnimatedVisibility(visible = isSelected) {
+//                            Icon(
+//                                painter = painterResource(id = item.icon_selected),
+//                                contentDescription = item.title,
+//                                modifier = Modifier.size(24.dp),
+//                                tint = Color.White
+//                            )
+//                        }
+//
+//                        // Text label animation with smooth horizontal expansion
+//                        AnimatedVisibility(
+//                            visible = isSelected,
+//                            enter = fadeIn() + slideInHorizontally(initialOffsetX = { 40 }) + expandIn(),
+//                            exit = fadeOut() + slideOutHorizontally(targetOffsetX = { -40 }) + shrinkOut()
+//                        ) {
+//                            Text(
+//                                text = item.title,
+//                                color = Color.White,
+//                                fontWeight = FontWeight.SemiBold,
+//                                fontSize = 13.sp,
+//                                modifier = Modifier
+//                                    .padding(start = 4.dp)
+//                                    .height(24.dp) // Fix height for consistent item size
+//                                    .wrapContentWidth()  // Allow text to expand horizontally
+//                                    .wrapContentHeight(align = Alignment.CenterVertically)  // Center vertically
+//                                    .padding(end = 4.dp)
+//                            )
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
+//
