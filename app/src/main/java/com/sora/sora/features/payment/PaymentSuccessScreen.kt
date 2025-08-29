@@ -43,92 +43,78 @@ fun PaymentSuccessScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-
             .background(Color.White) // Background for the entire screen
     ) {
-
         // Column for text content with vertical scrolling enabled
         Column(
             modifier = Modifier
-
-                .padding(top = 56.dp) //
-                .statusBarsPadding()
-                .padding(horizontal = 20.dp,)
+                .padding(horizontal = 20.dp)
                 .align(Alignment.Center)
-
-                .verticalScroll(rememberScrollState())//  Makes the content scrollable
+                .verticalScroll(rememberScrollState()) // Makes the content scrollable
+                .padding(top = 265.dp) // Add padding at the bottom for spacing
         ) {
-
-
-                CustomMontserratText(
-                    text = "Payment Successful",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight(700),
-                    color = Color(0xFF000000),
-                    textAlign = TextAlign.Center,
-
-
-                    )
-            Spacer(modifier = Modifier.height(vFactor(20)))
+            // Horizontally center the first text element
             CustomMontserratText(
-                    text = "Thank you! Your payment was successful",
+                text = "Payment Successful",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black,
+                textAlign = TextAlign.Center,  // Centers the text horizontally
+                modifier = Modifier.fillMaxWidth()  // Ensures the text takes full width of its container
+            )
+
+            Spacer(modifier = Modifier.height(18.dp))
+
+            // Horizontally center the second text element
+            CustomMontserratText(
+                text = "Thank you! Your payment was successful",
                 fontSize = 14.sp,
+                fontWeight = FontWeight.Normal,
+                color = Color.Gray,
+                textAlign = TextAlign.Center,  // Centers the text horizontally
+                modifier = Modifier.fillMaxWidth()  // Ensures the text takes full width of its container
+            )
 
-                fontWeight = FontWeight(400),
-                color = AppTextGray,
+            Spacer(modifier = Modifier.height(18.dp))
 
-                textAlign = TextAlign.Center,
-
-
-                    )
-            Spacer(modifier = Modifier.height(vFactor(20)))
             PriceRow(label = "Order No.", value = "OR1235NRM")
-            Spacer(modifier = Modifier.height(vFactor(12)))
+            Spacer(modifier = Modifier.height(5.dp))
             PriceRow(label = "Transaction Id.", value = "TNR258MLR58")
-            Spacer(modifier = Modifier.height(vFactor(12)))
+            Spacer(modifier = Modifier.height(5.dp))
             PriceRow(label = "Amount", value = "KD 12.00")
 
-            Spacer(modifier = Modifier.height(vFactor(24)))
+            Spacer(modifier = Modifier.height(24.dp))
+
             CustomButton(
                 label = "Done",
                 onClick = { /* TODO: Handle update logic */ }
             )
-
-
-
-
-
-
         }
 
         // Background image at the bottom
         Image(
             painter = painterResource(id = R.drawable.img_payment_lady_bags), // Replace with your image
             contentDescription = "Background",
-
             modifier = Modifier
                 .statusBarsPadding()
-                .padding(top = vFactor(144))
-                .width(195.86896.dp)
-                .height(250.dp)
+                .padding(top = 144.dp)
+                .width(195.dp) // Adjust the width
+                .height(250.dp) // Adjust the height
                 .align(Alignment.TopCenter)
-
-                .fillMaxWidth()
-
-
-            , // Adjust the height as needed
+                .fillMaxWidth(),
             contentScale = ContentScale.FillWidth
         )
+
+        // Another top background image (transparent overlay or gradient)
         Image(
             painter = painterResource(id = R.drawable.img_bg_top_transparent), // Replace with your image
             contentDescription = "Background",
-
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .fillMaxWidth()
-            //  .height(300.dp)
-            , // Adjust the height as needed
+                .fillMaxWidth(),
             contentScale = ContentScale.FillWidth
         )
     }
 }
+
+
