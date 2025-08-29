@@ -2,6 +2,7 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
@@ -17,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,6 +30,7 @@ import com.sora.sora.core.customButtons.PrimaryButton
 import com.sora.sora.core.customText.CustomMontserratText
 import com.sora.sora.core.hFactor
 import com.sora.sora.core.navigations.Dest
+import com.sora.sora.core.navigations.NavigationManager
 import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.navigations.toRoute
 import com.sora.sora.core.vFactor
@@ -116,7 +119,11 @@ fun SignInScreen(
                 fontSize = 14.sp,
                 fontWeight = FontWeight.W600,
                 color = PrimaryColor,
-                modifier = Modifier.padding(start = hFactor(10))
+                modifier = Modifier.padding(start = hFactor(10)).pointerInput(Unit) {
+                    detectTapGestures(
+                        onTap = { navController.navigate(Dest.ForgetPasswordScreen::class.toRoute()) },
+                    )
+                }
             )
 
             Spacer(modifier = Modifier.height(vFactor(20)))
@@ -126,7 +133,7 @@ fun SignInScreen(
                 text = "Sign in",
                 backgroundColor = PrimaryColor,
                 onClick = {
-                    navController.navigate(Dest.CreateAccountScreen::class.toRoute())
+                    NavigationManager.navigateAndClearStack(Dest.DashBoardScreen::class.toRoute())
                 },
             )
 
@@ -166,8 +173,8 @@ fun SignInScreen(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 SocialLoginButton(R.drawable.ic_google) { onSocialLoginClick("Google") }
-                Spacer(modifier = Modifier.width(10.dp))
-                SocialLoginButton(R.drawable.ic_facebook) { onSocialLoginClick("Facebook") }
+//                Spacer(modifier = Modifier.width(10.dp))
+//                SocialLoginButton(R.drawable.ic_facebook) { onSocialLoginClick("Facebook") }
                 Spacer(modifier = Modifier.width(10.dp))
                 SocialLoginButton(R.drawable.ic_apple) { onSocialLoginClick("Apple") }
             }

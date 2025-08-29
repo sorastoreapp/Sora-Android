@@ -1,5 +1,6 @@
 package com.sora.sora.features.category.screen
 
+import android.util.Log
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -63,9 +64,12 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorFilter.Companion.tint
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.style.TextAlign
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.sora.sora.core.navigations.NavigationManager.navController
+import com.sora.sora.features.category.CategoryDetailModel
 import com.sora.sora.features.dashboard.FancyPagerIndicator
 
 
@@ -73,9 +77,14 @@ import com.sora.sora.features.dashboard.FancyPagerIndicator
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun CategoryDetailScreen() {
+fun CategoryDetailScreen(categoryDetailModel : CategoryDetailModel) {
 
-    var themeColor = Color(0xFFFADA7A)
+//    var themeColor = Color(0xFFFADA7A)
+    val color = categoryDetailModel.themeColor
+
+    // If themeColor is a hex string (e.g., "#FFFADA7A"), use it as a color
+    val themeColor = Color(android.graphics.Color.parseColor(color))
+
     val filters = listOf("All", "Soft & Cuddly", "Action & Adventure", "Educational", "Outdoor")
     var selectedFilter by remember { mutableStateOf(filters[0]) }
 
@@ -128,18 +137,25 @@ fun CategoryDetailScreen() {
 
     val scrollState = rememberScrollState()
 
-    Column(modifier = Modifier.fillMaxSize().padding(bottom = 40.dp)) {
+    Log.d("MyTag", "--------${categoryDetailModel.title}---")
+
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .padding(bottom = 40.dp)) {
         val topPadding = 22.dp
 
-        Column( Modifier.background(
-                Brush.verticalGradient(
-                    colors = listOf(
-                        themeColor.copy(alpha = 0.8f),        // Opaque at the top with 50% opacity
+        Column(
+            Modifier
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            themeColor.copy(alpha = 0.8f),        // Opaque at the top with 50% opacity
 //                        Color(0xFFFFFFFF),        // Opaque at the top
-                        themeColor.copy(alpha = 0f),  // Partially transparent mid-way
-                    ),
+                            themeColor.copy(alpha = 0f),  // Partially transparent mid-way
+                        ),
+                    )
                 )
-                ).verticalScroll(scrollState)
+                .verticalScroll(scrollState)
         ){
 
             Box(
@@ -147,7 +163,9 @@ fun CategoryDetailScreen() {
                     .fillMaxWidth()
                     .height(headerHeight)
             ) {
-                Box(modifier = Modifier.fillMaxSize().padding(top = topPadding)) {
+                Box(modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = topPadding)) {
                     // Top bar - fixed height with top padding
 
                     Row(
@@ -172,13 +190,17 @@ fun CategoryDetailScreen() {
                                 modifier = Modifier
                                     .align(Alignment.Center)
                                     .size(30.dp)
+                                    .clickable {
+                                        navController.popBackStack()
+                                    }
                             )
                         }
 
                         Spacer(Modifier.weight(1f))
                         // Animated title
-                        Text(
-                            text = "Toys & Plushies",
+                        CustomMontserratText(
+//                            text = "Toys & Plushies",
+                            text = categoryDetailModel.title ,
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color(0xFF3A260C),
@@ -206,16 +228,20 @@ fun CategoryDetailScreen() {
                         contentAlignment = Alignment.Center,
                         modifier = Modifier
                             .fillMaxWidth() // Ensure it takes up the full width for centering
-                            .offset(x = teddyStartPadding, y = teddyTopPadding) // Horizontal movement
+                            .offset(
+                                x = teddyStartPadding,
+                                y = teddyTopPadding
+                            ) // Horizontal movement
                             .graphicsLayer {
                                 scaleX = teddyScale
                                 scaleY = teddyScale
                                 alpha = teddyAlpha
                             }
                     ) {
-                        Image(
+                        Icon(
                             painter = painterResource(R.drawable.ic_cat_toy),
                             contentDescription = "Teddy",
+                            tint = themeColor,
                             modifier = Modifier.size(teddySize)
                         )
                     }
@@ -224,8 +250,6 @@ fun CategoryDetailScreen() {
 
             // Dynamic Spacer height as we scroll
             Spacer(modifier = Modifier.height(spacerHeight)) // This spacer height shrinks as we scroll
-
-
 
             // Filter Chips - pinned at bottom
             LazyRow(
@@ -281,13 +305,13 @@ fun FilterChips(text: String, isSelected: Boolean,themeColor : Color, onClick: (
         modifier = Modifier
             .padding(vertical = 5.dp)
             .pointerInput(Unit) {
-            detectTapGestures(
-                onPress = { offset ->
-                    onClick()
-                    awaitRelease()
-                }
-            )
-        },
+                detectTapGestures(
+                    onPress = { offset ->
+                        onClick()
+                        awaitRelease()
+                    }
+                )
+            },
         shape = RoundedCornerShape(40),
         color = if (isSelected) themeColor else  Color(0xFF8A4C3D).copy(alpha = 0.1f),
     ) {
@@ -384,7 +408,9 @@ fun ItemSlider(
                         color = Color.Black,
                         fontSize = 14.sp,
                         maxLines = 3,
-                        modifier = Modifier.padding(bottom = 16.dp).widthIn(max = 200.dp)
+                        modifier = Modifier
+                            .padding(bottom = 16.dp)
+                            .widthIn(max = 200.dp)
                     )
                     Button(
                         onClick = { /* Handle button click */ },

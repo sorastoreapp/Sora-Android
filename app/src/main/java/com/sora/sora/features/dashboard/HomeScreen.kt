@@ -1,5 +1,6 @@
 package com.sora.sora.features.dashboard
 
+import android.util.Log
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -40,6 +41,13 @@ import com.sora.sora.ui.theme.PrimaryColor
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
+import com.sora.sora.core.hFactor
+import com.sora.sora.core.navigations.Dest
+import com.sora.sora.core.navigations.NavigationManager.navController
+import com.sora.sora.core.navigations.toRoute
+import com.sora.sora.core.vFactor
+import com.sora.sora.features.category.CategoryDetailModel
+import java.net.URLEncoder
 
 // Data classes
 data class Category(val id: Int, val title: String, val icon: Painter, val bgColor: Color)
@@ -49,6 +57,14 @@ data class Product(val id: Int, val title: String, val price: String, val discou
 @Composable
 fun HomeScreen() {
     val scrollState = rememberScrollState()
+
+    var categoryList =  listOf(
+        AppTexts.soraDeals,
+        AppTexts.clothing,
+        AppTexts.towels,
+        AppTexts.mugs,
+        AppTexts.disountProducts
+    )
 
     // Dummy categories list
     val categories = listOf(
@@ -107,25 +123,24 @@ fun HomeScreen() {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 16.dp)
             ){
                 Spacer(modifier = Modifier.height(24.dp))
                 CategorySection(categories)
                 Spacer(modifier = Modifier.height(24.dp))
-                ProductSection(title = AppTexts.soraDeals, products = newArrivals)
+                ProductSection(title = AppTexts.soraDeals, products = newArrivals,categoryList = categoryList)
                 Spacer(modifier = Modifier.height(24.dp))
-                ProductSection(title = "Clothings", products = clothingProducts)
+                ProductSection(title = "Clothings", products = clothingProducts,categoryList = categoryList)
                 Spacer(modifier = Modifier.height(24.dp))
                 OfferCard()
                 Spacer(modifier = Modifier.height(24.dp))
-                ProductSection(title = "Towels", products = towels)
+                ProductSection(title = "Towels", products = towels,categoryList = categoryList)
                 Spacer(modifier = Modifier.height(48.dp)) // extra bottom padding
-                ProductSection(title = AppTexts.soraDeals, products = towels)
+                ProductSection(title = AppTexts.soraDeals, products = towels,categoryList = categoryList)
                 Spacer(modifier = Modifier.height(48.dp)) // extra bottom padding
-                ProductSection(title = "Cups & Mugs", products = mugs)
+                ProductSection(title = "Cups & Mugs", products = mugs,categoryList = categoryList)
                 Spacer(modifier = Modifier.height(48.dp)) // extra bottom padding
-                ProductSection(title = "Discount Product", products = discountProducts)
-                Spacer(modifier = Modifier.height(48.dp)) // extra bottom padding
+                ProductSection(title = "Discount Product", products = discountProducts,categoryList = categoryList)
+                Spacer(modifier = Modifier.height(65.dp)) // extra bottom padding
             }
         }
     }
@@ -172,7 +187,7 @@ fun WelcomeTopBar() {
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun BannerSlider(
-    modifier: Modifier = Modifier.padding(horizontal = 8.dp)
+
 ) {
     val bannerImages = listOf(
         R.drawable.img_temp_slider,
@@ -204,7 +219,6 @@ fun BannerSlider(
     }
 
     Column(
-        modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         HorizontalPager(
@@ -253,17 +267,34 @@ fun BannerSlider(
                         modifier = Modifier.padding(bottom = 16.dp).widthIn(max = 200.dp)
                     )
                     Button(
-                            onClick = { /* Handle button click */ },
-                    shape = RoundedCornerShape(25.dp),
+                            onClick = {
+
+                                val categoryDetailModel = CategoryDetailModel(
+                                    title = "Toys",
+                                    themeColor = "#FFFADA7A"  // e.g., "#FFFADA7A"
+                                )
+
+                                // URL encode both the title and themeColor
+                                val encodedTitle = URLEncoder.encode(categoryDetailModel.title, "UTF-8")
+                                val encodedThemeColor = URLEncoder.encode(categoryDetailModel.themeColor, "UTF-8")
+
+                                Log.d("MyTag", "CategoryCard: ------------------${categoryDetailModel.title}")
+
+                                // Pass the encoded title and themeColor in the navigation URL
+                                navController.navigate("${Dest.CategoryDetailScreen::class.toRoute()}?title=$encodedTitle&themeColor=$encodedThemeColor")
+
+                            },
+                    shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(PrimaryColor),
                     contentPadding = PaddingValues(0.dp), // Remove internal padding
                     modifier = Modifier
                         .width(105.dp) // Make button stretch across
                         .height(28.dp) // Adjust button height as needed
+
                     ) {
                     Text(
                         text = "Explore Now",
-                        fontWeight = FontWeight.Bold,
+                        fontWeight = FontWeight.SemiBold,
                         color = Color.White,
                         fontSize = 14.sp,
 //                        modifier = Modifier.fillMaxSize(), // Ensure text is centered within button
@@ -439,10 +470,9 @@ fun CategorySection(
         modifier = Modifier
             .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally // This centers children horizontally
-
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -450,13 +480,13 @@ fun CategorySection(
                 text = AppTexts.categories,
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 16.sp,
-                color = Color.Black
+                color = Color.Black,
             )
             CustomMontserratText(
                 text = AppTexts.seeAll,
                 color = PrimaryColor,
                 fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.clickable { onSeeAllClick() }
             )
         }
@@ -466,10 +496,12 @@ fun CategorySection(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .align(Alignment.CenterHorizontally)
                 .horizontalScroll(rememberScrollState()),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+//            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             categories.forEach { category ->
+                Spacer(modifier = Modifier.width(16.dp))
                 CategoryItem(category)
             }
         }
@@ -486,6 +518,7 @@ fun PreviewCategorySection(){
         Category(4, "Cups & Mugs", painterResource(R.drawable.img_temp_categories4), Color(0xFFF6FFF2)),
         Category(5, "Accessories", painterResource(R.drawable.img_temp_categories4), Color(0xFFFFF7F7))
     )
+
 //    CategorySection(categories = categories, onSeeAllClick = {})
 
     CategoryItem(categories[0])
@@ -524,13 +557,84 @@ fun CategoryItem(category: Category) {
 
 @Composable
 fun OfferCard() {
-    Image(
-        painter = painterResource(id = R.drawable.img_discount_card),
-        contentDescription = "Offer Image",
-        modifier = Modifier
+    Box(
+        Modifier
             .fillMaxWidth()
-            .height(180.dp)  // set your desired height
-            .clip(RoundedCornerShape(10.dp)), // give some corner radius from all sides
-        contentScale = ContentScale.Crop // or ContentScale.Fit depending on design
-    )
+            .height(vFactor(194))
+            .clip(RoundedCornerShape(10.dp))
+            .padding(horizontal = 16.dp)
+    ) {
+
+        Image(
+            painter = painterResource(R.drawable.img_temp_discount_banner,),
+            contentDescription = "Banner Image",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(10.dp))
+        )
+        // (Your overlay here)
+
+        // Text Overlay
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp)
+                .padding(top = 50.dp)
+                .align(Alignment.Center)
+        ) {
+            CustomMontserratText(
+                text = "Adorable Plush Toys",
+                color = Color.Black,
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Bold,
+                maxLines = 3,
+                modifier = Modifier
+                    .padding(bottom = 8.dp)
+                    .widthIn(max = 150.dp)
+            )
+            CustomMontserratText(
+                text = "Up to 30% off!",
+                color = Color.Black,
+                fontSize = 14.sp,
+                maxLines = 3,
+                modifier = Modifier.padding(bottom = 16.dp).widthIn(max = 200.dp)
+            )
+            Button(
+                onClick = {
+
+                    val categoryDetailModel = CategoryDetailModel(
+                        title = "Toys",
+                        themeColor = "#FFFADA7A"  // e.g., "#FFFADA7A"
+                    )
+
+                    // URL encode both the title and themeColor
+                    val encodedTitle = URLEncoder.encode(categoryDetailModel.title, "UTF-8")
+                    val encodedThemeColor = URLEncoder.encode(categoryDetailModel.themeColor, "UTF-8")
+
+                    Log.d("MyTag", "CategoryCard: ------------------${categoryDetailModel.title}")
+
+                    // Pass the encoded title and themeColor in the navigation URL
+                    navController.navigate("${Dest.CategoryDetailScreen::class.toRoute()}?title=$encodedTitle&themeColor=$encodedThemeColor")
+
+                },
+                shape = RoundedCornerShape(8.dp),
+                colors = ButtonDefaults.buttonColors(PrimaryColor),
+                contentPadding = PaddingValues(0.dp), // Remove internal padding
+                modifier = Modifier
+                    .width(105.dp) // Make button stretch across
+                    .height(28.dp) // Adjust button height as needed
+            ) {
+                CustomMontserratText(
+                    text = "Explore Now",
+                    fontWeight = FontWeight.W500,
+                    color = Color.White,
+                    fontSize = 14.sp,
+//                        modifier = Modifier.fillMaxSize(), // Ensure text is centered within button
+                    textAlign = TextAlign.Center
+                )
+            }
+
+        }
+
+
+    }
 }
