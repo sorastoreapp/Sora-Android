@@ -39,8 +39,11 @@ import com.sora.sora.core.customText.CustomMontserratText
 import com.sora.sora.core.widgets.ProductSection
 import com.sora.sora.ui.theme.PrimaryColor
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.ui.input.pointer.pointerInput
 import com.google.accompanist.pager.PagerState
+import com.sora.sora.core.controller.GlobalController
 import com.sora.sora.core.hFactor
 import com.sora.sora.core.navigations.Dest
 import com.sora.sora.core.navigations.NavigationManager.navController
@@ -487,7 +490,9 @@ fun CategorySection(
                 color = PrimaryColor,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.clickable { onSeeAllClick() }
+                modifier = Modifier.clickable {
+                    GlobalController.updateSelectedIndex(1)
+                }
             )
         }
 
@@ -501,7 +506,7 @@ fun CategorySection(
 //            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             categories.forEach { category ->
-                Spacer(modifier = Modifier.width(16.dp))
+                Spacer(modifier = Modifier.width(14.dp))
                 CategoryItem(category)
             }
         }
@@ -528,7 +533,25 @@ fun PreviewCategorySection(){
 fun CategoryItem(category: Category) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.clickable { /* TODO: Handle click */ }
+        modifier = Modifier.pointerInput(Unit) {
+            detectTapGestures(onTap = {
+
+                val categoryDetailModel = CategoryDetailModel(
+                    title = "Toys",
+                    themeColor = "#FFFADA7A"  // e.g., "#FFFADA7A"
+                )
+
+                // URL encode both the title and themeColor
+                val encodedTitle = URLEncoder.encode(categoryDetailModel.title, "UTF-8")
+                val encodedThemeColor = URLEncoder.encode(categoryDetailModel.themeColor, "UTF-8")
+
+                Log.d("MyTag", "CategoryCard: ------------------${categoryDetailModel.title}")
+
+                // Pass the encoded title and themeColor in the navigation URL
+                navController.navigate("${Dest.CategoryDetailScreen::class.toRoute()}?title=$encodedTitle&themeColor=$encodedThemeColor")
+
+        })
+        }
     ) {
         Box(
             modifier = Modifier

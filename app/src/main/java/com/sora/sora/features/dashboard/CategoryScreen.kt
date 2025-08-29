@@ -240,6 +240,7 @@ fun CategoryCard(category: CategoryItemData) {
 //                    // Navigate to category details screen
 //                    NavigationManager.navigateTo(Dest.CategoryDetailScreen::class.toRoute())
 //                },
+
                 .pointerInput(Unit) {
                     detectTapGestures(
                         onTap = {
@@ -259,6 +260,7 @@ fun CategoryCard(category: CategoryItemData) {
                         }
                     )
                 },
+
 
                     shape = shape,
             colors = CardDefaults.cardColors(

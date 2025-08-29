@@ -71,12 +71,12 @@ fun NotificationScreen() {
                     description = "Get up to 50% off on your favorite toys & kids' accessories. Hurry, limited time only",
                     time = "10 hr ago"
                 ),
-                NotificationItem(
-                    icon = R.drawable.ic_truck,
-                    title = "Order Delivered!",
-                    description = "Yay! Your order #12345 has been delivered. We hope your little one loves it! Let us know what you think!",
-                    time = "Yesterday"
-                ),
+//                NotificationItem(
+//                    icon = R.drawable.ic_truck,
+//                    title = "Order Delivered!",
+//                    description = "Yay! Your order #12345 has been delivered. We hope your little one loves it! Let us know what you think!",
+//                    time = "Yesterday"
+//                ),
                 NotificationItem(
                     icon = R.drawable.ic_favorite_outline,
                     title = "New Arrivals Just Landed!",
