@@ -95,7 +95,7 @@ fun MainNavigation(modifier: Modifier = Modifier) {
                     NavigationManager.navigateAndClearStack(Dest.DashBoardScreen::class.toRoute())
                 },
                 onRegisterClick = {
-                    navController.navigate(Dest.AccountDetailsScreen::class.toRoute())
+                    navController.navigate(Dest.CreateAccountScreen::class.toRoute())
                 },
                 onSocialLoginClick = {
                     NavigationManager.navigateAndClearStack(Dest.DashBoardScreen::class.toRoute())
