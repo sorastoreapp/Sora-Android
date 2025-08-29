@@ -442,7 +442,8 @@ fun ProductCard(
                         .clickable { onShare() },
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(Icons.Default.Share, contentDescription = null, tint = PrimaryColor, modifier = Modifier.padding(7.dp))
+                    Icon(painter = painterResource(id = R.drawable.ic_share),
+                        contentDescription = null, tint = PrimaryColor, modifier = Modifier.padding(7.dp))
                 }
 
                 // *** Animated [- qty +] control ***

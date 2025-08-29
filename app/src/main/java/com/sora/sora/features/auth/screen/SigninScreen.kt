@@ -91,8 +91,9 @@ fun SignInScreen(
                 value = emailController,
                 onValueChange = { emailController = it },
                 placeholder = "Enter some text",
+
                 suffix = {
-                    Icon(painter = painterResource(id = R.drawable.ic_email), contentDescription = "Some Icon")
+                    Icon(painter = painterResource(id = R.drawable.ic_email), contentDescription = "Some Icon", tint = PrimaryColor)
                 },
                 modifier = Modifier.fillMaxWidth()
             )

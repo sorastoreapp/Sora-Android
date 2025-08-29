@@ -90,6 +90,7 @@ sealed class Dest{
 
     @Serializable
     data object NewPasswordScreen : Dest()
+
     @Serializable
     data object PaymentSuccessScreen : Dest()
 
