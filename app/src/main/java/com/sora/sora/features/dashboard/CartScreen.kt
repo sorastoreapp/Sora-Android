@@ -333,7 +333,9 @@ fun CartScreen() {
 
                 item {
                     Button(
-                        onClick = { /* Continue action */ },
+                        onClick = {
+                             navController.navigate(Dest.PaymentSuccessScreen::class.toRoute())
+                                  },
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF7B3F00)),
                         modifier = Modifier
                             .fillMaxWidth()
