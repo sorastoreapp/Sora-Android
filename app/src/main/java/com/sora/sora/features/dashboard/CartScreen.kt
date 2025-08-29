@@ -48,6 +48,7 @@ import com.sora.sora.ui.components.AppTextField
 import com.sora.sora.ui.theme.IconBackgroundColor
 import com.sora.sora.ui.theme.PrimaryColor
 import com.sora.sora.ui.theme.ProductCardColor
+import com.sora.sora.ui.theme.TextFieldBackgroundColors
 import com.sora.sora.ui.theme.YellowApp
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -584,7 +585,7 @@ fun SmallCouponTextField(
     Box(
         modifier = modifier
             .height(44.dp)                                   // total height ~44 dp
-            .background(Color(0xFFF2F2F2), RoundedCornerShape(12.dp))
+            .background(TextFieldBackgroundColors, RoundedCornerShape(12.dp))
             // NOTE: we removed the .border(...) here
             .padding(horizontal = 12.dp),                    // left/right padding
         contentAlignment = Alignment.CenterStart

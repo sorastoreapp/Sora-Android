@@ -201,7 +201,7 @@ fun DashboardScreen(navController: NavController) {
                 }
             )
         },
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize().background(Color.White)
     ) { paddingValues ->
         Box(
             modifier = Modifier
