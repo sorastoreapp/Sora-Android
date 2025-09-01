@@ -18,12 +18,14 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,6 +53,7 @@ import com.sora.sora.core.navigations.Dest
 import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.navigations.toRoute
 import com.sora.sora.core.vFactor
+import com.sora.sora.ui.theme.AppGray
 import com.sora.sora.ui.theme.LightBrown
 import com.sora.sora.ui.theme.PrimaryColor
 
@@ -64,46 +67,60 @@ fun ProfileScreen() {
     var showLanguageSheet by remember { mutableStateOf(false) }
 
 
-  Scaffold {
-          paddingValues ->
-      CustomAppBar(
-          title = "Settings",
-          isBackButton = false,
-         // modifier = Modifier.padding(bottom = vFactor(40)),
+  Scaffold(
+      backgroundColor=Color.White,
 
-          onBackClick = {
-              // navController.navigate(Dest.Home.toRoute())
-          }
-      )
-      Spacer(modifier = Modifier.height(vFactor(100)))
+      modifier = Modifier
+          .background(Color.White)
+          .fillMaxSize(),
+
+      topBar = {
+
+
+
+          CenterAlignedTopAppBar(
+              colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                  containerColor = Color.White
+              ),
+              modifier = Modifier.
+              padding(0.dp),
+              title = {
+                  CustomMontserratText(
+                      text = "Settings",
+                      fontSize = 18.sp,
+                      fontWeight = FontWeight.Bold,
+                      color = Color.Black
+                  )
+              },
+
+          )
+
+      },
+
+
+
+  ) {
+
+          paddingValues ->
+//      CustomAppBar(
+//          title = "Settings",
+//          isBackButton = false,
+//         // modifier = Modifier.padding(bottom = vFactor(40)),
+//
+//          onBackClick = {
+//              // navController.navigate(Dest.Home.toRoute())
+//          }
+//      )
+
 
       Column(
           modifier = Modifier
               .fillMaxSize()
-              .statusBarsPadding()
-              .padding(top = 20.dp)
               .verticalScroll(rememberScrollState())
-              .systemBarsPadding()
-              .padding(horizontal = 20.dp, vertical = 12.dp)
+
+              .padding(horizontal = 20.dp,)
       ) {
-
-
-          //        Box(
-          //            modifier = Modifier
-          //                .fillMaxWidth()
-          //                .padding(16.dp),
-          //            contentAlignment = Alignment.Center
-          //        ) {
-          //            CustomMontserratText(
-          //                text = "Settings",
-          //                fontWeight = FontWeight.Bold,
-          //                fontSize = 16.sp,
-          //                color = Color.Black,
-          //                textAlign = TextAlign.Center
-          //            )
-          //        }
-          Spacer(modifier = Modifier.height(20.dp))
-
+          Spacer(modifier = Modifier.height(vFactor(5)))
 
           Row(
               verticalAlignment = Alignment.CenterVertically,
@@ -125,7 +142,7 @@ fun ProfileScreen() {
 
               )
 
-              Spacer(modifier = Modifier.width(16.dp))
+              Spacer(modifier = Modifier.width(hFactor(8)))
 
 
               CustomMontserratText(
@@ -143,9 +160,9 @@ fun ProfileScreen() {
               CustomMontserratText(
                   text = "Create account",
 
-                  fontSize = 14.sp,
+                  fontSize = 12.sp,
                   color = PrimaryColor,
-                  fontWeight = FontWeight(500),
+                  fontWeight = FontWeight.Bold,
                   lineHeight = 20.sp,
                   textAlign = TextAlign.Right,
                   modifier = Modifier.pointerInput(Unit) {
@@ -158,17 +175,17 @@ fun ProfileScreen() {
 
           }
 
-          Spacer(modifier = Modifier.height(26.dp))
+          Spacer(modifier = Modifier.height(vFactor(30)))
 
           // Section Title
           CustomMontserratText(
               text = "Account",
-              fontWeight = FontWeight(600),
+              fontWeight = FontWeight.Bold,
               fontSize = 16.sp,
               color = PrimaryColor
           )
 
-          Spacer(modifier = Modifier.height(5.dp))
+          Spacer(modifier = Modifier.height(8.dp))
 
           // Account items
           ProfileMenuItem(
@@ -200,6 +217,7 @@ fun ProfileScreen() {
               iconRes = R.drawable.ic_notifications,
               title = "Notifications",
               trailingContent = {
+
                   MinimalSwitch(
                       checked = notificationsEnabled,
                       onCheckedChange = { notificationsEnabled = it },
@@ -235,14 +253,14 @@ fun ProfileScreen() {
                       showLanguageSheet = false
                   })
           }
-          CommonDivider()
 
 
-          Spacer(modifier = Modifier.height(22.dp))
+
+          Spacer(modifier = Modifier.height(vFactor(30)))
 
           CustomMontserratText(
               text = "Others",
-              fontWeight = FontWeight(600),
+              fontWeight = FontWeight.Bold,
               fontSize = 16.sp,
               color = PrimaryColor
           )
@@ -330,7 +348,7 @@ fun ProfileMenuItem(
                     onClick()
                 }
             }
-            .padding(horizontal = 8.dp)
+            .padding(horizontal = hFactor(10))
     ) {
 
         if(iconRes!=null)
@@ -340,12 +358,12 @@ fun ProfileMenuItem(
             modifier = Modifier
                 .size(24.dp)
         )
-        Spacer(modifier = Modifier.width(12.dp))
+        Spacer(modifier = Modifier. width(12.dp))
         CustomMontserratText(
             text = title,
-            fontSize = 14.sp,
+            fontSize = 15.sp,
             lineHeight = 18.sp,
-            fontWeight = FontWeight(400),
+            fontWeight = FontWeight(500),
             color = Color.Black,
             modifier = Modifier.weight(1f)
         )
@@ -353,7 +371,7 @@ fun ProfileMenuItem(
             CustomMontserratText(
                 text = trailingText,
                 color = Color(0xFF8A4C3D),
-                fontWeight = FontWeight(500),
+                fontWeight = FontWeight.Bold,
                 lineHeight = 18.sp,
                 fontSize = 12.sp
             )
@@ -428,11 +446,11 @@ data class MinimalSwitchColors(
     val checkedThumb: Color = Color(0xFFFFFFFF),
     val checkedTrack: Color = Color(0xFF8A4C3D),
     val uncheckedThumb: Color = Color.White,
-    val uncheckedTrack: Color = Color(0xFFBDBDBD),
+    val uncheckedTrack: Color = AppGray,
 
     // Disabled state
     val disabledThumb: Color = Color.White.copy(alpha = 0.7f),
-    val disabledTrack: Color = Color(0xFFE0E0E0)
+    val disabledTrack: Color = AppGray
 )
 
 @Composable
@@ -457,14 +475,14 @@ fun MinimalSwitch(
 
     val trackColor by animateColorAsState(targetValue = targetTrack, label = "trackColor")
     val thumbColor by animateColorAsState(targetValue = targetThumb, label = "thumbColor")
-    val thumbOffset by animateDpAsState(targetValue = if (checked) 20.dp else 0.dp, label = "thumbOffset")
+    val thumbOffset by animateDpAsState(targetValue = if (checked) 33.dp else 4.dp, label = "thumbOffset")
 
     val shape = CircleShape
 
     Box(
         modifier = modifier
-            .width(40.dp)
-            .height(20.5.dp)
+            .width(55.dp)
+            .height(27.dp)
             .clip(shape)
             .background(trackColor)
             .toggleable( // ✅ instead of clickable + semantics
@@ -479,14 +497,14 @@ fun MinimalSwitch(
         Box(
             modifier = Modifier
                 .offset(x = thumbOffset)
-                .size(17.dp)
+                .size(18.5.dp)
                 .clip(shape)
                 .background(thumbColor)
-                .border(
-                    width = 1.dp,
-                    color = if (enabled) Color.Black.copy(alpha = 0.06f) else Color.Black.copy(alpha = 0.04f),
-                    shape = shape
-                )
+//                .border(
+//                    width = 1.dp,
+//                    color = if (enabled) Color.Black.copy(alpha = 0.05f) else Color.Black.copy(alpha = 0.04f),
+//                    shape = shape
+//                )
         )
     }
 }

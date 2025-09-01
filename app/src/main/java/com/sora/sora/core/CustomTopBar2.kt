@@ -93,13 +93,10 @@ fun CustomAppBar(
         title?.let {
             CustomMontserratText(
                 text = it,
-
-                    color = if (titleColor != null) titleColor else Color.Black,
+                color = if (titleColor != null) titleColor else Color.Black,
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
-                    textAlign = TextAlign.Center,
-
-
+                textAlign = TextAlign.Center,
                 modifier = Modifier
                     .align(Alignment.Center)
                     .padding(start = if (onBackClick != null) 50.dp else 0.dp)  // Add offset for back button if present

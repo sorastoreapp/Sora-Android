@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Sora" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.Sora" parent="android:Theme.Material.Light.NoActionBar">
+    <item name="colorPrimary">@color/white</item>
+    <item name="colorBackgroundFloating">@color/white</item> <!-- Optional: for a consistent look -->
+    <item name="colorButtonNormal">@color/primary</item>
+    <item name="colorAccent">@color/primary</item>
+
+    <!-- Text color on primary background -->
+    </style>
+
+<style name="Theme.Sora.NoActionBar">
+<item name="windowActionBar">false</item>
+<item name="windowNoTitle">true</item>
+</style>
+<style name="Theme.Sora.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+<style name="Theme.Sora.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

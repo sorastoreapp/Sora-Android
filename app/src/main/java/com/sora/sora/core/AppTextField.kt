@@ -221,17 +221,17 @@ fun AppTextField2(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier
-            .height(height ?: 56.dp)
+            .height(height ?:60.dp)
             .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))  // Set the corner radius for clipping
+            .clip(RoundedCornerShape(15.dp))  // Set the corner radius for clipping
             .background(
                 color = TextFieldBackgroundColors,  // Background color
-                shape = RoundedCornerShape(12.dp)  // Same shape for background
+                shape = RoundedCornerShape(15.dp)  // Same shape for background
             )
             .border(
                 width = 1.dp,
                 color = if (value.isNotEmpty()) TextFieldBorderColors else Color.Transparent,  // Set border color based on focus
-                shape = RoundedCornerShape(12.dp)  // Same shape for border
+                shape = RoundedCornerShape(15.dp)  // Same shape for border
             ),
         singleLine = false, // Ensure it allows multi-line text
         maxLines = 5, // Set the max lines as needed
