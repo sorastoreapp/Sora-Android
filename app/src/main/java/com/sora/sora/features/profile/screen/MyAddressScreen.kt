@@ -36,7 +36,6 @@ import com.sora.sora.core.vFactor
 import com.sora.sora.ui.theme.LightBrown
 import com.sora.sora.ui.theme.PrimaryColor
 import com.sora.sora.ui.theme.PrimaryColorFaded
-import com.sora.sora.ui.theme.TextFieldColor2
 
 // Data class for Address
 data class Address(

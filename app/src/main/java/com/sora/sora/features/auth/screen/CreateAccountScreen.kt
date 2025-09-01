@@ -1,4 +1,5 @@
 import android.provider.CalendarContract.Colors
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -40,6 +41,7 @@ import com.sora.sora.core.navigations.toRoute
 import com.sora.sora.core.vFactor
 import com.sora.sora.ui.components.AppTextFieldWithSuffix
 import com.sora.sora.ui.theme.AppSubTextColor
+import com.sora.sora.ui.theme.AppTextGray
 import com.sora.sora.ui.theme.DividerGray
 import com.sora.sora.ui.theme.PrimaryColor
 
@@ -77,18 +79,19 @@ fun CreateAccountScreen(
 
          Column ( modifier = Modifier
              .fillMaxWidth()
-             .padding(horizontal = hFactor(20),)){       Spacer(modifier = Modifier.height(vFactor(20)))
+             .padding(horizontal = hFactor(20),)){
+             Spacer(modifier = Modifier.height(vFactor(45)))
              AppTextFieldWithSuffix(
                  value = nameController,
                  onValueChange = { nameController = it },
-                 placeholder = "Name",
+                 placeholder = "Full Name",
                  suffix = {
                      Icon(painter = painterResource(id = R.drawable.ic_profile2), contentDescription = "Some Icon",tint = PrimaryColor)
                  },
                  modifier = Modifier.fillMaxWidth()
              )
 
-             Spacer(modifier = Modifier.height(vFactor(20)))
+             Spacer(modifier = Modifier.height(vFactor(10)))
 
              AppTextFieldWithSuffix(
                  value = emailController,
@@ -100,7 +103,7 @@ fun CreateAccountScreen(
                  modifier = Modifier.fillMaxWidth()
              )
 
-             Spacer(modifier = Modifier.height(vFactor(20)))
+             Spacer(modifier = Modifier.height(vFactor(10)))
 
              // Password field
 
@@ -112,7 +115,7 @@ fun CreateAccountScreen(
                  modifier = Modifier.fillMaxWidth()
              )
 
-             Spacer(modifier = Modifier.height(vFactor(10)))
+             Spacer(modifier = Modifier.height(vFactor(5)))
 
 //            CustomMontserratText(
 //                text = "By clicking continue, you accept the Terms & Conditions and Privacy Policy",
@@ -124,34 +127,48 @@ fun CreateAccountScreen(
 
              val annotatedString = buildAnnotatedString {
                  append("By clicking continue, you accept the ")
-                 pushStyle(SpanStyle(textDecoration = TextDecoration.Underline))
+
+                 // Add annotation for "Terms & Conditions"
+                 pushStringAnnotation(tag = "terms", annotation = "Terms & Conditions")
+                 pushStyle(SpanStyle(textDecoration = TextDecoration.Underline, color = AppTextGray, fontWeight = FontWeight.Bold))
                  append("Terms & Conditions")
                  pop()
+                 pop()
+
                  append(" and ")
-                 pushStyle(SpanStyle(textDecoration = TextDecoration.Underline))
+
+                 // Add annotation for "Privacy Policy"
+                 pushStringAnnotation(tag = "privacy", annotation = "Privacy Policy")
+                 pushStyle(SpanStyle(textDecoration = TextDecoration.Underline, color = AppTextGray, fontWeight = FontWeight.Bold))
                  append("Privacy Policy")
                  pop()
+                 pop()
+
                  append(".")
              }
 
              ClickableText(
                  text = annotatedString,
                  onClick = { offset ->
-                     // Handle click events for terms and privacy policy here
+                     // Check if the clicked position is within the Terms & Conditions range
                      annotatedString.getStringAnnotations(tag = "terms", start = offset, end = offset)
                          .firstOrNull()?.let {
                              // Handle click on Terms & Conditions
-                             // For example, open the Terms & Conditions screen
+                             Log.d("MyTag", "------------------Terms & Conditions clicked")
+                             navController.navigate(Dest.TermConditionScreen::class.toRoute())
                          }
 
+                     // Check if the clicked position is within the Privacy Policy range
                      annotatedString.getStringAnnotations(tag = "privacy", start = offset, end = offset)
                          .firstOrNull()?.let {
                              // Handle click on Privacy Policy
-                             // For example, open the Privacy Policy screen
+                             Log.d("MyTag", "------------------Privacy Policy clicked")
+                             navController.navigate(Dest.PrivacyPolicyScreen::class.toRoute())
                          }
                  },
-                 style = LocalTextStyle.current.copy(fontSize = 14.sp, color = AppSubTextColor)
+                 style = LocalTextStyle.current.copy(fontSize = 12.sp, color = AppTextGray)
              )
+
 
              Spacer(modifier = Modifier.height(vFactor(20)))
 
@@ -164,7 +181,52 @@ fun CreateAccountScreen(
                  },
              )
 
-             Spacer(modifier = Modifier.height(vFactor(15))) }
+             Spacer(modifier = Modifier.height(vFactor(15)))
+
+             // OR separator
+             Row(
+                 verticalAlignment = Alignment.CenterVertically,
+                 modifier = Modifier
+                     .fillMaxWidth()
+                     .padding(horizontal = hFactor(48))
+             ) {
+                 Divider(
+                     color = DividerGray,
+                     thickness = 1.dp,
+                     modifier = Modifier.weight(1f)
+                 )
+                 CustomMontserratText(
+                     " OR ",
+                     color = AppTextGray,
+                     fontSize = 12.sp,
+                     modifier = Modifier.padding(horizontal = 8.dp)
+                 )
+                 Divider(
+                     color = DividerGray,
+                     thickness = 1.dp,
+                     modifier = Modifier.weight(1f)
+                 )
+             }
+
+             Spacer(modifier = Modifier.height(30.dp))
+
+             // Social login buttons
+             Row(
+                 horizontalArrangement = Arrangement.Center,
+                 modifier = Modifier.fillMaxWidth(),
+                 verticalAlignment = Alignment.CenterVertically,
+             ) {
+                 SocialLoginButton(R.drawable.ic_google) {
+//                     onSocialLoginClick("Google")
+                 }
+//                Spacer(modifier = Modifier.width(10.dp))
+//                SocialLoginButton(R.drawable.ic_facebook) { onSocialLoginClick("Facebook") }
+                 Spacer(modifier = Modifier.width(10.dp))
+                 SocialLoginButton(R.drawable.ic_apple) {
+//                     onSocialLoginClick("Apple")
+                 }
+             }
+         }
 
         }
     }

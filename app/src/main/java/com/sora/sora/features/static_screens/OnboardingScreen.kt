@@ -170,6 +170,7 @@ fun OnboardingScreen(navController: NavController) {
             .fillMaxSize()
           //  .safeDrawingPadding()
     ) {
+
         HorizontalPager(state = pagerState, count = pages.size) { page ->
             val currentPageData = pages[page]
 
@@ -186,7 +187,7 @@ fun OnboardingScreen(navController: NavController) {
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
-                .padding(bottom = 40.dp, start = 24.dp, end = 24.dp),
+                .padding(bottom = 70.dp, start = 24.dp, end = 24.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {

@@ -15,15 +15,16 @@ val SecondaryColor = Color(0xFFB77E3E)
 val SecondaryColor100 = Color(0xFFFBF9F6)
 val TextFieldColorX = Color(  0xFFFBF9F6)
 val YellowApp = Color(0xFFFFAF17)
-val TextFieldColor = Color(0xFFF2F2F2)
-val TextFieldColor2 = Color(0xFFFFF7F2)
+val TextFieldColor = Color(0xFFF2F2F2) //#
 val TextFieldColor3 = Color(0xFFF8F3EE)
 val AppGray = Color(0xFFDCD9D9)
 val AppTextGray = Color(0xFF928C8A)
+val AppTextGray2 = Color(0xFF605755)
 val DividerGray = Color(0xFFE5E5E5)
 val LightBrown = Color(0xFFFEF7F2)
 val ImageBackgroundColor = Color(0xFFF6F1EF)
-val TextFieldBackgroundColors = Color(0x0DB58353)
+val TextFieldBackgroundColors = Color(0xFFFBF9F6)   //old background color = 0x0DB58353
+//val TextFieldBackgroundColors2  = Color(0xFFFBF9F6)
 val TextFieldBorderColors = Color(0xFFB58353)
 
 

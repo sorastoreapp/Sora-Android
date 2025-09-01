@@ -40,6 +40,8 @@ import com.sora.sora.core.navigations.toRoute
 import com.sora.sora.core.vFactor
 import com.sora.sora.ui.components.AppTextFieldWithSuffix
 import com.sora.sora.ui.theme.AppSubTextColor
+import com.sora.sora.ui.theme.AppTextGray
+import com.sora.sora.ui.theme.AppTextGray2
 import com.sora.sora.ui.theme.DividerGray
 import com.sora.sora.ui.theme.PrimaryColor
 
@@ -80,31 +82,25 @@ fun ForgetPasswordScreen(
               .padding(horizontal = hFactor(20),)
 
           ){
-              Spacer(modifier = Modifier.height(vFactor(20)))
+              Spacer(modifier = Modifier.height(vFactor(30)))
 
               AppTextFieldWithSuffix(
                   value = emailController,
                   onValueChange = { emailController = it },
                   placeholder = "Email",
                   suffix = {
-                      Icon(painter = painterResource(id = R.drawable.ic_email), contentDescription = "Some Icon")
+                      Icon(painter = painterResource(id = R.drawable.ic_email), tint = PrimaryColor, contentDescription = "Some Icon")
                   },
                   modifier = Modifier.fillMaxWidth()
               )
 
               Spacer(modifier = Modifier.height(vFactor(20)))
 
-
-              val annotatedString = buildAnnotatedString {
-                  append("We will send an OTP to your email to reset your password ")
-                  pushStyle(SpanStyle(textDecoration = TextDecoration.Underline))
-              }
-
               CustomMontserratText(
-                  text = "We will send an OTP to your email to reset your password",
-                  fontSize = 14.sp, color = AppSubTextColor
+                  text = "We will send an OTP to your email to reset \n your password",
+                  fontSize = 12.sp, color = AppTextGray2,
+                  fontWeight = FontWeight(400)
               )
-
 
               Spacer(modifier = Modifier.height(vFactor(20)))
 
@@ -129,10 +125,10 @@ fun ForgetPasswordScreen(
 @Preview(showBackground = true)
 @Composable
 fun PreviewForgetPasswordScreen() {
-    SignInScreen(
-        onLoginClick = {},
-        onRegisterClick = {},
-        onSocialLoginClick = {},
-        onCountryCodeChange = {}
+    ForgetPasswordScreen(
+//        onLoginClick = {},
+//        onRegisterClick = {},
+//        onSocialLoginClick = {},
+//        onCountryCodeChange = {}
     )
 }
