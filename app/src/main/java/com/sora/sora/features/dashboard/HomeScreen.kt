@@ -287,7 +287,7 @@ fun BannerSlider(
                                 navController.navigate("${Dest.CategoryDetailScreen::class.toRoute()}?title=$encodedTitle&themeColor=$encodedThemeColor")
 
                             },
-                    shape = RoundedCornerShape(8.dp),
+                    shape = RoundedCornerShape(20.dp),
                     colors = ButtonDefaults.buttonColors(PrimaryColor),
                     contentPadding = PaddingValues(0.dp), // Remove internal padding
                     modifier = Modifier
@@ -639,18 +639,20 @@ fun OfferCard() {
                     navController.navigate("${Dest.CategoryDetailScreen::class.toRoute()}?title=$encodedTitle&themeColor=$encodedThemeColor")
 
                 },
-                shape = RoundedCornerShape(8.dp),
+                shape = RoundedCornerShape(20.dp),
                 colors = ButtonDefaults.buttonColors(PrimaryColor),
                 contentPadding = PaddingValues(0.dp), // Remove internal padding
                 modifier = Modifier
                     .width(105.dp) // Make button stretch across
                     .height(28.dp) // Adjust button height as needed
+
             ) {
                 CustomMontserratText(
                     text = "Explore Now",
-                    fontWeight = FontWeight.W500,
+                    fontWeight = FontWeight.Bold,
                     color = Color.White,
                     fontSize = 14.sp,
+
 //                        modifier = Modifier.fillMaxSize(), // Ensure text is centered within button
                     textAlign = TextAlign.Center
                 )
