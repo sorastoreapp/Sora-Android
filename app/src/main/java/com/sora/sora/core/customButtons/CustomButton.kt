@@ -121,7 +121,7 @@ fun PrimaryButton(
     onClick: () -> Unit,
     backgroundColor: Color = PrimaryColor, // Default value for the background color
     textColor: Color = Color.White, // Default value for the text color
-    height: Int = 57, // Default height
+    height: Int = 70, // Default height
     modifier: Modifier = Modifier, // Default empty modifier
     borderColor: Color? = null, // Optional border color
 //    shape: androidx.compose.foundation.shape.CornerBasedShape = MaterialTheme.shapes.large // Default shape

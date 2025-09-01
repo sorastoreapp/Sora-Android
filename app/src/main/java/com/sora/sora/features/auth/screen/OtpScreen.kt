@@ -1,5 +1,6 @@
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -47,8 +48,11 @@ import com.sora.sora.core.navigations.toRoute
 import com.sora.sora.core.vFactor
 import com.sora.sora.ui.components.AppTextFieldWithSuffix
 import com.sora.sora.ui.theme.AppSubTextColor
+import com.sora.sora.ui.theme.AppTextColor
+import com.sora.sora.ui.theme.AppTextGray
 import com.sora.sora.ui.theme.DividerGray
 import com.sora.sora.ui.theme.PrimaryColor
+import com.sora.sora.ui.theme.PrimaryColor100
 import kotlinx.coroutines.delay
 
 
@@ -145,7 +149,9 @@ fun OtpScreen() {
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize().background(color = Color.White)) {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(color = Color.White)) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -165,23 +171,23 @@ fun OtpScreen() {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                Spacer(modifier = Modifier.height(vFactor(30)))
+                Spacer(modifier = Modifier.height(vFactor(15)))
 
                 Image(
-                    painter = painterResource(id = R.drawable.ic_email),
+                    painter = painterResource(id = R.drawable.ic_mail_normal_outlined),
                     contentDescription = null,
                     modifier = Modifier
-                        .size(64.dp)
+                        .size(65.dp)
                         .background(Color(0xFFF8F0E8), shape = CircleShape)
-                        .padding(18.dp)
+                        .padding(9.dp)
                 )
 
                 Spacer(modifier = Modifier.height(vFactor(20)))
 
                 CustomMontserratText(
                     text = "We sent an OTP to your Email",
-                    fontSize = 14.sp,
-                    color = AppSubTextColor
+                    fontSize = 16.sp,
+                    color = Color.Black,
                 )
 
                 Spacer(modifier = Modifier.height(vFactor(30)))
@@ -196,7 +202,7 @@ fun OtpScreen() {
 
                 // Verify button becomes active only when OTP length is 4
                 PrimaryButton(
-                    text = "Verify Otp",
+                    text = "Verify",
                     backgroundColor = if (otpValue.length == 4) PrimaryColor else Color.Gray,
                     onClick = {
                      if(otpValue.length == 4){
@@ -210,14 +216,14 @@ fun OtpScreen() {
                 // Resend OTP section
                 if (isTimerRunning) {
                     CustomMontserratText(
-                        text = "Resend OTP in $timer sec",
+                        text = "Resend OTP in ${timer}s",
                         fontSize = 14.sp,
-                        color = AppSubTextColor
+                        color = AppTextGray
                     )
                 } else {
                     Text(
                         text = "Resend OTP",
-                        color = PrimaryColor,
+                        color = AppTextGray,
                         fontSize = 14.sp,
                         modifier = Modifier.clickable {
                             // action to resend
@@ -233,8 +239,6 @@ fun OtpScreen() {
     }
 }
 
-
-
 @Composable
 fun OtpTextField(
     otpText: String,
@@ -246,6 +250,7 @@ fun OtpTextField(
     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
         repeat(otpLength) { index ->
             val char = otpText.getOrNull(index)?.toString() ?: ""
+            val isFilled = char.isNotEmpty()
 
             BasicTextField(
                 value = char,
@@ -254,7 +259,6 @@ fun OtpTextField(
                         val newOtp = StringBuilder(otpText)
 
                         if (value.isNotEmpty()) {
-                            // add or replace this index
                             if (otpText.length > index) {
                                 newOtp.setCharAt(index, value[0])
                             } else {
@@ -262,19 +266,14 @@ fun OtpTextField(
                             }
                             onOtpTextChange(newOtp.toString())
 
-                            // move focus to next
                             if (index < otpLength - 1) {
                                 focusRequesters[index + 1].requestFocus()
                             }
                         } else {
-                            // delete / go back
                             if (otpText.isNotEmpty()) {
                                 newOtp.deleteCharAt(otpText.length - 1)
                                 onOtpTextChange(newOtp.toString())
-
-                                if (index > 0) {
-                                    focusRequesters[index - 1].requestFocus()
-                                }
+                                if (index > 0) focusRequesters[index - 1].requestFocus()
                             }
                         }
                     }
@@ -283,26 +282,102 @@ fun OtpTextField(
                 textStyle = LocalTextStyle.current.copy(
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.Black,
+                    color = PrimaryColor,
                     textAlign = TextAlign.Center
                 ),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-
-                        modifier = Modifier
-                    .size(60.dp)
+                modifier = Modifier
+                    .size(70.dp)
                     .focusRequester(focusRequesters[index])
-                    .background(color = Color(0xFFF8F0E8), shape = RoundedCornerShape(12.dp))
+                    .background(color = PrimaryColor100, shape = RoundedCornerShape(12.dp))
+                    .border(
+                        width = 1.dp,
+                        color = if (isFilled) PrimaryColor else Color.Transparent,
+                        shape = RoundedCornerShape(12.dp)
+                    )
                     .wrapContentHeight(Alignment.CenterVertically),
                 decorationBox = { innerTextField ->
                     Box(
                         contentAlignment = Alignment.Center,
                         modifier = Modifier.fillMaxSize()
-                    ) {
-                        innerTextField()
-                    }
+                    ) { innerTextField() }
                 }
             )
         }
     }
 }
+
+
+//@Composable
+//fun OtpTextField(
+//    otpText: String,
+//    onOtpTextChange: (String) -> Unit,
+//    otpLength: Int = 4
+//) {
+//    val focusRequesters = remember { List(otpLength) { FocusRequester() } }
+//
+//    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+//        repeat(otpLength) { index ->
+//            val char = otpText.getOrNull(index)?.toString() ?: ""
+//
+//            BasicTextField(
+//                value = char,
+//                onValueChange = { value ->
+//                    if (value.length <= 1) {
+//                        val newOtp = StringBuilder(otpText)
+//
+//                        if (value.isNotEmpty()) {
+//                            // add or replace this index
+//                            if (otpText.length > index) {
+//                                newOtp.setCharAt(index, value[0])
+//                            } else {
+//                                newOtp.append(value)
+//                            }
+//                            onOtpTextChange(newOtp.toString())
+//
+//                            // move focus to next
+//                            if (index < otpLength - 1) {
+//                                focusRequesters[index + 1].requestFocus()
+//                            }
+//                        } else {
+//                            // delete / go back
+//                            if (otpText.isNotEmpty()) {
+//                                newOtp.deleteCharAt(otpText.length - 1)
+//                                onOtpTextChange(newOtp.toString())
+//
+//                                if (index > 0) {
+//                                    focusRequesters[index - 1].requestFocus()
+//                                }
+//                            }
+//                        }
+//                    }
+//                },
+//                singleLine = true,
+//                textStyle = LocalTextStyle.current.copy(
+//                    fontSize = 18.sp,
+//                    fontWeight = FontWeight.Bold,
+//                    color = PrimaryColor,
+//                    textAlign = TextAlign.Center
+//                ),
+//                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+//
+//                modifier = Modifier
+//                    .size(70.dp)
+//                    .focusRequester(focusRequesters[index])
+//                    .background(color = Color(0xFFF8F0E8), shape = RoundedCornerShape(12.dp))
+//                    .border(width = 1.dp, color = PrimaryColor,shape = RoundedCornerShape(12.dp))
+//                    .background(color =  PrimaryColor100,)
+//                    .wrapContentHeight(Alignment.CenterVertically),
+//                decorationBox = { innerTextField ->
+//                    Box(
+//                        contentAlignment = Alignment.Center,
+//                        modifier = Modifier.fillMaxSize()
+//                    ) {
+//                        innerTextField()
+//                    }
+//                }
+//            )
+//        }
+//    }
+//}
 
