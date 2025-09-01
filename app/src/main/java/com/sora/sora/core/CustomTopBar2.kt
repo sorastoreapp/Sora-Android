@@ -95,9 +95,10 @@ fun CustomAppBar(
                 text = it,
 
                     color = if (titleColor != null) titleColor else Color.Black,
-                    fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
                     textAlign = TextAlign.Center,
-                    fontWeight = FontWeight(600),
+
 
                 modifier = Modifier
                     .align(Alignment.Center)
