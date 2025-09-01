@@ -32,6 +32,7 @@ import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.vFactor
 import com.sora.sora.features.profile.widgets.DeleteAccountBottomSheet
 import com.sora.sora.ui.components.AppTextField2
+import com.sora.sora.ui.components.AppTextFieldWithSuffix
 import com.sora.sora.ui.theme.AppGray
 import com.sora.sora.ui.theme.PrimaryColor
 import com.sora.sora.ui.theme.TextFieldBackgroundColors
@@ -69,9 +70,7 @@ fun EditProfileScreen() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-
-                .padding(horizontal = 16.dp)
-                .statusBarsPadding()
+                .padding(horizontal = 16.dp, vertical = vFactor(10))
 
                 .background(color = Color.White),
             verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -114,15 +113,18 @@ fun EditProfileScreen() {
             }
             Spacer(modifier = Modifier.height(vFactor(15)))
 
-            // Name field
-            AppTextField2(
+            AppTextFieldWithSuffix(
                 value = name,
                 onValueChange = { name = it },
                 placeholder = "Faisal Alajmi",
-                keyboardType = KeyboardType.Text
+                keyboardType = KeyboardType.Text,
+                suffix = {
+                    Icon(painter = painterResource(id = R.drawable.ic_profile2), contentDescription = "Some Icon",tint = PrimaryColor)
+                },
+                modifier = Modifier.fillMaxWidth()
             )
 
-            // Phone field with country selector
+
             PhoneNumberInputField(
                 selectedCountry = selectedCountry,
                 onCountrySelected = { selectedCountry = it },
@@ -131,6 +133,20 @@ fun EditProfileScreen() {
             )
 
             // Email field
+            AppTextFieldWithSuffix(
+                value = email,
+                onValueChange = { email = it },
+                placeholder = "Faisalajmi95@gmail.com",
+                suffix = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_email),
+                        contentDescription = "Email",
+                        tint = PrimaryColor
+                    )
+                },
+                keyboardType = KeyboardType.Email,
+                modifier = Modifier.fillMaxWidth()
+            )
             AppTextField2(
                 value = email,
                 onValueChange = { email = it },
