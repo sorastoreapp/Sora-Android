@@ -98,9 +98,9 @@ fun EditProfileScreen() {
                 ProfileImagePicker()
             }
 
+
             Spacer(modifier = Modifier.height(1.dp))
 
-            // Other UI components...
             AppTextFieldWithSuffix(
                 value = name,
                 onValueChange = { name = it },

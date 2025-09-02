@@ -162,17 +162,20 @@ fun MainNavigation(modifier: Modifier = Modifier) {
             SeeAllProductScreen(seeAllModel = SeeAllModel(title = title, list = list))
         }
 
-        composable(Dest.CategoryDetailScreen::class.toRoute() + "?title={title}&themeColor={themeColor}") { backStackEntry ->
+        composable(Dest.CategoryDetailScreen::class.toRoute() + "?title={title}&themeColor1={themeColor1}&themeColor2={themeColor2}") { backStackEntry ->
             val encodedTitle = backStackEntry.arguments?.getString("title") ?: ""
-            val encodedThemeColor = backStackEntry.arguments?.getString("themeColor") ?: ""
+            val encodedThemeColor1 = backStackEntry.arguments?.getString("themeColor1") ?: ""
+            val encodedThemeColor2 = backStackEntry.arguments?.getString("themeColor2") ?: ""
 
-            // Decode the title and themeColor from the URL encoding
+            // Decode the title and theme colors from the URL encoding
             val title = URLDecoder.decode(encodedTitle, "UTF-8")
-            val themeColor = URLDecoder.decode(encodedThemeColor, "UTF-8")
+            val themeColor1 = URLDecoder.decode(encodedThemeColor1, "UTF-8")
+            val themeColor2 = URLDecoder.decode(encodedThemeColor2, "UTF-8")
 
-            // Pass the decoded title and themeColor to CategoryDetailScreen
-            CategoryDetailScreen(categoryDetailModel = CategoryDetailModel(title = title, themeColor = themeColor))
+            // Pass the decoded title and theme colors to CategoryDetailScreen
+            CategoryDetailScreen(categoryDetailModel = CategoryDetailModel(title = title, themeColor1 = themeColor1, themeColor2 = themeColor2))
         }
+
 
 
 

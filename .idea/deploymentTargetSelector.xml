@@ -7,7 +7,7 @@
         <DropdownSelection timestamp="2025-09-02T05:05:45.063363Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=/Users/preetivishwakarma/.android/avd/Pixel_7.avd" />
+              <DeviceId pluginId="PhysicalDevice" identifier="serial=ZA222LPTQW" />
             </handle>
           </Target>
         </DropdownSelection>

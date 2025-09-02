@@ -146,6 +146,7 @@ fun HomeScreen() {
                 Spacer(modifier = Modifier.height(100.dp)) // extra bottom padding
             }
         }
+
     }
 }
 
@@ -270,40 +271,43 @@ fun BannerSlider(
                         modifier = Modifier.padding(bottom = 16.dp).widthIn(max = 200.dp)
                     )
                     Button(
-                            onClick = {
+                        onClick = {
 
-                                val categoryDetailModel = CategoryDetailModel(
-                                    title = "Toys",
-                                    themeColor = "#FFFADA7A"  // e.g., "#FFFADA7A"
-                                )
+                            val categoryDetailModel = CategoryDetailModel(
+                                title = "Toys",
+                                themeColor1 = "#FFFADA7A" , // e.g., "#FFFADA7A"
+                                themeColor2 = "#FFF8C844"  // e.g., "#FFFADA7A"
+                            )
 
-                                // URL encode both the title and themeColor
-                                val encodedTitle = URLEncoder.encode(categoryDetailModel.title, "UTF-8")
-                                val encodedThemeColor = URLEncoder.encode(categoryDetailModel.themeColor, "UTF-8")
+                            // URL encode both the title and theme colors
+                            val encodedTitle = URLEncoder.encode(categoryDetailModel.title, "UTF-8")
+                            val encodedThemeColor1 = URLEncoder.encode(categoryDetailModel.themeColor1, "UTF-8")
+                            val encodedThemeColor2 = URLEncoder.encode(categoryDetailModel.themeColor2, "UTF-8")
 
-                                Log.d("MyTag", "CategoryCard: ------------------${categoryDetailModel.title}")
+                            Log.d("MyTag", "CategoryCard: ------------------${categoryDetailModel.title}")
 
-                                // Pass the encoded title and themeColor in the navigation URL
-                                navController.navigate("${Dest.CategoryDetailScreen::class.toRoute()}?title=$encodedTitle&themeColor=$encodedThemeColor")
-
-                            },
-                    shape = RoundedCornerShape(20.dp),
-                    colors = ButtonDefaults.buttonColors(PrimaryColor),
-                    contentPadding = PaddingValues(0.dp), // Remove internal padding
-                    modifier = Modifier
-                        .width(105.dp) // Make button stretch across
-                        .height(28.dp) // Adjust button height as needed
+                            // Pass the encoded title and theme colors in the navigation URL
+                            navController.navigate("${Dest.CategoryDetailScreen::class.toRoute()}?title=$encodedTitle&themeColor1=$encodedThemeColor1&themeColor2=$encodedThemeColor2")
+                        },
+                        shape = RoundedCornerShape(20.dp),
+                        colors = ButtonDefaults.buttonColors(PrimaryColor),
+                        contentPadding = PaddingValues(0.dp), // Remove internal padding
+                        modifier = Modifier
+                            .width(105.dp) // Make button stretch across
+                            .height(28.dp) // Adjust button height as needed
 
                     ) {
-                    Text(
-                        text = "Explore Now",
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.White,
-                        fontSize = 14.sp,
+                        CustomMontserratText(
+                            text = "Explore Now",
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White,
+                            fontSize = 12.sp,
+
 //                        modifier = Modifier.fillMaxSize(), // Ensure text is centered within button
-                        textAlign = TextAlign.Center
-                    )
-                }
+                            textAlign = TextAlign.Center
+                        )
+                    }
+
 
                 }
 
@@ -538,24 +542,26 @@ fun CategoryItem(category: Category) {
 
                 val categoryDetailModel = CategoryDetailModel(
                     title = "Toys",
-                    themeColor = "#FFFADA7A"  // e.g., "#FFFADA7A"
+                    themeColor1 = "#FFFADA7A",  // e.g., "#FFFADA7A"
+                    themeColor2 = "#FFF8C844"  // e.g., "#FFFADA7A"
                 )
 
-                // URL encode both the title and themeColor
+                // URL encode both the title and theme colors
                 val encodedTitle = URLEncoder.encode(categoryDetailModel.title, "UTF-8")
-                val encodedThemeColor = URLEncoder.encode(categoryDetailModel.themeColor, "UTF-8")
+                val encodedThemeColor1 = URLEncoder.encode(categoryDetailModel.themeColor1, "UTF-8")
+                val encodedThemeColor2 = URLEncoder.encode(categoryDetailModel.themeColor2, "UTF-8")
 
                 Log.d("MyTag", "CategoryCard: ------------------${categoryDetailModel.title}")
 
-                // Pass the encoded title and themeColor in the navigation URL
-                navController.navigate("${Dest.CategoryDetailScreen::class.toRoute()}?title=$encodedTitle&themeColor=$encodedThemeColor")
+                // Pass the encoded title and theme colors in the navigation URL
+                navController.navigate("${Dest.CategoryDetailScreen::class.toRoute()}?title=$encodedTitle&themeColor1=$encodedThemeColor1&themeColor2=$encodedThemeColor2")
 
-        })
+            })
         }
     ) {
         Box(
             modifier = Modifier
-                .size(55.dp)
+                .size(60.dp)
                 .background(category.bgColor.copy(alpha = 0.15f), shape = CircleShape),
             contentAlignment = Alignment.Center
         ) {
@@ -584,7 +590,7 @@ fun OfferCard() {
         Modifier
             .fillMaxWidth()
             .height(vFactor(194))
-            .clip(RoundedCornerShape(10.dp))
+            .clip(RoundedCornerShape(20.dp))
             .padding(horizontal = 16.dp)
     ) {
 
@@ -592,7 +598,7 @@ fun OfferCard() {
             painter = painterResource(R.drawable.img_temp_discount_banner,),
             contentDescription = "Banner Image",
             contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(10.dp))
+            modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(20.dp))
         )
         // (Your overlay here)
 
@@ -626,17 +632,19 @@ fun OfferCard() {
 
                     val categoryDetailModel = CategoryDetailModel(
                         title = "Toys",
-                        themeColor = "#FFFADA7A"  // e.g., "#FFFADA7A"
+                        themeColor1 = "#FFFADA7A",  // e.g., "#FFFADA7A"
+                        themeColor2 = "#FFF8C844"  // e.g., "#FFFADA7A"
                     )
 
-                    // URL encode both the title and themeColor
+                    // URL encode both the title and theme colors
                     val encodedTitle = URLEncoder.encode(categoryDetailModel.title, "UTF-8")
-                    val encodedThemeColor = URLEncoder.encode(categoryDetailModel.themeColor, "UTF-8")
+                    val encodedThemeColor1 = URLEncoder.encode(categoryDetailModel.themeColor1, "UTF-8")
+                    val encodedThemeColor2 = URLEncoder.encode(categoryDetailModel.themeColor2, "UTF-8")
 
                     Log.d("MyTag", "CategoryCard: ------------------${categoryDetailModel.title}")
 
-                    // Pass the encoded title and themeColor in the navigation URL
-                    navController.navigate("${Dest.CategoryDetailScreen::class.toRoute()}?title=$encodedTitle&themeColor=$encodedThemeColor")
+                    // Pass the encoded title and theme colors in the navigation URL
+                    navController.navigate("${Dest.CategoryDetailScreen::class.toRoute()}?title=$encodedTitle&themeColor1=$encodedThemeColor1&themeColor2=$encodedThemeColor2")
 
                 },
                 shape = RoundedCornerShape(20.dp),
@@ -651,9 +659,8 @@ fun OfferCard() {
                     text = "Explore Now",
                     fontWeight = FontWeight.Bold,
                     color = Color.White,
-                    fontSize = 14.sp,
-
-//                        modifier = Modifier.fillMaxSize(), // Ensure text is centered within button
+                    fontSize = 12.sp,
+//                  modifier = Modifier.fillMaxSize(), // Ensure text is centered within button
                     textAlign = TextAlign.Center
                 )
             }
