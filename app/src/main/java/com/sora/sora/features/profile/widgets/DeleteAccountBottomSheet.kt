@@ -1,5 +1,6 @@
 package com.sora.sora.features.profile.widgets
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -31,7 +32,10 @@ fun DeleteAccountBottomSheet(
     onCancelOrder: (String) -> Unit
 ) {
     ModalBottomSheet(
-        onDismissRequest = onDismiss
+
+        onDismissRequest = onDismiss,
+
+        containerColor = Color.White,
     ) {
         Column(
             modifier = Modifier
@@ -87,17 +91,8 @@ fun DeleteAccountBottomSheet(
                 modifier = Modifier.padding(bottom = 8.dp)
             )
             // Button Row with "Yes, cancel my order" and "Back" options
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-//                    .horizontalArrangement(Arrangement.SpaceEvenly)
-            ) {
 
-
-
-                Spacer(modifier = Modifier.width(15.dp))
-
-            }
+            Spacer(modifier = Modifier.height(vFactor(16)))
         }
     }
 }
