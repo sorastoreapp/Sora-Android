@@ -101,12 +101,24 @@ fun AppTextFieldWithSuffix(
         modifier = modifier
             .height(height ?: 60.dp)
             .fillMaxWidth()
-            .clip(RoundedCornerShape(20.dp)),
-        singleLine = true,
+            .clip(RoundedCornerShape(20.dp))
+            .background(
+                color = TextFieldBackgroundColors,  // Background color
+                shape = RoundedCornerShape(20.dp)  // Same shape for background
+            )
+            .border(
+                width = 1.dp,
+                color = if (value.isNotEmpty()) TextFieldBorderColors else Color.Transparent,  // Set border color based on focus
+                shape = RoundedCornerShape(20.dp)  // Same shape for border
+            ),
+
+        singleLine = false,
+        maxLines = 5,
         placeholder = {
             CustomMontserratText(
                 text = placeholder,
                 color = TextHintColor,
+                fontWeight = FontWeight(500),
                 fontSize = 14.sp,
                 textAlign = TextAlign.Start,
             )
@@ -223,15 +235,16 @@ fun AppTextField2(
         modifier = modifier
             .height(height ?:60.dp)
             .fillMaxWidth()
-            .clip(RoundedCornerShape(15.dp))  // Set the corner radius for clipping
+            .clip(RoundedCornerShape(20.dp))  // Set the corner radius for clipping
             .background(
                 color = TextFieldBackgroundColors,  // Background color
-                shape = RoundedCornerShape(15.dp)  // Same shape for background
+                shape = RoundedCornerShape(20.dp)  // Same shape for background
+
             )
             .border(
                 width = 1.dp,
                 color = if (value.isNotEmpty()) TextFieldBorderColors else Color.Transparent,  // Set border color based on focus
-                shape = RoundedCornerShape(15.dp)  // Same shape for border
+                shape = RoundedCornerShape(20.dp)  // Same shape for border
             ),
         singleLine = false, // Ensure it allows multi-line text
         maxLines = 5, // Set the max lines as needed

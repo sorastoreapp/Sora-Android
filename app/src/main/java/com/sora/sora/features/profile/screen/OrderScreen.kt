@@ -13,8 +13,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -31,6 +35,7 @@ import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.navigations.toRoute
 import com.sora.sora.core.vFactor
 import com.sora.sora.core.widgets.OrderStatusWidget
+import com.sora.sora.ui.theme.AppTextGray
 import com.sora.sora.ui.theme.ImageBackgroundColor
 import com.sora.sora.utils.models.OrderModel
 
@@ -41,7 +46,7 @@ import com.sora.sora.utils.models.OrderModel
 fun OrdersScreen() {
     val orderModels = listOf(
         OrderModel(orderId = "Order #87778", items = 10, date = "March 28, 2025", productName = "Soft Plush Bear Toy", amount = "KD 20", status = OrderStatusEnum.Processing, image = R.drawable.img_temp_teddy_without_bg),
-        OrderModel(orderId = "Order #87778", items = 10, date = "March 30, 2025", productName = "Brown Men Full T-shirt", amount = "KD 20", status = OrderStatusEnum.Shipped, image = R.drawable.img_temp_teddy_without_bg),
+        OrderModel(orderId = "Order #87778", items = 10, date = "March 30, 2025", productName = "Brown Men Full T-shirt", amount = "KD 20", status = OrderStatusEnum.Confirmed, image = R.drawable.img_temp_teddy_without_bg),
         OrderModel(orderId = "Order #87778", items = 10, date = "April 2, 2025", productName = "Basket of clean towels", amount = "KD 20", status = OrderStatusEnum.Delivered, image = R.drawable.img_temp_teddy_without_bg),
         OrderModel(orderId = "Order #87778", items = 10, date = "April 2, 2025", productName = "Basket of clean towels", amount = "KD 20", status = OrderStatusEnum.Returned, image = R.drawable.img_temp_teddy_without_bg)
     )
@@ -66,6 +71,7 @@ fun OrdersScreen() {
                 .fillMaxSize()
                 .padding(top = 56.dp) // Adjust to make space for the app bar
                 .statusBarsPadding()
+                .background(Color.White)
                 .padding(horizontal = 20.dp, )
                 .verticalScroll(rememberScrollState())
         ) {
@@ -84,12 +90,26 @@ fun OrdersScreen() {
 fun OrderCard(orderModel: OrderModel) {
     Card(
         modifier = Modifier
-            .shadow(elevation = 24.dp, spotColor = Color(0x0D000000), ambientColor = Color(0x0D000000))
-            .border(width = 1.dp, color = Color.Black.copy(alpha = 0.1f), shape = RoundedCornerShape(size = 15.dp))
+            .shadow(elevation = 0.dp, spotColor = Color(0x0D000000), ambientColor = Color(0x0D000000),
+           shape = RoundedCornerShape(size = 15.dp), )
+         //   .border(width = 1.dp, color = Color.Black.copy(alpha = 0.1f), shape = RoundedCornerShape(size = 15.dp))
             .padding(1.dp)
             .fillMaxWidth()
-            .height(vFactor(120))
+          //  .height(vFactor(120))
             .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(size = 15.dp))
+            .drawBehind(onDraw = {
+                val shadowColor = Color(0x0D000000) // Semi-transparent black for shadow
+                val shadowRadius = 15f
+                drawRoundRect(
+                    color = shadowColor,
+                    size = size.copy(width = size.width - 2.dp.toPx(), height = size.height - 2.dp.toPx()),
+                    cornerRadius = CornerRadius.Zero,
+                    blendMode = BlendMode.SrcOver,
+                    alpha = 0.45f
+                )
+
+            })
+
 
 
 
@@ -99,7 +119,19 @@ fun OrderCard(orderModel: OrderModel) {
              ,
 //        shape = RoundedCornerShape(15.dp),
 
-       colors = CardDefaults.cardColors(containerColor = Color.White)
+       colors = CardDefaults.cardColors(
+           containerColor = Color.White,
+           contentColor = Color.White
+
+           ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp,pressedElevation = 1.dp, focusedElevation = 5.dp),
+        shape = RoundedCornerShape(15.dp),
+        border = CardDefaults.outlinedCardBorder(enabled = true),
+
+
+
+
+
 
     ) {
         Row(
@@ -107,14 +139,14 @@ fun OrderCard(orderModel: OrderModel) {
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxSize()
-
-
         ) {
 
             // Order Details Column
             Column(
                 modifier = Modifier
                     .weight(1f)
+
+                    .align(Alignment.CenterVertically)
                     .padding(8.dp)
             ) {
                 // Order ID and Date
@@ -155,17 +187,19 @@ fun OrderCard(orderModel: OrderModel) {
 //                Spacer(modifier = Modifier.height(8.dp))
 
 
-                Row(){
+                Row(
+
+                ){
                     //            // Product Image
                     Image(
                         painter = painterResource(id = orderModel.image),
                         contentDescription = "Product Image",
-                        modifier =
-                            Modifier
-                                 .width(74.dp)
-                                .height(74.dp)
-                                .background(color = ImageBackgroundColor, shape = RoundedCornerShape(size = 8.dp))
-                                .padding(start = 4.32432.dp, top = 4.32432.dp, end = 4.32432.dp, bottom = 4.32432.dp)
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                            .width(80.dp)
+                            .height(80.dp)
+                            .background(color = ImageBackgroundColor, shape = RoundedCornerShape(size = 8.dp))
+                            .padding(start = 4.32432.dp, top = 4.32432.dp, end = 4.32432.dp, bottom = 4.32432.dp)
                     )
                     Spacer(modifier = Modifier.width(12.dp))
 
@@ -186,18 +220,18 @@ fun OrderCard(orderModel: OrderModel) {
 
                 CustomMontserratText(
                     text = "Items: ${orderModel.items}",
-                    fontSize = 13.sp,
+                    fontSize = 10.sp,
                     fontWeight = FontWeight(400),
-                    color = Color.Black.copy(alpha = 0.9f),
+                    color = AppTextGray,
                     textAlign = TextAlign.Center,
                 )
 
                 Spacer(modifier = Modifier.height(5.dp))
                       CustomMontserratText(
                     text = "${orderModel.amount}",
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight(400),
-                    color = Color.Black.copy(alpha = 0.9f),
+                          fontSize = 10.sp,
+                          fontWeight = FontWeight(400),
+                          color = AppTextGray,
                     textAlign = TextAlign.Center,
                 )
 

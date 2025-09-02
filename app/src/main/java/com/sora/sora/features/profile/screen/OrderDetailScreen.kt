@@ -192,7 +192,7 @@ fun OrderDetailScreen(status: String ="Processing", ) {
                         OrderStatusEnum.Delivered,
                         OrderStatusEnum.Refund,
                         OrderStatusEnum.Returned,
-                        OrderStatusEnum.Completed
+                        OrderStatusEnum.Confirmed
                     )
                 ) {
                     CustomButton(
