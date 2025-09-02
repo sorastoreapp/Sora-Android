@@ -1,5 +1,7 @@
 package com.sora.sora.core.widgets
 
+import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -65,6 +67,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 
@@ -392,22 +395,183 @@ fun ProductSection(title: String, products: List<Product>, categoryList: List<St
 //    }
 //}
 
+/** WORKING WITHOUT SHARING **/
+
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun ProductCard(
+//    product: Product,
+//    onFavorite: () -> Unit = {},
+//    onAddToCart: () -> Unit = {},
+//    onRemoveFromCart: () -> Unit = {},
+//    isFavoriteScreen: Boolean = false,
+//    color: Color = PrimaryColor,
+//    quantity: Int = 0,
+//    onShare: (Context) -> Unit = { context ->
+//        // This logic will be executed when share is clicked
+//        val sendIntent: Intent = Intent().apply {
+//            action = Intent.ACTION_SEND
+//            putExtra(Intent.EXTRA_TEXT, "https://www.example.com") //******//
+//            type = "text/plain"
+//        }
+//
+//        val shareIntent = Intent.createChooser(sendIntent, null)
+//        context.startActivity(shareIntent)
+//    } // This is the default implementation, can be customized
+//) {
+//    val cardWidth = 190.dp
+//    val cardHeight = 263.dp
+//    val context = LocalContext.current // Here we access LocalContext.current inside composable
+//    var isFavourite by remember { mutableStateOf(isFavoriteScreen) }
+//    Card(
+//        modifier = Modifier
+//            .width(cardWidth)
+//            .height(cardHeight)
+//            .pointerInput(Unit) {
+//                detectTapGestures(
+//                    onTap = {
+//                        navController.navigate(Dest.ItemDetailScreen::class.toRoute())
+//                    }
+//                )
+//            },
+//        shape = RoundedCornerShape(16.dp),
+//        colors = CardDefaults.cardColors(Color.White),
+//        elevation = CardDefaults.cardElevation(1.dp),
+//        border = BorderStroke(1.dp, Color(0xFFEADFD0))
+//    ) {
+//        Column(Modifier.fillMaxSize()) {
+//            // TOP
+//            Box(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .height(cardHeight * 0.6f)
+//                    .background(ProductCardColor)
+//            ) {
+//                Image(
+//                    painter = product.image,
+//                    contentDescription = product.title,
+//                    contentScale = ContentScale.Fit,
+//                    modifier = Modifier
+//                        .align(Alignment.Center)
+//                        .fillMaxHeight()
+//                        .fillMaxWidth()
+//                )
+//
+//                // Heart
+//                Box(
+//                    modifier = Modifier
+//                        .padding(8.dp)
+//                        .size(30.dp)
+//                        .background(Color(0xFFF2ECE7), CircleShape)
+//                        .align(Alignment.TopStart)
+//                        .clickable { onFavorite() },
+//                    contentAlignment = Alignment.Center
+//                ) {
+//                    Icon(if(isFavourite)Icons.Default.Favorite else Icons.Default.FavoriteBorder, contentDescription = null, tint = PrimaryColor,
+//                        modifier = Modifier
+//                            .padding(7.dp)
+//                            .pointerInput(Unit) {
+//                                detectTapGestures(
+//                                    onTap = {
+//                                        onFavorite()
+//                                        isFavourite = !isFavourite
+//                                    }
+//                                )
+//                            }
+//                    )
+//
+//
+//                }
+//
+//                // Share
+//                Box(
+//                    modifier = Modifier
+//                        .padding(8.dp)
+//                        .size(30.dp)
+//                        .background(Color(0xFFF2ECE7), CircleShape)
+//                        .align(Alignment.TopEnd)
+//                        .clickable {
+//                            onShare(context)
+//                                   },
+//                    contentAlignment = Alignment.Center
+//                ) {
+//                    Icon(painter = painterResource(id = R.drawable.ic_share),
+//                        contentDescription = null, tint = PrimaryColor, modifier = Modifier.padding(7.dp))
+//                }
+//
+//                // *** Animated [- qty +] control ***
+////                AnimatedAddToCart(
+////                    quantity = quantity,
+////                    onAdd = onAddToCart,
+////                    onRemove = onRemoveFromCart,
+////                    color = color,
+////                    modifier = Modifier
+////                        .align(Alignment.BottomEnd)
+////                        .padding(8.dp)
+////                )
+//            }
+//
+//            // BOTTOM
+//            Column(
+//                Modifier
+//                    .fillMaxWidth()
+//                    .padding(start = 8.dp, end = 8.dp, top = 16.dp, bottom = 8.dp)
+//            ) {
+//                CustomMontserratText(
+//                    text = product.title,
+//                    maxLines = 2,
+//                    overflow = TextOverflow.Ellipsis,
+//                    fontWeight = FontWeight.Bold,
+//                    fontSize = 15.sp,
+//                    color = Color(0xFF383B3E)
+//                )
+//
+//                Spacer(Modifier.height(4.dp))
+//
+//                Row(verticalAlignment = Alignment.CenterVertically) {
+//                    CustomMontserratText("KD ${product.price}", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = PrimaryColor)
+//                    Spacer(Modifier.width(4.dp))
+//                    CustomMontserratText(product.oldPrice, fontSize =  12.sp, color = Color.Gray, textDecoration = TextDecoration.LineThrough)
+//                    Spacer(Modifier.width(4.dp))
+//                    CustomMontserratText("${product.discountPercent}%", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Color(0xFFD93025))
+//                }
+//            }
+//        }
+//    }
+//}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductCard(
     product: Product,
     onFavorite: () -> Unit = {},
-    onShare: () -> Unit = {},
     onAddToCart: () -> Unit = {},
     onRemoveFromCart: () -> Unit = {},
-    isFavoriteScreen : Boolean = false,
-    color : Color = PrimaryColor,
-    quantity: Int = 0 // <- add this (default keeps old calls working)
+    isFavoriteScreen: Boolean = false,
+    color: Color = PrimaryColor,
+    quantity: Int = 0,
+    onShare: (Context) -> Unit = { context ->
+        // Debugging log to ensure this block is reached
+        Log.d("MyTag", "Share button clicked!")
+
+        // Ensuring context is not null and start activity safely
+        context?.let {
+            val sendIntent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, "https://www.example.com")
+                type = "text/plain"
+            }
+
+            val shareIntent = Intent.createChooser(sendIntent, null)
+            it.startActivity(shareIntent)
+        }
+    }
 ) {
+    val context = LocalContext.current // Correctly accessed inside composable
     val cardWidth = 190.dp
     val cardHeight = 263.dp
     var isFavourite by remember { mutableStateOf(isFavoriteScreen) }
+
     Card(
         modifier = Modifier
             .width(cardWidth)
@@ -418,8 +582,7 @@ fun ProductCard(
                         navController.navigate(Dest.ItemDetailScreen::class.toRoute())
                     }
                 )
-            }
-        ,
+            },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(Color.White),
         elevation = CardDefaults.cardElevation(1.dp),
@@ -439,7 +602,7 @@ fun ProductCard(
                     contentScale = ContentScale.Fit,
                     modifier = Modifier
                         .align(Alignment.Center)
-                        .height(120.dp)
+                        .fillMaxHeight()
                         .fillMaxWidth()
                 )
 
@@ -453,7 +616,10 @@ fun ProductCard(
                         .clickable { onFavorite() },
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(if(isFavourite)Icons.Default.Favorite else Icons.Default.FavoriteBorder, contentDescription = null, tint = PrimaryColor,
+                    Icon(
+                        if (isFavourite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                        contentDescription = null,
+                        tint = PrimaryColor,
                         modifier = Modifier
                             .padding(7.dp)
                             .pointerInput(Unit) {
@@ -465,8 +631,6 @@ fun ProductCard(
                                 )
                             }
                     )
-
-
                 }
 
                 // Share
@@ -476,11 +640,35 @@ fun ProductCard(
                         .size(30.dp)
                         .background(Color(0xFFF2ECE7), CircleShape)
                         .align(Alignment.TopEnd)
-                        .clickable { onShare() },
+                        .pointerInput(Unit) {
+                            detectTapGestures(
+                                onTap = {
+                                    Log.d("ProductCard", "Share clicked") // Add debug log
+                                    // Debugging log to ensure this block is reached
+                                    Log.d("MyTag", "Share button clicked!")
+
+                                    // Ensuring context is not null and start activity safely
+                                    context?.let {
+                                        val sendIntent: Intent = Intent().apply {
+                                            action = Intent.ACTION_SEND
+                                            putExtra(Intent.EXTRA_TEXT, "https://www.sora.com")
+                                            type = "text/plain"
+                                        }
+
+                                        val shareIntent = Intent.createChooser(sendIntent, null)
+                                        it.startActivity(shareIntent)
+                                    }
+                                }
+                            )
+                        },
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(painter = painterResource(id = R.drawable.ic_share),
-                        contentDescription = null, tint = PrimaryColor, modifier = Modifier.padding(7.dp))
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_share),
+                        contentDescription = null,
+                        tint = PrimaryColor,
+                        modifier = Modifier.padding(7.dp)
+                    )
                 }
 
                 // *** Animated [- qty +] control ***
@@ -515,7 +703,7 @@ fun ProductCard(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     CustomMontserratText("KD ${product.price}", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = PrimaryColor)
                     Spacer(Modifier.width(4.dp))
-                    CustomMontserratText(product.oldPrice, fontSize =  12.sp, color = Color.Gray, textDecoration = TextDecoration.LineThrough)
+                    CustomMontserratText(product.oldPrice, fontSize = 12.sp, color = Color.Gray, textDecoration = TextDecoration.LineThrough)
                     Spacer(Modifier.width(4.dp))
                     CustomMontserratText("${product.discountPercent}%", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Color(0xFFD93025))
                 }
@@ -523,6 +711,8 @@ fun ProductCard(
         }
     }
 }
+
+
 
 /** CODE IN TESTING */
 @Composable

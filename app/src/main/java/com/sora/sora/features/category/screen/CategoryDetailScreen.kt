@@ -68,7 +68,10 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.style.TextAlign
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.sora.sora.core.controller.GlobalController
+import com.sora.sora.core.navigations.Dest
 import com.sora.sora.core.navigations.NavigationManager.navController
+import com.sora.sora.core.navigations.toRoute
 import com.sora.sora.features.category.CategoryDetailModel
 import com.sora.sora.features.dashboard.FancyPagerIndicator
 
@@ -80,10 +83,12 @@ import com.sora.sora.features.dashboard.FancyPagerIndicator
 fun CategoryDetailScreen(categoryDetailModel : CategoryDetailModel) {
 
 //    var themeColor = Color(0xFFFADA7A)
-    val color = categoryDetailModel.themeColor
+    val color1 = categoryDetailModel.themeColor1
+    val color2 = categoryDetailModel.themeColor2
 
     // If themeColor is a hex string (e.g., "#FFFADA7A"), use it as a color
-    val themeColor = Color(android.graphics.Color.parseColor(color))
+    val themeColor = Color(android.graphics.Color.parseColor(color1))
+    val themeColor2 = Color(android.graphics.Color.parseColor(color2))
 
     val filters = listOf("All", "Soft & Cuddly", "Action & Adventure", "Educational", "Outdoor")
     var selectedFilter by remember { mutableStateOf(filters[0]) }
@@ -180,13 +185,13 @@ fun CategoryDetailScreen(categoryDetailModel : CategoryDetailModel) {
                             modifier = Modifier
                                 .size(35.dp)
                                 .clip(CircleShape)
-                                .background(themeColor.copy(alpha = 0.1f))
+                                .background(themeColor2.copy(alpha = 0.1f))
 
                         ) {
                             Icon(
                                 imageVector = Icons.Filled.ArrowBack,
                                 contentDescription = "Back",
-                                tint = themeColor,
+                                tint = themeColor2,
                                 modifier = Modifier
                                     .align(Alignment.Center)
                                     .size(30.dp)
@@ -200,7 +205,7 @@ fun CategoryDetailScreen(categoryDetailModel : CategoryDetailModel) {
                         // Animated title
                         CustomMontserratText(
 //                            text = "Toys & Plushies",
-                            text = categoryDetailModel.title ,
+                            text = categoryDetailModel.title,
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color(0xFF3A260C),
@@ -218,9 +223,20 @@ fun CategoryDetailScreen(categoryDetailModel : CategoryDetailModel) {
                                 .clip(CircleShape)
                                 .background(themeColor.copy(alpha = 0.1f))
                         ) {
-                            Image(painter = painterResource(R.drawable.ic_empty_order), colorFilter = tint(themeColor) ,modifier = Modifier
+                            Icon(painter = painterResource(R.drawable.ic_empty_order), tint = themeColor2 ,modifier = Modifier
                                 .align(Alignment.Center)
-                                .size(30.dp), contentDescription = "Cart", )
+                                .pointerInput(Unit) {
+                                    detectTapGestures(
+                                        onPress = { /* No animation on press */ },
+                                        onTap = {
+                                            GlobalController.updateSelectedIndex(2)
+                                            navController.navigate(Dest.DashBoardScreen::class.toRoute())
+                                        }
+                                    )
+                                }
+                                .size(30.dp),
+                                contentDescription = "Cart",
+                                )
                         }
                     }
                     // Teddy Icon with animated transition to the left of the title
@@ -241,7 +257,7 @@ fun CategoryDetailScreen(categoryDetailModel : CategoryDetailModel) {
                         Icon(
                             painter = painterResource(R.drawable.ic_cat_toy),
                             contentDescription = "Teddy",
-                            tint = themeColor,
+                            tint = themeColor2,
                             modifier = Modifier.size(teddySize)
                         )
                     }
@@ -324,7 +340,6 @@ fun FilterChips(text: String, isSelected: Boolean,themeColor : Color, onClick: (
         )
     }
 }
-
 
 data class CategoryModel(val title: String, val bgColor: String, val img: ImageBitmap)
 
