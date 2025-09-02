@@ -1,13 +1,10 @@
 package com.sora.sora.features.category.screen
 
-import android.util.Log
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -21,10 +18,8 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextGranularity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -37,12 +32,10 @@ import com.sora.sora.core.customText.CustomMontserratText
 import com.sora.sora.core.hFactor
 import com.sora.sora.core.vFactor
 import com.sora.sora.features.category.widgets.BubbleShape
-import com.sora.sora.features.profile.screen.CommonDivider
-import com.sora.sora.features.profile.screen.MinimalSwitch
+import com.sora.sora.features.profile.widgets.CustomSwitch
+
 import com.sora.sora.ui.theme.AppGray
 import com.sora.sora.ui.theme.PrimaryColor
-import com.sora.sora.ui.theme.PrimaryColor100
-import com.sora.sora.ui.theme.SecondaryColor
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -508,7 +501,7 @@ fun CategoryResultRow(resultCount: Int = 23, verticalPadding: Dp = 8.dp, horizon
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         var switchEnabled by remember { mutableStateOf(true) }
-                        MinimalSwitch(
+                        CustomSwitch(
                             checked  = showOffers,
                             onCheckedChange = { showOffers = it },
                             enabled = switchEnabled
@@ -530,7 +523,7 @@ fun CategoryResultRow(resultCount: Int = 23, verticalPadding: Dp = 8.dp, horizon
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         var switchEnabled by remember { mutableStateOf(true) }
-                        MinimalSwitch(
+                        CustomSwitch(
                             checked = hideOutOfStock,
                             onCheckedChange = { hideOutOfStock = it },
                             enabled = switchEnabled

@@ -89,44 +89,51 @@ fun OrdersScreen() {
 @Composable
 fun OrderCard(orderModel: OrderModel) {
     Card(
-        modifier = Modifier
-            .shadow(elevation = 0.dp, spotColor = Color(0x0D000000), ambientColor = Color(0x0D000000),
-           shape = RoundedCornerShape(size = 15.dp), )
-         //   .border(width = 1.dp, color = Color.Black.copy(alpha = 0.1f), shape = RoundedCornerShape(size = 15.dp))
-            .padding(1.dp)
-            .fillMaxWidth()
-          //  .height(vFactor(120))
-            .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(size = 15.dp))
-            .drawBehind(onDraw = {
-                val shadowColor = Color(0x0D000000) // Semi-transparent black for shadow
-                val shadowRadius = 15f
-                drawRoundRect(
-                    color = shadowColor,
-                    size = size.copy(width = size.width - 2.dp.toPx(), height = size.height - 2.dp.toPx()),
-                    cornerRadius = CornerRadius.Zero,
-                    blendMode = BlendMode.SrcOver,
-                    alpha = 0.45f
-                )
+//        modifier = Modifier
+//            .shadow(elevation = 0.dp, spotColor = Color(0x0D000000), ambientColor = Color(0x0D000000),
+//           shape = RoundedCornerShape(size = 15.dp), )
+//           // .border(width = 1.dp, color = Color.Transparent.copy(alpha = 0.1f), shape = RoundedCornerShape(size = 15.dp))
+//            .padding(5.dp)
+//            .fillMaxWidth()
+//          //  .height(vFactor(120))
+//            .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(size = 15.dp))
+//            .drawBehind(onDraw = {
+//                val shadowColor = Color(0x0D000000) // Semi-transparent black for shadow
+//                val shadowRadius = 15f
+//                drawRoundRect(
+//                    color = shadowColor,
+//                    size = size.copy(width = size.width - 2.dp.toPx(), height = size.height - 2.dp.toPx()),
+//                    cornerRadius = CornerRadius.Zero,
+//                    blendMode = BlendMode.SrcOver,
+//                    alpha = 0.45f
+//                )
+//            })
+//
+//            .clickable {
+//                navController.navigate(Dest.OrderDetailScreen::class.toRoute() + "?status=${orderModel.status}")
+//            }
+//             ,
 
-            })
 
-
-
-
-            .clickable {
-                navController.navigate(Dest.OrderDetailScreen::class.toRoute() + "?status=${orderModel.status}")
-            }
-             ,
-//        shape = RoundedCornerShape(15.dp),
-
+        shape = RoundedCornerShape(15.dp),
        colors = CardDefaults.cardColors(
            containerColor = Color.White,
-           contentColor = Color.White
+           contentColor = Color.White,
+           disabledContainerColor = Color.White,
+           disabledContentColor = Color.White,
+
+
+
 
            ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp,pressedElevation = 1.dp, focusedElevation = 5.dp),
-        shape = RoundedCornerShape(15.dp),
-        border = CardDefaults.outlinedCardBorder(enabled = true),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp,
+            pressedElevation = 1.dp, focusedElevation = 1.dp,
+            hoveredElevation = 1.dp,
+            disabledElevation = 1.dp,
+            ),
+
+
+        //border = CardDefaults.outlinedCardBorder(enabled = false),
 
 
 
@@ -135,7 +142,7 @@ fun OrderCard(orderModel: OrderModel) {
 
     ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
+            horizontalArrangement = Arrangement.spacedBy(15.dp, Alignment.Start),
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxSize()
@@ -147,7 +154,7 @@ fun OrderCard(orderModel: OrderModel) {
                     .weight(1f)
 
                     .align(Alignment.CenterVertically)
-                    .padding(8.dp)
+                    .padding(10.dp)
             ) {
                 // Order ID and Date
 //                Row ( modifier = Modifier

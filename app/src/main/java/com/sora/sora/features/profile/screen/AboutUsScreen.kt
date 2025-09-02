@@ -60,45 +60,25 @@ fun AboutUsScreen() {
 
 
             Spacer(modifier = Modifier.height(15.dp))
+            QuestionAnswer(
+                question = "About Us - Sora",
+                answer = "Sora is a premium e-commerce platform specializing in toys, kids' products, and accessories. We offer a wide range of high-quality items designed to bring joy and excitement to children while ensuring safety and convenience for parents.\n"+
 
-            // Introduction section
-            CustomMontserratText(
-                text = "About Us – Sora",
-                fontSize = 16.sp,
-
-                fontWeight = FontWeight(600),
-                color = Color.Black
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            CustomMontserratText(
-                text = "Welcome to Sora, your go-to destination for premium toys, kids' products, and accessories! We are dedicated to bringing joy and excitement to children while ensuring convenience and reliability for parents.\n" +
-                        "\n" +
                         "At Sora, we believe in providing high-quality, safe, and innovative products that cater to every child’s needs. Our carefully curated selection features the latest trends in toys, educational items, and everyday essentials for kids of all ages.",
 
-                fontSize = 14.sp,
-                color = AppTextGray,
-                fontWeight = FontWeight(400)
+
             )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Why Choose Sora? section
-            CustomMontserratText(
-                text = "Why Choose Sora?",
-                fontSize = 16.sp,
-
-                fontWeight = FontWeight(600),
-                color = Color.Black
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            CustomMontserratText(
-                text = "• Wide Range of Products – From fun-filled toys to must-have kids' accessories, we have it all!\n\n" +
+            QuestionAnswer(
+                question = "Why Choose Sora?",
+                answer = "• Wide Range of Products – From fun-filled toys to must-have kids' accessories, we have it all!\n\n" +
                         "• Safe & Trusted – All our products meet safety standards to ensure your child’s well-being.\n\n" +
                         "• Seamless Shopping – Enjoy a hassle-free shopping experience with easy ordering, secure payments, and fast delivery.\n\n" +
                         "• Customer-Centric Approach – We prioritize customer satisfaction, offering excellent support and smooth returns.",
-                fontSize = 14.sp,
-                color = AppTextGray
             )
+
+
+
+
 
             Spacer(modifier = Modifier.height(16.dp))
         }

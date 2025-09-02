@@ -4,6 +4,7 @@ package com.sora.sora.features.profile.screen
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -109,8 +110,10 @@ fun NotificationCard(item: NotificationItem) {
     Card(
         shape = RoundedCornerShape(15.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+       // border = CardDefaults.outlinedCardBorder(false),
         modifier = Modifier.fillMaxWidth()
+            .border(width = 1.dp, color = Color.Gray.copy(alpha = 0.1f), shape = RoundedCornerShape(size = 15.dp))
     ) {
         Row(
             modifier = Modifier.padding(vertical = vFactor(12), horizontal = hFactor(8)),
