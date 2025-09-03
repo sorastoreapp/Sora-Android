@@ -89,7 +89,7 @@ fun OrdersScreen() {
 @Composable
 fun OrderCard(orderModel: OrderModel) {
     Card(
-//        modifier = Modifier
+       modifier = Modifier
 //            .shadow(elevation = 0.dp, spotColor = Color(0x0D000000), ambientColor = Color(0x0D000000),
 //           shape = RoundedCornerShape(size = 15.dp), )
 //           // .border(width = 1.dp, color = Color.Transparent.copy(alpha = 0.1f), shape = RoundedCornerShape(size = 15.dp))
@@ -109,10 +109,10 @@ fun OrderCard(orderModel: OrderModel) {
 //                )
 //            })
 //
-//            .clickable {
-//                navController.navigate(Dest.OrderDetailScreen::class.toRoute() + "?status=${orderModel.status}")
-//            }
-//             ,
+            .clickable {
+                navController.navigate(Dest.OrderDetailScreen::class.toRoute() + "?status=${orderModel.status}")
+            }
+             ,
 
 
         shape = RoundedCornerShape(15.dp),
@@ -121,9 +121,6 @@ fun OrderCard(orderModel: OrderModel) {
            contentColor = Color.White,
            disabledContainerColor = Color.White,
            disabledContentColor = Color.White,
-
-
-
 
            ),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp,
@@ -134,11 +131,6 @@ fun OrderCard(orderModel: OrderModel) {
 
 
         //border = CardDefaults.outlinedCardBorder(enabled = false),
-
-
-
-
-
 
     ) {
         Row(

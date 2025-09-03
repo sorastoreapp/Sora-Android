@@ -57,15 +57,13 @@ fun AboutUsScreen() {
                 .verticalScroll(rememberScrollState())//  Makes the content scrollable
         ) {
             // Back Button Section
-
-
+            
             Spacer(modifier = Modifier.height(15.dp))
             QuestionAnswer(
                 question = "About Us - Sora",
                 answer = "Sora is a premium e-commerce platform specializing in toys, kids' products, and accessories. We offer a wide range of high-quality items designed to bring joy and excitement to children while ensuring safety and convenience for parents.\n"+
 
                         "At Sora, we believe in providing high-quality, safe, and innovative products that cater to every child’s needs. Our carefully curated selection features the latest trends in toys, educational items, and everyday essentials for kids of all ages.",
-
 
             )
             QuestionAnswer(
@@ -75,10 +73,6 @@ fun AboutUsScreen() {
                         "• Seamless Shopping – Enjoy a hassle-free shopping experience with easy ordering, secure payments, and fast delivery.\n\n" +
                         "• Customer-Centric Approach – We prioritize customer satisfaction, offering excellent support and smooth returns.",
             )
-
-
-
-
 
             Spacer(modifier = Modifier.height(16.dp))
         }

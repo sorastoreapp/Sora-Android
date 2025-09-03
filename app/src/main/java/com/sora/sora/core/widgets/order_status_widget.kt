@@ -30,7 +30,7 @@ fun OrderStatusWidget(status: OrderStatusEnum?, ) {
     ) {
         CustomInterText(
             text = status?.text?:"",
-            fontSize = 14.sp,
+            fontSize = 16.sp,
             lineHeight = 16.sp,
             color = status?.color?:Color.Black,
             fontWeight = FontWeight.W400

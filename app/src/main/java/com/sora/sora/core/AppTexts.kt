@@ -34,6 +34,7 @@ object AppTexts {
     const val categories = "Categories"
     const val seeAll = "See All"
     const val soraDeals = "Sora Deals"
+    const val newArrivals = "New Arrivals"
     const val clothing = "Clothing"
     const val towels = "Towels"
     const val mugs = "Mugs"

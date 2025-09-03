@@ -56,7 +56,7 @@ fun ProfileScreen() {
 
 
   Scaffold(
-      backgroundColor=Color.White,
+      backgroundColor = Color.White,
 
       modifier = Modifier
           .background(Color.White)
