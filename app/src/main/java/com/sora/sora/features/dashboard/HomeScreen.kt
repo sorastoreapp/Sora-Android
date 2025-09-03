@@ -51,12 +51,14 @@ import com.sora.sora.core.navigations.toRoute
 import com.sora.sora.core.vFactor
 import com.sora.sora.features.category.CategoryDetailModel
 import java.net.URLEncoder
+import androidx.compose.material3.*
 
 // Data classes
 data class Category(val id: Int, val title: String, val icon: Painter, val bgColor: Color)
 data class Product(val id: Int, val title: String, val price: String, val discountPercent: Int, val oldPrice: String, val image: Painter)
 
-//@Preview(showBackground = true)
+@Preview(showBackground = true)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen() {
     val scrollState = rememberScrollState()
@@ -111,37 +113,52 @@ fun HomeScreen() {
     // Scaffold for general layout
     Scaffold(
 //        bottomBar = { BottomNavigationBar() },
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            TopAppBar(  // This is likely line 117 or around it
+                title = {
+                    Image(
+                        painter = painterResource(R.drawable.ic_sora_logo),
+                        contentDescription = "Sora Logo",
+                        modifier = Modifier.size(80.dp)
+                    )
+                },
+            )
+        }
+
     ) { paddingValues ->
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .systemBarsPadding()
+                .padding(top = vFactor(76))
+
+
                 .verticalScroll(scrollState)
         ) {
-            WelcomeTopBar()
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(30.dp))
+
+
             BannerSlider()
             Column(
                 modifier = Modifier
                     .fillMaxSize()
             ){
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(vFactor(10)))
                 CategorySection(categories)
-                Spacer(modifier = Modifier.height(24.dp))
-                ProductSection(title = AppTexts.soraDeals, products = newArrivals,categoryList = categoryList)
+                Spacer(modifier = Modifier.height(vFactor(35)))
+                ProductSection(title = AppTexts.newArrivals, products = newArrivals,categoryList = categoryList)
                 Spacer(modifier = Modifier.height(24.dp))
                 ProductSection(title = "Clothings", products = clothingProducts,categoryList = categoryList)
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(vFactor(30)))
                 OfferCard()
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(vFactor(30)))
                 ProductSection(title = "Towels", products = towels,categoryList = categoryList)
-                Spacer(modifier = Modifier.height(48.dp)) // extra bottom padding
+                Spacer(modifier = Modifier.height(24.dp))
                 ProductSection(title = AppTexts.soraDeals, products = towels,categoryList = categoryList)
-                Spacer(modifier = Modifier.height(48.dp)) // extra bottom padding
+                Spacer(modifier = Modifier.height(24.dp))
                 ProductSection(title = "Cups & Mugs", products = mugs,categoryList = categoryList)
-                Spacer(modifier = Modifier.height(48.dp)) // extra bottom padding
+                Spacer(modifier = Modifier.height(24.dp))
                 ProductSection(title = "Discount Product", products = discountProducts,categoryList = categoryList)
                 Spacer(modifier = Modifier.height(100.dp)) // extra bottom padding
             }
@@ -230,12 +247,12 @@ fun BannerSlider(
             state = pagerState,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp)
+                .height(230.dp)
         ) { page ->
             Box(
                 Modifier
                     .fillMaxWidth()
-                    .height(200.dp)
+                    .height(220.dp)
             ) {
                 Image(
                     painter = painterResource(bannerImages[page]),
@@ -250,13 +267,13 @@ fun BannerSlider(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(horizontal = 16.dp)
-                        .padding(top = 32.dp)
+                        .padding(top = 35.dp)
                         .align(Alignment.Center)
                 ) {
                     CustomMontserratText(
                         text = "Effortless Style, Timeless Elegance",
                         color = Color.Black,
-                        fontSize = 16.sp,
+                        fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         maxLines = 3,
                         modifier = Modifier
@@ -268,14 +285,13 @@ fun BannerSlider(
                         color = Color.Black,
                         fontSize = 14.sp,
                         maxLines = 3,
-                        modifier = Modifier.padding(bottom = 16.dp).widthIn(max = 200.dp)
+                        modifier = Modifier.padding(bottom = 8.dp).widthIn(max = 230.dp)
                     )
                     Button(
                         onClick = {
-
                             val categoryDetailModel = CategoryDetailModel(
                                 title = "Toys",
-                                themeColor1 = "#FFFADA7A" , // e.g., "#FFFADA7A"
+                                themeColor1 = "#FFFADA7A", // e.g., "#FFFADA7A"
                                 themeColor2 = "#FFF8C844"  // e.g., "#FFFADA7A"
                             )
 
@@ -291,22 +307,21 @@ fun BannerSlider(
                         },
                         shape = RoundedCornerShape(20.dp),
                         colors = ButtonDefaults.buttonColors(PrimaryColor),
-                        contentPadding = PaddingValues(0.dp), // Remove internal padding
-                        modifier = Modifier
-                            .width(105.dp) // Make button stretch across
-                            .height(28.dp) // Adjust button height as needed
-
+                        contentPadding = PaddingValues(horizontal = 18.dp, vertical = 0.dp) // Remove internal vertical padding
                     ) {
-                        CustomMontserratText(
-                            text = "Explore Now",
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White,
-                            fontSize = 12.sp,
+                        Box(modifier = Modifier.padding(vertical = 0.dp)) { // If necessary, adjust padding for CustomMontserratText
+                            CustomMontserratText(
+                                text = "Explore Now",
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White,
+                                fontSize = 12.sp,
+                                textAlign = TextAlign.Center
 
-//                        modifier = Modifier.fillMaxSize(), // Ensure text is centered within button
-                            textAlign = TextAlign.Center
-                        )
+                            )
+                        }
                     }
+
+
 
 
                 }
@@ -486,7 +501,7 @@ fun CategorySection(
             CustomMontserratText(
                 text = AppTexts.categories,
                 fontWeight = FontWeight.ExtraBold,
-                fontSize = 16.sp,
+                fontSize = 20.sp,
                 color = Color.Black,
             )
             CustomMontserratText(

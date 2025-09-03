@@ -68,18 +68,28 @@ fun OrderDetailScreen(status: String ="Processing", ) {
         OrderItem("Brown Men Full T-shirt", "KD 5.500", 1, R.drawable.img_temp_kids_toy),
         OrderItem("Basket of clean towels", "KD 5.500", 1, R.drawable.img_temp_wooden_building)
     )
+    val orderDetails = listOf(
+        OrderDetail("Order status", orderStatusEnum?.text ?: "Unknown", true),
+        OrderDetail("Order ID", orderId),
+        OrderDetail("Purchase Date", purchaseDate),
+        OrderDetail("Transaction ID", transactionId),
+        OrderDetail("Total Amount", totalAmount),
+        OrderDetail("Shipping Method", shippingMethod)
+    )
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color.White)) {
         CustomAppBar(
+
             title = "Order Details",
             onBackClick = {
                 // Handle back click, navigate back or pop from the navigation stack
                 navController.popBackStack()
             },
-            modifier = Modifier.align(Alignment.TopCenter)// Aligning app bar at the top
+            modifier = Modifier.align(Alignment.TopCenter,)
+                .padding(bottom = vFactor(45))// Aligning app bar at the top
         )
         LazyColumn(
             modifier = Modifier
@@ -91,31 +101,33 @@ fun OrderDetailScreen(status: String ="Processing", ) {
         ) {
             item {
 
-                // Back Button Section
-
-
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(vFactor(20)))
 
                 CustomMontserratText(
                     text = "Order Details",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight(700),
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight(600),
                     color = PrimaryColor
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+
                 // Order Detail Rows
-                OrderDetailRow(
-                    label = "Order status",
-                    value = orderStatusEnum?.text ?: "Unknown",
-                    status = true
-                )
-                OrderDetailRow(label = "Order Id", value = orderId)
-                OrderDetailRow(label = "Purchase Date", value = purchaseDate)
-                OrderDetailRow(label = "Transaction ID", value = transactionId)
-                OrderDetailRow(label = "Total Amount", value = totalAmount)
-                OrderDetailRow(label = "Shipping Method", value = shippingMethod)
+//                OrderDetailRow(
+//                    label = "Order status",
+//                    value = orderStatusEnum?.text ?: "Unknown",
+//                    status = true
+//                )
+                orderDetails.forEach { orderDetail ->
+                    OrderDetailRow(
+                        label = orderDetail.label,
+                        value = orderDetail.value,
+                        status = orderDetail.status
+                    )
+                    Spacer(modifier = Modifier.height(vFactor(8)))
+                }
+
 
                 Spacer(modifier = Modifier.height(vFactor(28)))
 
@@ -133,9 +145,9 @@ fun OrderDetailScreen(status: String ="Processing", ) {
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(vFactor(8)))
                 CustomMontserratText("$contactPhone", fontSize = 14.sp, color = AppTextGray)
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(vFactor(8)))
                 CustomMontserratText("$contactAddress", fontSize = 14.sp, color = AppTextGray)
 
                 Spacer(modifier = Modifier.height(vFactor(28)))
@@ -153,14 +165,16 @@ fun OrderDetailScreen(status: String ="Processing", ) {
                 items.forEach { item ->
 
                     // Depending on the order status, display the appropriate item card
-                    if (orderStatusEnum == OrderStatusEnum.Processing ||
-                        orderStatusEnum == OrderStatusEnum.Shipped ||
-                        orderStatusEnum == OrderStatusEnum.Canceled
-                    ) {
+//                    if (orderStatusEnum == OrderStatusEnum.Processing ||
+//                        orderStatusEnum == OrderStatusEnum.Shipped ||
+//                        orderStatusEnum == OrderStatusEnum.Canceled
+//                    ) {
                         OrderDetailCard(item)
-                    } else {
-                        OrderDetailReviewCard(item)
-                    }
+//                    }
+//                    else {
+//
+//                        OrderDetailReviewCard(item)
+//                    }
 
                     // Add 12dp height spacing after each item
                     Spacer(modifier = Modifier.height(vFactor(12)))
@@ -431,7 +445,9 @@ fun OrderDetailRow(label: String, value: String, status: Boolean = false) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Box(modifier = Modifier.width(200.dp)) {
-            CustomMontserratText(label, color = Color(0xB21C0F0C), fontSize = 14.sp,fontWeight = FontWeight(400))
+            CustomMontserratText(
+                label, color = Color(0xB21C0F0C),
+                fontSize = 14.sp,fontWeight = FontWeight(500))
         }
 
 
@@ -453,7 +469,7 @@ fun OrderDetailCard(order: OrderItem) {
         modifier = Modifier
             .shadow(elevation = 24.dp, spotColor = Color(0x0D000000), ambientColor = Color(0x0D000000))
             .border(width = 1.dp, color = Color.Black.copy(alpha = 0.1f), shape = RoundedCornerShape(size = 15.dp))
-            .padding(1.dp)
+            .padding(vertical = vFactor(8), horizontal = hFactor(6))
             .fillMaxWidth()
             .height(vFactor(80))
             .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(size = 15.dp)),
@@ -471,19 +487,21 @@ fun OrderDetailCard(order: OrderItem) {
                 modifier = Modifier
                     .weight(1f)
 
+
             ) {
-                Row() {
+                Row(
+
+                ) {
                     // Product Image
                     Image(
                         painter = painterResource(id = order.image),
                         contentDescription = "Product Image",
-
-                        modifier =
-                            Modifier
-                                .width(74.dp)
-                                .height(74.dp)
-                                .background(color = ImageBackgroundColor, shape = RoundedCornerShape(size = 8.dp))
-                                .padding(start = 4.32432.dp, top = 4.32432.dp, end = 4.32432.dp, bottom = 4.32432.dp)
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                            .width(80.dp)
+                            .height(80.dp)
+                            .background(color = ImageBackgroundColor, shape = RoundedCornerShape(size = 8.dp))
+                            .padding(start = 4.32432.dp, top = 4.32432.dp, end = 4.32432.dp, bottom = 4.32432.dp)
                     )
                     Spacer(modifier = Modifier.width(hFactor(10)))
 
@@ -491,13 +509,13 @@ fun OrderDetailCard(order: OrderItem) {
                         // Product Name
                         CustomMontserratText(
                             text = order.name,
-                            fontWeight = FontWeight(500),
-                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 16.sp,
                             color = Color.Black,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
-                        Spacer(modifier = Modifier.height(vFactor(4)))
+                        Spacer(modifier = Modifier.height(vFactor(8)))
 
                         // Order Status Button
 
@@ -548,7 +566,6 @@ fun OrderDetailReviewCard(order: OrderItem) {
                     .padding(16.dp)
             ) {
                 Row() {
-                    // Product Image
                     Image(
                         painter = painterResource(id = order.image),
                         contentDescription = "Product Image",
@@ -637,7 +654,11 @@ data class OrderItem(
     val image: Int // Image resource for the product
 )
 
-
+data class OrderDetail(
+    val label: String,
+    val value: String,
+    val status: Boolean = false // Only use if status is relevant
+)
 
 
 //package com.sora.sora.features.profile.screen

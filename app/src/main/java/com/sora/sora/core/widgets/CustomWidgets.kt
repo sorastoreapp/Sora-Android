@@ -127,7 +127,7 @@ fun ProductSection(title: String, products: List<Product>, categoryList: List<St
             CustomMontserratText(
                 text = title,
                 fontWeight = FontWeight.ExtraBold,
-                fontSize = 16.sp,
+                fontSize = 20.sp,
                 color = Color.Black,
             )
             CustomMontserratText(
@@ -569,8 +569,8 @@ fun ProductCard(
     }
 ) {
     val context = LocalContext.current // Correctly accessed inside composable
-    val cardWidth = 190.dp
-    val cardHeight = 263.dp
+    val cardWidth = 200.dp
+    val cardHeight = 285.dp
     var isFavourite by remember { mutableStateOf(isFavoriteScreen) }
     val iconSize = 36.dp
     Card(
@@ -594,7 +594,7 @@ fun ProductCard(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(cardHeight * 0.6f)
+                    .height(cardHeight * 0.68f)
                     .background(ProductCardColor)
             ) {
                 Image(
@@ -688,14 +688,15 @@ fun ProductCard(
             Column(
                 Modifier
                     .fillMaxWidth()
-                    .padding(start = 8.dp, end = 8.dp, top = 16.dp, bottom = 8.dp)
+                    .padding(start = 8.dp, end = 8.dp, top = 12.dp, bottom = 8.dp)
             ) {
                 CustomMontserratText(
                     text = product.title,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 15.sp,
+                    fontSize = 16.sp,
+                    lineHeight = 20.sp,
                     color = Color(0xFF383B3E)
                 )
 

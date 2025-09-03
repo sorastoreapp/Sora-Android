@@ -3,6 +3,8 @@ package com.sora.sora.features.profile.screen
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -13,7 +15,9 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -27,6 +31,8 @@ import com.sora.sora.core.customText.CustomMontserratText
 import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.vFactor
 import com.sora.sora.ui.theme.AppTextGray
+import com.sora.sora.ui.theme.SecondaryColor
+import com.sora.sora.ui.theme.SecondaryColor100
 
 @Preview(showBackground = true)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,61 +41,121 @@ fun PrivacyPolicyScreen() {
     val context = LocalContext.current
     var showBackPressed by remember { mutableStateOf(false) }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
+    Scaffold (
+        containerColor = Color.White,
 
-            .background(Color.White) // Background for the entire screen
+
+     modifier = Modifier
+         .background(Color.White)
+         .fillMaxSize(),
+
+        topBar = {
+
+
+
+            CenterAlignedTopAppBar(
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = Color.White
+                ),
+                modifier = Modifier.
+                padding(start = 10.dp),
+                title = {
+                    CustomMontserratText(
+                        text = "Privacy Policy",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                },
+                navigationIcon = {
+                    Row(
+                        modifier = Modifier
+                            .pointerInput(Unit) {
+                                detectTapGestures(
+                                    onPress = { offset ->
+
+                                            navController?.popBackStack()
+
+                                        awaitRelease()
+                                    }
+                                )
+                            },
+
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                       Box(
+                            modifier = Modifier
+                                .size(45.dp)
+                                .clip(CircleShape)
+                                .background(SecondaryColor100)
+
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.ArrowBack,
+                                contentDescription = "Back",
+                                tint = SecondaryColor,
+                                modifier = Modifier
+                                    .align(Alignment.Center)
+                                    .size(24.dp)
+                            )
+                        }
+                    }
+                }
+
+                )
+
+        },
+
     ) {
-        CustomAppBar(
-            title = "Privacy Policies",
-            onBackClick = {
-                // Handle back click, navigate back or pop from the navigation stack
-                navController.popBackStack()
-            },
-            modifier = Modifier.align(Alignment.TopCenter) // Aligning app bar at the top
-        )
+            paddingValues ->
+
         // Column for text content
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 76.dp) //
-
-                .padding(horizontal = 20.dp, )
-                .verticalScroll(rememberScrollState())//  Makes the content scrollable
+        Box(
+            modifier = Modifier.fillMaxSize()
         ) {
-            // Back Button Section
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 70.dp) //
+
+                    .padding(horizontal = 20.dp)
+                    .verticalScroll(rememberScrollState())//  Makes the content scrollable
+            ) {
+                // Back Button Section
 
 
-            Spacer(modifier = Modifier.height(vFactor(45)))
-            QuestionAnswer(
-                question = "Introduction",
-                answer = "Welcome to Sora Store, a premier e-commerce platform in Kuwait. We are committed to protecting your privacy and ensuring the security of your personal data. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application. Please read this policy carefully to understand our practices."
+                Spacer(modifier = Modifier.height(vFactor(45)))
+                QuestionAnswer(
+                    question = "Introduction",
+                    answer = "Welcome to Sora Store, a premier e-commerce platform in Kuwait. We are committed to protecting your privacy and ensuring the security of your personal data. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application. Please read this policy carefully to understand our practices."
+                )
+                QuestionAnswer(
+                    question = "Acceptance of Privacy Policy",
+                    answer = "By using Sora Store, you consent to the collection and use of your information in accordance with this Privacy Policy. If you do not agree with the terms, please do not use the application."
+                )
+                QuestionAnswer(
+                    question = "Eligibility",
+                    answer = "• The application is intended for individuals aged 12 years and above. Users under the age of 18 require parental or guardian consent to use the application.\n" +
+                            "• By using the app, you confirm that you meet this age requirement and have the legal capacity to agree to these terms."
+                )
+
+
+
+                QuestionAnswer(
+                    question = "Information We Collect",
+                    answer = "We collect the following categories of information:"
+                )
+
+
+            }
+            // Background image at the bottom
+            BackgrountOtherImage(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
             )
-            QuestionAnswer(
-                question = "Acceptance of Privacy Policy",
-                answer = "By using Sora Store, you consent to the collection and use of your information in accordance with this Privacy Policy. If you do not agree with the terms, please do not use the application."
-            )
-            QuestionAnswer(
-                question = "Eligibility",
-                answer = "• The application is intended for individuals aged 12 years and above. Users under the age of 18 require parental or guardian consent to use the application.\n" +
-                        "• By using the app, you confirm that you meet this age requirement and have the legal capacity to agree to these terms."
-            )
-
-
-
-      QuestionAnswer(
-          question = "Information We Collect",
-          answer = "We collect the following categories of information:"
-      )
-
-
         }
 
-        // Background image at the bottom
-        BackgrountOtherImage(
-            modifier = Modifier.align(Alignment.BottomCenter)
-                .fillMaxWidth()
-        )
+
     }
 }

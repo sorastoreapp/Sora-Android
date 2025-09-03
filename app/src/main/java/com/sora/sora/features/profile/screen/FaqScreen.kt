@@ -101,16 +101,16 @@ fun QuestionAnswer(question:String, answer:String) {
     Column(){
         CustomMontserratText(
             text = question,
-            fontWeight = FontWeight(600),
-            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+            fontSize = 18.sp,
             color = Color.Black
         )
-        Spacer(modifier = Modifier.height(16.dp))
+
         CustomMontserratText(
             text = answer,
-            fontSize = 14.sp,
-            color = AppTextGray,
-            fontWeight = FontWeight(400)
+            fontSize = 18.sp,
+            color = Color.Black,
+            fontWeight = FontWeight.Medium
         )
 
         Spacer(modifier = Modifier.height(24.dp))
