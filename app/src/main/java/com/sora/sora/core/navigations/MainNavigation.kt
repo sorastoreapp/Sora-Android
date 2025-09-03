@@ -17,6 +17,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.sora.sora.AccountDetailsScreen
 import com.sora.sora.core.temp.SeeAllModel
+import com.sora.sora.core.snackbar.AnimatedTopSnackbarDemo
+
 import com.sora.sora.features.static_screens.OnboardingScreen
 import com.sora.sora.core.temp.TempCustomData
 import com.sora.sora.features.category.CategoryDetailModel
@@ -71,7 +73,7 @@ fun MainNavigation(modifier: Modifier = Modifier) {
 
     NavHost(
         navController = navController,
-        startDestination = Dest.DashBoardScreen::class.toRoute(),
+        startDestination = Dest.AnimatedTopSnackbarDemo::class.toRoute(),
         modifier = modifier
     ) {
          composable(Dest.OnboardingScreen::class.toRoute()) {
@@ -185,6 +187,9 @@ fun MainNavigation(modifier: Modifier = Modifier) {
         composable(Dest.CartScreen::class.toRoute()) { CartScreen()}
         composable(Dest.ItemDetailScreen::class.toRoute()) { ItemDetailScreen()}
 //        composable(Dest.CategoryDetailScreen::class.toRoute()) { CategoryDetailScreen()}
+
+        composable(Dest.AnimatedTopSnackbarDemo::class.toRoute()) { AnimatedTopSnackbarDemo()}
+
 
         composable(Dest.ProfileScreen::class.toRoute()) { ProfileScreen()}
         composable(Dest.OrdersScreen::class.toRoute()) { OrdersScreen()}
