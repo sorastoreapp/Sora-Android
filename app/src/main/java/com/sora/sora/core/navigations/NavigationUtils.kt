@@ -98,6 +98,9 @@ sealed class Dest{
     @Serializable
     data object PaymentSuccessScreen : Dest()
 
+    @Serializable
+    data object AnimatedTopSnackbarDemo : Dest()
+
 }
 
 // -- 

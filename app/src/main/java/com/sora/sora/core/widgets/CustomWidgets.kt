@@ -76,6 +76,7 @@ import com.sora.sora.R
 import com.sora.sora.core.AppTexts
 import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.temp.SeeAllModel
+import com.sora.sora.ui.theme.IconBackgroundColor
 import com.sora.sora.ui.theme.ProductCardColor
 import kotlinx.coroutines.delay
 
@@ -571,7 +572,7 @@ fun ProductCard(
     val cardWidth = 190.dp
     val cardHeight = 263.dp
     var isFavourite by remember { mutableStateOf(isFavoriteScreen) }
-
+    val iconSize = 36.dp
     Card(
         modifier = Modifier
             .width(cardWidth)
@@ -610,14 +611,14 @@ fun ProductCard(
                 Box(
                     modifier = Modifier
                         .padding(8.dp)
-                        .size(30.dp)
-                        .background(Color(0xFFF2ECE7), CircleShape)
+                        .size(iconSize)
+                        .background(IconBackgroundColor, CircleShape)
                         .align(Alignment.TopStart)
                         .clickable { onFavorite() },
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        if (isFavourite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                       painter =  if (isFavourite) painterResource(R.drawable.ic_selected_favorite ) else painterResource(R.drawable.ic_favorite_outline),
                         contentDescription = null,
                         tint = PrimaryColor,
                         modifier = Modifier
@@ -637,8 +638,8 @@ fun ProductCard(
                 Box(
                     modifier = Modifier
                         .padding(8.dp)
-                        .size(30.dp)
-                        .background(Color(0xFFF2ECE7), CircleShape)
+                        .size(iconSize)
+                        .background(IconBackgroundColor, CircleShape)
                         .align(Alignment.TopEnd)
                         .pointerInput(Unit) {
                             detectTapGestures(
