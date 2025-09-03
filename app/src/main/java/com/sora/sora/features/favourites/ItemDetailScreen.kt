@@ -45,6 +45,8 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.sora.sora.core.customButtons.CountButton
+import com.sora.sora.core.customButtons.CustomButton
 
 import com.sora.sora.core.customButtons.PrimaryButton
 import com.sora.sora.core.customText.CustomMontserratText
@@ -68,13 +70,15 @@ fun ItemDetailScreen(
     // Example state
     var featuresExpanded by remember { mutableStateOf(true) }
     var productDetailsExpanded by remember { mutableStateOf(true) }
-    val productDescription = remember { mutableStateOf("Soft, cozy, and designed for unicorn lovers, this plush pillow adds comfort and charm to any space...") }
+    val productDescription = remember { mutableStateOf("Soft, cozy, and designed for unicorn lovers, this plush pillow adds comfort and charm to any space , Soft, cozy, and designed for unicorn lovers, this plush pillow adds comfort and charm to any space") }
     // Dummy products list
     val discountProductList = listOf(
         Product(1, "Kids Colorful car toy", "1.500", discountPercent = 20, oldPrice = "2.500",    painterResource(R.drawable.img_temp_kids_toy)),
         Product(2, "Brown Men Full T-Short", "1.500", discountPercent = 20, oldPrice = "2.500",       painterResource(R.drawable.img_temp_tshirt)),
         Product(3, "Stainless Steel Water Bottle", "1.500", discountPercent = 20, oldPrice = "2.500", painterResource(R.drawable.img_temp_bottel))
     )
+    var textExpanded by remember { mutableStateOf(false) }
+
 
     Column(
         modifier = Modifier
@@ -277,15 +281,15 @@ fun ItemDetailScreen(
                   text = productDescription.value,
                   fontSize = 14.sp,
                   color = AppTextGray,
-                  maxLines = 3,
+                  maxLines = if(textExpanded)  100 else  3,
                   overflow = TextOverflow.Ellipsis
               )
               CustomMontserratText(
-                  text = "Read More",
+                  text = if(textExpanded) "Read Less" else "Read More",
                   fontSize = 13.sp,
                   fontWeight = FontWeight.Bold,
                   color = Color(0xFF7B3F00),
-                  modifier = Modifier.clickable { /* Expand full description */ }
+                  modifier = Modifier.clickable { textExpanded = !textExpanded}
               )
 
               Spacer(modifier = Modifier.height(20.dp))
@@ -317,42 +321,10 @@ fun ItemDetailScreen(
               //
               //        Spacer(modifier = Modifier.height(20.dp))
 
-              // Add To Cart Button
-              //        Button(
-              //            onClick = { /* Add to cart */ },
-              //            modifier = Modifier
-              //                .fillMaxWidth()
-              //                .height(64.dp),
-              //            shape = RoundedCornerShape(16.dp),
-              //            colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF7B3F00))
-              //        ) {
-              //            Text("Add To Cart", color = Color.White, fontSize = 18.sp)
-              //        }
+
+              CountButton()
 
 
-
-
-
-              //        Spacer(modifier = Modifier.height(12.dp))
-              //
-              //        Divider(color = AppGray, thickness = 1.dp)
-
-              //        Spacer(modifier = Modifier.height(20.dp))
-              //
-              //        // Available Sizes
-              //        Text("Available Sizes", fontWeight = FontWeight.Bold, fontSize = 18.sp)
-              //        Spacer(modifier = Modifier.height(12.dp))
-              //        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-              //            listOf("12 inches", "18 inches", "24 inches").forEach { size ->
-              //                Box(
-              //                    modifier = Modifier
-              //                        .background(Color(0xFFF2F2F2), RoundedCornerShape(16.dp))
-              //                        .padding(horizontal = 16.dp, vertical = 8.dp)
-              //                ) {
-              //                    Text(size, fontSize = 14.sp, color = AppTextGray)
-              //                }
-              //            }
-              //        }
 
               Spacer(modifier = Modifier.height(24.dp))
 
@@ -373,7 +345,8 @@ fun ItemDetailScreen(
                           Text("Features", fontWeight = FontWeight.Bold, fontSize = 18.sp)
                           Icon(
                               imageVector = if (featuresExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                              contentDescription = null
+                              contentDescription = null,
+                              tint = PrimaryColor
                           )
                       }
                       if (featuresExpanded) {
@@ -402,10 +375,12 @@ fun ItemDetailScreen(
                           verticalAlignment = Alignment.CenterVertically,
                           horizontalArrangement = Arrangement.SpaceBetween
                       ) {
-                          Text("Product Details", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                          CustomMontserratText("Product Details", fontWeight = FontWeight.Bold, fontSize = 18.sp)
                           Icon(
                               imageVector = if (productDetailsExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                              contentDescription = null
+                              contentDescription = null,
+                              tint = PrimaryColor
+
                           )
                       }
                       if (productDetailsExpanded) {
@@ -449,7 +424,7 @@ fun FeatureItem(text: String) {
             modifier = Modifier.size(18.dp)
         )
         Spacer(modifier = Modifier.width(8.dp))
-        CustomMontserratText(text, fontSize = 12.sp, color = AppTextGray)
+        CustomMontserratText(text, fontSize = 14.sp, color = AppTextGray)
     }
 }
 
@@ -468,7 +443,7 @@ fun ProductDetailRow(label: String, value: String) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         CustomMontserratText(label, color = Color.Gray, fontSize = 12.sp)
-        CustomMontserratText(value, fontSize = 12.sp, fontWeight = FontWeight.Normal, textAlign = TextAlign.End)
+        CustomMontserratText(value, fontSize = 12.sp, fontWeight = FontWeight.W500, textAlign = TextAlign.End)
     }
 }
 
@@ -544,85 +519,95 @@ fun ItemSlider(
     val pagerState = rememberPagerState()
 
     // Only ONE coroutine that never interrupts in-progress scrolls
-    LaunchedEffect(pagerState) {
-        while (true) {
-            if (!pagerState.isScrollInProgress) {
-                kotlinx.coroutines.delay(2000)
-                // If still not scrolling and on same page, animate
-                if (!pagerState.isScrollInProgress) {
-                    val nextPage = (pagerState.currentPage + 1) % bannerImages.size
-                    pagerState.animateScrollToPage(
-                        page = nextPage,
-                        animationSpec = tween(
-                            durationMillis = 5000,   // 800ms for quick yet smooth
-                            easing = FastOutSlowInEasing // Makes slide look ‘material’
-                        )
-                    )
-                }
-            }
-            // Check every 100ms to avoid busy looping
-            kotlinx.coroutines.delay(100)
-        }
-    }
+//    LaunchedEffect(pagerState) {
+//        while (true) {
+//            if (!pagerState.isScrollInProgress) {
+//                kotlinx.coroutines.delay(4000)
+//                // If still not scrolling and on same page, animate
+//                if (!pagerState.isScrollInProgress) {
+//                    val nextPage = (pagerState.currentPage + 1) % bannerImages.size
+//                    pagerState.animateScrollToPage(
+//                        page = nextPage,
+//                        animationSpec = tween(
+//                            durationMillis = 5000,   // 800ms for quick yet smooth
+//                            easing = FastOutSlowInEasing // Makes slide look ‘material’
+//                        )
+//                    )
+//                }
+//            }
+//            // Check every 100ms to avoid busy looping
+//            kotlinx.coroutines.delay(100)
+//        }
+//    }
 
     Column(
         modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        HorizontalPager(
-            count = bannerImages.size,
-            state = pagerState,
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(ProductCardColor)
                 .height(300.dp)
-        ) { page ->
-            Box(
+
+        ) {
+            HorizontalPager(
+                count = bannerImages.size,
+                state = pagerState,
                 modifier = Modifier
                     .fillMaxWidth()
+                    .background(ProductCardColor)
                     .height(300.dp)
+            ) { page ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(300.dp)
+                ) {
+                    Image(
+                        painter = painterResource(bannerImages[page]),
+                        contentDescription = "product.title",
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .fillMaxSize()
+                    )
+
+            }
+        }
+
+            // Heart
+            Box(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .size(40.dp)
+                    .background(IconBackgroundColor, CircleShape)
+                    .align(Alignment.TopStart)
+                    .clickable {
+                        //                            onFavorite()
+                    },
+                contentAlignment = Alignment.Center
             ) {
                 Image(
-                    painter = painterResource(bannerImages[page]),
-                    contentDescription = "product.title",
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .fillMaxSize()
+                    painter = painterResource(R.drawable.ic_full_screen),
+                    contentDescription = null,
+                    modifier = Modifier.padding(7.dp)
                 )
-                // Heart
+            }
+
+            // Share
+            Column(modifier = Modifier.align(Alignment.TopEnd)) {
                 Box(
                     modifier = Modifier
                         .padding(8.dp)
                         .size(40.dp)
                         .background(IconBackgroundColor, CircleShape)
-                        .align(Alignment.TopStart)
                         .clickable {
-//                            onFavorite()
-                        },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Image(
-                        painter = painterResource(R.drawable.ic_full_screen),
-                        contentDescription = null,
-                        modifier = Modifier.padding(7.dp)
-                    )
-                }
-
-                // Share
-                Column( modifier = Modifier.align(Alignment.TopEnd)){
-                    Box(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .size(40.dp)
-                        .background(IconBackgroundColor, CircleShape)
-                        .clickable {
-//                            onShare()
+                            //                            onShare()
                         },
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        Icons.Default.FavoriteBorder,
+                        painter = painterResource(R.drawable.ic_favorite_outline,),
                         contentDescription = null,
                         tint = PrimaryColor,
                         modifier = Modifier.padding(7.dp)
@@ -630,47 +615,46 @@ fun ItemSlider(
 
                 }
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-                    Box(
+                Box(
                     modifier = Modifier
                         .padding(8.dp)
                         .size(40.dp)
                         .background(IconBackgroundColor, CircleShape)
                         .clickable {
-//                            onShare()
+                            //                            onShare()
                         },
                     contentAlignment = Alignment.Center
                 ) {
-                        Icon(
-                            Icons.Default.Share,
-                            contentDescription = null,
-                            tint = PrimaryColor,
-                            modifier = Modifier.padding(7.dp)
-                        )
+                    Icon(
+                        painter = painterResource(R.drawable.ic_share),
+                        contentDescription = null,
+                        tint = PrimaryColor,
+                        modifier = Modifier.padding(7.dp)
+                    )
                 }
 
-                }
+            }
 
-                Box(
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(15.dp)
+                    .align(Alignment.BottomCenter)
+
+            ) {
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(15.dp)
-                        .align(Alignment.BottomCenter)
-
+                        .wrapContentSize(Alignment.Center)
                 ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentSize(Alignment.Center)
-                    ) {
-                        FancyPagerIndicator(
-                            pagerState = pagerState,
-                            pageCount = bannerImages.size,
-                            activeColor = Color(0xFF86544E),
-                            inactiveColor = Color.LightGray
-                        )
-                    }
+                    FancyPagerIndicator(
+                        pagerState = pagerState,
+                        pageCount = bannerImages.size,
+                        activeColor = Color(0xFF86544E),
+                        inactiveColor = Color.LightGray
+                    )
                 }
             }
         }

@@ -233,13 +233,13 @@ fun AppTextField2(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier
-
             .height(height ?:60.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(20.dp))  // Set the corner radius for clipping
             .background(
                 color = TextFieldBackgroundColors,  // Background color
                 shape = RoundedCornerShape(20.dp)  // Same shape for background
+
             )
             .border(
                 width = 1.dp,

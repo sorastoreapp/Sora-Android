@@ -438,7 +438,7 @@ fun CategoryResultRow(resultCount: Int = 23, verticalPadding: Dp = 8.dp, horizon
                                 color = Color.Black,
                                 fontWeight = FontWeight.Normal
                             )
-                            Spacer(modifier = Modifier.width(8.dp)) // Space between label and value
+                            Spacer(modifier = Modifier.weight(1f))
                             CustomMontserratText(
                                 text = "${priceRange.value.first.toInt()}",
                                 fontSize = 16.sp,
@@ -471,7 +471,7 @@ fun CategoryResultRow(resultCount: Int = 23, verticalPadding: Dp = 8.dp, horizon
                                 color = Color.Black,
                                 fontWeight = FontWeight.Normal
                             )
-                            Spacer(modifier = Modifier.width(8.dp)) // Space between label and value
+                            Spacer(modifier = Modifier.weight(1f))
                             CustomMontserratText(
                                 text = "${priceRange.value.second.toInt()}",
                                 fontSize = 16.sp,
@@ -506,8 +506,8 @@ fun CategoryResultRow(resultCount: Int = 23, verticalPadding: Dp = 8.dp, horizon
                             onCheckedChange = { showOffers = it },
                             enabled = switchEnabled
                         )
-
                     }
+
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Row(
@@ -552,10 +552,10 @@ fun CategoryResultRow(resultCount: Int = 23, verticalPadding: Dp = 8.dp, horizon
                             borderColor = PrimaryColor,
 
                             modifier = Modifier
-                                .width(170.dp)
+                                .width(160.dp)
                                 .height(60.dp)
                         )
-                        Spacer(modifier = Modifier.weight(2f))
+                        Spacer(modifier = Modifier.weight(1f))
 
                         PrimaryButton(
                             text = "Clear",
@@ -569,7 +569,7 @@ fun CategoryResultRow(resultCount: Int = 23, verticalPadding: Dp = 8.dp, horizon
                                 }
                             },
                             modifier = Modifier
-                                .width(170.dp)
+                                .width(160.dp)
                                 .height(60.dp)
                         )
                 }
