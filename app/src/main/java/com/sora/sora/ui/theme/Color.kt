@@ -12,8 +12,8 @@ val AppTextColor = Color(0xFF1C0F0CB2)
 val PrimaryColorFaded = PrimaryColor.copy(alpha = 0.1f)
 val PrimaryColor100 = Color(0xFFFFF7F2)
 val SecondaryColor = Color(0xFFB77E3E)
+val SecondaryColor500 = Color(0xFFB77E3E).copy(alpha = 0.5f)
 val SecondaryColor100 = Color(0xFFFBF9F6)
-val TextFieldColorX = Color(  0xFFFBF9F6)
 val YellowApp = Color(0xFFFFAF17)
 val TextFieldColor = Color(0xFFF2F2F2) //#
 val TextFieldColor3 = Color(0xFFF8F3EE)
@@ -24,13 +24,11 @@ val DividerGray = Color(0xFFE5E5E5)
 val LightBrown = Color(0xFFFEF7F2)
 val ImageBackgroundColor = Color(0xFFF6F1EF)
 val TextFieldBackgroundColors = Color(0xFFFBF9F6)   //old background color = 0x0DB58353
-//val TextFieldBackgroundColors2  = Color(0xFFFBF9F6)
 val TextFieldBorderColors = Color(0xFFB58353)
 
 
-
-val ProductCardColor = Color(0xFFFDF6F0)
-val IconBackgroundColor = Color(0xFFF7F3ED)
+val ProductCardColor = Color(0xFFF6F1EF) //#F6F1EF  //F6F1EF
+val IconBackgroundColor =  PrimaryColor100//PrimaryColor100
 
 //
 val TextHintColor = Color.Black.copy(alpha = 0.6f)

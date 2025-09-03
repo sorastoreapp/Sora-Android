@@ -32,6 +32,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
 import com.sora.sora.core.customText.CustomMontserratText
+//import com.sora.sora.core.snackbar.AppSnackBar
+//import com.sora.sora.core.snackbar.SnackBarManager
+//import com.sora.sora.core.snackbar.SnackBarType
 import com.sora.sora.ui.theme.PrimaryColor
 import com.sora.sora.ui.theme.PrimaryColorFaded
 import com.sora.sora.core.widgets.ProductCard
@@ -100,7 +103,10 @@ fun FavoritesScreen() {
 
                     ProductCard(
                         product = product,
-                        onFavorite = { favProductList.remove(product) }, // ✅ Remove item
+                        onFavorite = {
+//                             SnackBarManager.show("Success!", "Account created")
+                            favProductList.remove(product)
+                                     }, // ✅ Remove item
                         isFavoriteScreen = true,
                         onShare = { /* … */ },
                         onAddToCart = { qty++ },
@@ -109,14 +115,17 @@ fun FavoritesScreen() {
                     )
                 }
             }
+
             else{
                FavoriteEmptyStateView()
         }
+
+
         }
+
+        // ✅ Overlay SnackBar on top of everything
+//        AppSnackBar()
+
     }
+
 }
-
-
-
-
-

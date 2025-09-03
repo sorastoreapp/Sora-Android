@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextGranularity
@@ -262,8 +263,8 @@ fun CategoryResultRow(resultCount: Int = 23, verticalPadding: Dp = 8.dp, horizon
                     IconButton(
                         onClick = {
                             coroutineScope.launch {
-                                sortSheetState.hide()
-                                showSortSheet = false
+                                filterSheetState.hide()
+                                showFilterSheet = false
                             }
                         },
                         modifier = Modifier.size(24.dp)
@@ -281,8 +282,9 @@ fun CategoryResultRow(resultCount: Int = 23, verticalPadding: Dp = 8.dp, horizon
                 Column (modifier = Modifier.padding(horizontal = hFactor(20))){
 
                      Box(modifier = Modifier.fillMaxWidth()) {
+                        val screenWidth = with(LocalConfiguration.current) { screenWidthDp.dp }
                         val trackWidth =
-                            with(LocalDensity.current) { (352.dp - 32.dp).toPx() } // slider width minus padding
+                            with(LocalDensity.current) { (screenWidth - 100.dp).toPx() } // slider width minus padding
                         val minThumbX = minValueFraction * trackWidth
                         val maxThumbX = maxValueFraction * trackWidth
                         Box(
