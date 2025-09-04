@@ -112,17 +112,27 @@ fun HomeScreen() {
 
     // Scaffold for general layout
     Scaffold(
+        containerColor = Color.White,
+
 //        bottomBar = { BottomNavigationBar() },
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize()
+            .systemBarsPadding()
+            .background(Color.White),
         topBar = {
-            TopAppBar(  // This is likely line 117 or around it
+            TopAppBar(
+
+
+                // This is likely line 117 or around it
                 title = {
                     Image(
                         painter = painterResource(R.drawable.ic_sora_logo),
                         contentDescription = "Sora Logo",
                         modifier = Modifier.size(80.dp)
+                            .background(Color.White),
+
                     )
                 },
+                modifier = Modifier.background(Color.White)
             )
         }
 
