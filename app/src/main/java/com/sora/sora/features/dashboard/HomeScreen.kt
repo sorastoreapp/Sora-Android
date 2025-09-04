@@ -52,6 +52,7 @@ import com.sora.sora.core.vFactor
 import com.sora.sora.features.category.CategoryDetailModel
 import java.net.URLEncoder
 import androidx.compose.material3.*
+import androidx.compose.material3.AlertDialogDefaults.containerColor
 
 // Data classes
 data class Category(val id: Int, val title: String, val icon: Painter, val bgColor: Color)
@@ -120,8 +121,9 @@ fun HomeScreen() {
             .background(Color.White),
         topBar = {
             TopAppBar(
-
-
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.White
+                ),
                 // This is likely line 117 or around it
                 title = {
                     Image(
@@ -142,11 +144,9 @@ fun HomeScreen() {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = vFactor(76))
-
-
                 .verticalScroll(scrollState)
         ) {
-            Spacer(modifier = Modifier.height(30.dp))
+//            Spacer(modifier = Modifier.height(30.dp))
 
 
             BannerSlider()

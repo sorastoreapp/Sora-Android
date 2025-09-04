@@ -2,6 +2,7 @@ package com.sora.sora.core.navigations
 
 import com.sora.sora.features.category.screen.CategoryDetailScreen
 import CreateAccountScreen
+import EmptyCartScreen
 import ForgetPasswordScreen
 import NewPasswordScreen
 import OtpScreen
@@ -73,7 +74,7 @@ fun MainNavigation(modifier: Modifier = Modifier) {
 
     NavHost(
         navController = navController,
-        startDestination = Dest.DashBoardScreen::class.toRoute(),
+        startDestination = Dest.EmptyCartScreen::class.toRoute(),
         modifier = modifier
     ) {
          composable(Dest.OnboardingScreen::class.toRoute()) {
@@ -188,7 +189,7 @@ fun MainNavigation(modifier: Modifier = Modifier) {
         composable(Dest.ItemDetailScreen::class.toRoute()) { ItemDetailScreen()}
 //        composable(Dest.CategoryDetailScreen::class.toRoute()) { CategoryDetailScreen()}
 
-        composable(Dest.AnimatedTopSnackbarDemo::class.toRoute()) { AnimatedTopSnackbarDemo()}
+
 
 
         composable(Dest.ProfileScreen::class.toRoute()) { ProfileScreen()}
@@ -212,10 +213,11 @@ fun MainNavigation(modifier: Modifier = Modifier) {
                 OrderDetailScreen(status = status)
             }
         }
+
         composable(Dest.PaymentSuccessScreen::class.toRoute()) { PaymentSuccessScreen() }
 
-
-
+        ///TESTING ONLY///
+        composable(Dest.AnimatedTopSnackbarDemo::class.toRoute()) { AnimatedTopSnackbarDemo()}
+        composable(Dest.EmptyCartScreen::class.toRoute()) { EmptyCartScreen()}
     }
-
 }
