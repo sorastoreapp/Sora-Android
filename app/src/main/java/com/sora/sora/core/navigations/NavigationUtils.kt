@@ -98,8 +98,21 @@ sealed class Dest{
     @Serializable
     data object PaymentSuccessScreen : Dest()
 
+
+
+
+
+
+
+
+
+
+    ////**TESTING PURPOSE ONLY*/
     @Serializable
     data object AnimatedTopSnackbarDemo : Dest()
+
+    @Serializable
+    data object EmptyCartScreen : Dest()
 
 }
 
