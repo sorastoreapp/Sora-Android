@@ -114,6 +114,9 @@ sealed class Dest{
     @Serializable
     data object EmptyCartScreen : Dest()
 
+    @Serializable
+    data object ExampleScreen : Dest()
+
 }
 
 // -- 

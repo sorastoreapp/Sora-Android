@@ -10,11 +10,15 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,62 +45,88 @@ import com.sora.sora.ui.theme.AppTextGray
 import com.sora.sora.ui.theme.SecondaryColor
 import com.sora.sora.ui.theme.SecondaryColor100
 import com.sora.sora.ui.theme.TextFieldBackgroundColors
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterialApi::class)
 @Preview(showBackground = true)
 @Composable
 fun NotificationScreen() {
     var showBackPressed by remember { mutableStateOf(false) }
+    var isRefreshing by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = isRefreshing,
+        onRefresh = {
+            scope.launch {
+                isRefreshing = true
+                delay(2000) // simulate network call
+                isRefreshing = false
+            }
+        }
+    )
+    Box {
 
-    Column {
-        CustomAppBar(
-            title = "Notifications",
-            onBackClick = {
-                // Handle back click, navigate back or pop from the navigation stack
-                navController.popBackStack()
-            },
-
-            )
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
-                .padding(horizontal = hFactor(20))// Background for the entire screen
+                .pullRefresh(pullRefreshState)
         ) {
-
-            // Image Background
-            Spacer(modifier = Modifier.height(vFactor(16)))
-
-            // Notifications List
-            val notifications = listOf(
-                NotificationItem(
-                    icon = R.drawable.ic_notification,
-                    title = "Big Savings Alert!",
-                    description = "Get up to 50% off on your favorite toys & kids' accessories. Hurry, limited time only",
-                    time = "10 hr ago"
-                ),
-//                NotificationItem(
-//                    icon = R.drawable.ic_truck,
-//                    title = "Order Delivered!",
-//                    description = "Yay! Your order #12345 has been delivered. We hope your little one loves it! Let us know what you think!",
-//                    time = "Yesterday"
-//                ),
-                NotificationItem(
-                    icon = R.drawable.ic_favorite_outline,
-                    title = "New Arrivals Just Landed!",
-                    description = "Discover the latest toys & trendy accessories for your little ones. Shop now!",
-                    time = "Yesterday"
+            CustomAppBar(
+                title = "Notifications",
+                isBackButton = true,
+                onBackClick = {
+                    // Handle back click, navigate back or pop from the navigation stack
+                    navController.popBackStack()
+                },
                 )
-            )
-
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(vFactor(12))
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.White)
+                    .padding(horizontal = hFactor(20))// Background for the entire screen
             ) {
-                items(notifications) { item ->
-                    NotificationCard(item)
+
+                // Image Background
+                Spacer(modifier = Modifier.height(vFactor(16)))
+
+                // Notifications List
+                val notifications = listOf(
+                    NotificationItem(
+                        icon = R.drawable.ic_notification,
+                        title = "Big Savings Alert!",
+                        description = "Get up to 50% off on your favorite toys & kids' accessories. Hurry, limited time only",
+                        time = "10 hr ago"
+                    ),
+                    //                NotificationItem(
+                    //                    icon = R.drawable.ic_truck,
+                    //                    title = "Order Delivered!",
+                    //                    description = "Yay! Your order #12345 has been delivered. We hope your little one loves it! Let us know what you think!",
+                    //                    time = "Yesterday"
+                    //                ),
+                    NotificationItem(
+                        icon = R.drawable.ic_favorite_outline,
+                        title = "New Arrivals Just Landed!",
+                        description = "Discover the latest toys & trendy accessories for your little ones. Shop now!",
+                        time = "Yesterday"
+                    )
+                )
+
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(vFactor(12))
+                ) {
+                    items(notifications) { item ->
+                        NotificationCard(item)
+                    }
                 }
             }
         }
+        PullRefreshIndicator(
+            refreshing = isRefreshing,
+            state = pullRefreshState,
+            modifier = Modifier.align(Alignment.TopCenter)
+        )
     }
 }
 

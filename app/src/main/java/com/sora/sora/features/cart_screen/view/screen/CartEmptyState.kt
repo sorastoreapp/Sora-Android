@@ -9,7 +9,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Add
@@ -88,150 +90,119 @@ fun EmptyCartScreen(
         bagIdleAnim = true
     }
 
-    androidx.compose.material.Scaffold(
-        backgroundColor = Color.White,
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
 
         modifier = Modifier
-            .background(Color.White)
-            .fillMaxSize(),
-
-        topBar = {
-
-
-            CenterAlignedTopAppBar(
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color.White
-                ),
-                modifier = Modifier.padding(0.dp),
-                title = {
-                    CustomMontserratText(
-                        text = "Cart",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black
-                    )
-                },
-
-                )
-
-        }
-
-        ){
-        Box(
-            Modifier
-                .fillMaxSize()
-                .background(Color.White)
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .navigationBarsPadding()
-            ) {
-                Spacer(modifier = Modifier.height(60.dp))
-                Box(contentAlignment = Alignment.Center, modifier = Modifier.size(140.dp)) {
-                    // Animated Bouncy Circle Behind Bag
-                    Canvas(modifier = Modifier
-                        .size(118.dp)
-                        .graphicsLayer {
-                            scaleX = bagScale
-                            scaleY = bagScale
-                            alpha = bagAlpha
-                            translationY = bagY.toPx()
-                        }
-                    ) {
-                        drawCircle(color = SecondaryColor100)
-                    }
-                    // Animated Bag Icon
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_cart_outlined), // replace with your bag icon resource
-                        tint = SecondaryColor,
-                        contentDescription = "Cart",
-                        modifier = Modifier
-                            .size(80.dp)
-                            .graphicsLayer {
-                                scaleX = bagScale * idleScale
-                                scaleY = bagScale * idleScale
-                                alpha = bagAlpha
-                                translationY = bagY.toPx() + if (bagIdleAnim) idleBobY else 0f
-                                rotationZ = bagAngle
-                                rotationY = if (bagIdleAnim) idleR3d else 0f
-                            }
-                    )
-                    // Falling items with different shapes
-                    FallingItem(
-
-                        color = Color.Green,
-                        size = 16.dp,
-                        shape = CircleShape,       // Circle shape
-                        startOffset = Offset(-70f, -50f),
-                        endOffset = Offset(-70f, 90f),
-                        duration = 680,
-                        delay = 450
-                    )
-
-                    FallingItem(
-                        color = Color.Blue,
-                        size = 16.dp,
-                        shape = null,    // Rectangle shape
-                        startOffset = Offset(28f, -25f),
-                        endOffset = Offset(28f, 86f),
-                        duration = 590,
-                        delay = 620
-                    )
-                    FallingItem(
-                        color = Color.Red,
-                        size = 16.dp,
-                        shape = RectangleShape,        // Triangle shape (custom)
-                        startOffset = Offset(120f, 10f),
-                        endOffset = Offset(90f, 150f),
-                        duration = 760,
-                        delay = 840
-                    )
-
+            .fillMaxSize()
+            .navigationBarsPadding()
+            .systemBarsPadding()
+            .verticalScroll(rememberScrollState())
+    ) {
+        Spacer(modifier = Modifier.height(60.dp))
+        Box(contentAlignment = Alignment.Center, modifier = Modifier.size(140.dp)) {
+            // Animated Bouncy Circle Behind Bag
+            Canvas(modifier = Modifier
+                .size(118.dp)
+                .graphicsLayer {
+                    scaleX = bagScale
+                    scaleY = bagScale
+                    alpha = bagAlpha
+                    translationY = bagY.toPx()
                 }
-                // Title
-                CustomMontserratText(
-                    text = "Your Cart is Empty!",
-                    color = Color.Black,
-                    fontSize = 32.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .alpha(titleAlpha)
-                        .offset(y = titleY)
-                        .padding(vertical = 2.dp)
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                // Description
-                CustomMontserratText(
-                    text = "Looks like you haven't added anything to your cart yet. Start exploring our amazing products!",
-                    color = AppTextGray,
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Medium,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .alpha(descAlpha)
-                        .offset(y = descY)
-                        .padding(horizontal = 60.dp)
-                        .padding(top = 2.dp)
-                )
-                // Button (scaling/shimmer/press effect)
-                Spacer(modifier = Modifier.height(19.dp))
-                AnimatedBounceButton(
-                    modifier = Modifier
-                        .alpha(buttonAlpha)
-                        .scale(buttonScale),
-                    text = "Start Shopping",
-                    onClick = onShop,
-
-                    shimmer = true // turn shimmer true if you want a shimmer effect
-                )
-                Spacer(modifier = Modifier.weight(2f))
+            ) {
+                drawCircle(color = SecondaryColor100)
             }
+            // Animated Bag Icon
+            Icon(
+                painter = painterResource(id = R.drawable.ic_cart_outlined), // replace with your bag icon resource
+                tint = SecondaryColor,
+                contentDescription = "Cart",
+                modifier = Modifier
+                    .size(80.dp)
+                    .graphicsLayer {
+                        scaleX = bagScale * idleScale
+                        scaleY = bagScale * idleScale
+                        alpha = bagAlpha
+                        translationY = bagY.toPx() + if (bagIdleAnim) idleBobY else 0f
+                        rotationZ = bagAngle
+                        rotationY = if (bagIdleAnim) idleR3d else 0f
+                    }
+            )
+            // Falling items with different shapes
+            FallingItem(
+
+                color = Color.Green,
+                size = 16.dp,
+                shape = CircleShape,       // Circle shape
+                startOffset = Offset(-70f, -50f),
+                endOffset = Offset(-70f, 90f),
+                duration = 680,
+                delay = 450
+            )
+
+            FallingItem(
+                color = Color.Blue,
+                size = 16.dp,
+                shape = null,    // Rectangle shape
+                startOffset = Offset(28f, -25f),
+                endOffset = Offset(28f, 86f),
+                duration = 590,
+                delay = 620
+            )
+            FallingItem(
+                color = Color.Red,
+                size = 16.dp,
+                shape = RectangleShape,        // Triangle shape (custom)
+                startOffset = Offset(120f, 10f),
+                endOffset = Offset(90f, 150f),
+                duration = 760,
+                delay = 840
+            )
+
         }
+        // Title
+        CustomMontserratText(
+            text = "Your Cart is Empty!",
+            color = Color.Black,
+            fontSize = 32.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .alpha(titleAlpha)
+                .offset(y = titleY)
+                .padding(vertical = 2.dp)
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        // Description
+        CustomMontserratText(
+            text = "Looks like you haven't added anything to your cart yet. Start exploring our amazing products!",
+            color = AppTextGray,
+            fontSize = 15.sp,
+            fontWeight = FontWeight.Medium,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .alpha(descAlpha)
+                .offset(y = descY)
+                .padding(horizontal = 60.dp)
+                .padding(top = 2.dp)
+        )
+        // Button (scaling/shimmer/press effect)
+        Spacer(modifier = Modifier.height(19.dp))
+        AnimatedBounceButton(
+            modifier = Modifier
+                .alpha(buttonAlpha)
+                .scale(buttonScale),
+            text = "Start Shopping",
+            onClick = onShop,
+
+            shimmer = true // turn shimmer true if you want a shimmer effect
+        )
+        Spacer(modifier = Modifier.weight(2f))
     }
 
 }
+
+
 
 
 @Composable
