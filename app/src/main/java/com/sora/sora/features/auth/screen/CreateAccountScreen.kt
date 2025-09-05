@@ -62,6 +62,7 @@ fun CreateAccountScreen(
 
     Box(
         modifier = Modifier.fillMaxSize()
+            .background(Color.White)
     ) {
 
         Column(
@@ -222,9 +223,9 @@ fun CreateAccountScreen(
 //                Spacer(modifier = Modifier.width(10.dp))
 //                SocialLoginButton(R.drawable.ic_facebook) { onSocialLoginClick("Facebook") }
                  Spacer(modifier = Modifier.width(10.dp))
-                 SocialLoginButton(R.drawable.ic_apple) {
-//                     onSocialLoginClick("Apple")
-                 }
+//                 SocialLoginButton(R.drawable.ic_apple) {
+////                     onSocialLoginClick("Apple")
+//                 }
              }
          }
 

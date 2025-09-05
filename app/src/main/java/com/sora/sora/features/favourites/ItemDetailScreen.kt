@@ -17,7 +17,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -39,6 +39,7 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.ColorFilter.Companion.tint
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontStyle
@@ -227,8 +228,8 @@ fun ItemDetailScreen(
 
               // Title + Price + Share Button
               Row(
-                  verticalAlignment = Alignment.CenterVertically,
-                  modifier = Modifier.fillMaxWidth()
+                  modifier = Modifier.fillMaxWidth(),
+                  verticalAlignment = Alignment.Bottom
               ) {
                   Column(modifier = Modifier.weight(1f)) {
                       CustomMontserratText(
@@ -237,42 +238,33 @@ fun ItemDetailScreen(
                           fontSize = 24.sp
                       )
                       Spacer(modifier = Modifier.height(12.dp))
-                      Row() {
-                          //                    Text(
-                          //                        text = "Price: ",
-                          //                        color = Color.Black,
-                          //                        fontWeight = FontWeight.Bold,
-                          //                        fontSize = 16.sp,
-                          //                        modifier = Modifier.padding(end = 8.dp)
-                          //                    )
-                          //                    Text(
-                          //                        text = "KD6.500",
-                          //                        textDecoration = TextDecoration.LineThrough,
-                          //                        color = Color.Gray,
-                          //                        fontSize = 16.sp,
-                          //                        modifier = Modifier.padding(end = 8.dp)
-                          //                    )
+                      Row(
+                          verticalAlignment = Alignment.Bottom
+                      ) {
                           CustomMontserratText(
                               text = "KD 5.500",
                               fontWeight = FontWeight.Bold,
                               color = Color(0xFF7B3F00), // brown accent
                               fontSize = 18.sp
                           )
+                          Spacer(Modifier.width(4.dp))
+                          CustomMontserratText(
+                              "2.500",
+                              fontSize = 12.sp,
+                              color = Color.Gray,
+                              textDecoration = TextDecoration.LineThrough
+                          )
+                          Spacer(Modifier.width(4.dp))
+                          CustomMontserratText(
+                              "${20}%",
+                              fontSize = 12.sp,
+                              fontWeight = FontWeight.Bold,
+                              color = Color(0xFFD93025)
+                          )
                       }
                   }
-                  //            IconButton(
-                  //                onClick = { /* Cart */ },
-                  //                modifier = Modifier
-                  //                    .size(40.dp)
-                  //                    .background(PrimaryColor, shape = CircleShape)
-                  //            ) {
-                  //                Icon(
-                  //                    imageVector = Icons.Default.Share,
-                  //                    contentDescription = "Share",
-                  //                    tint = Color.White  // <-- this makes the icon white
-                  //                )
-                  //            }
               }
+
 
               Spacer(modifier = Modifier.height(12.dp))
 
@@ -407,7 +399,7 @@ fun ItemDetailScreen(
           }
             ProductSection(title = "Similar Products", products = discountProductList)
 
-            Spacer(modifier = Modifier.height(100.dp)) // extra bottom padding
+            Spacer(modifier = Modifier.height(20.dp)) // extra bottom padding
         }
 
     }

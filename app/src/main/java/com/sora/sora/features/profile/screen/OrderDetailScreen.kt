@@ -58,7 +58,7 @@ fun OrderDetailScreen(status: String ="Processing", ) {
     val purchaseDate = "March 28, 2025"
     val transactionId = "TXN9876543210"
     val totalAmount = "KD 49.99"
-    val shippingMethod = "Standard Deliveryh"
+    val shippingMethod = "Same day delivery"
     val contactName = "Fahad Alajmi"
     val contactPhone = "+965 9876 5432"
     val contactAddress = "Block 2, Street 10, House 15, Salmiya, Hawalli, Kuwait"
@@ -77,179 +77,185 @@ fun OrderDetailScreen(status: String ="Processing", ) {
         OrderDetail("Shipping Method", shippingMethod)
     )
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.White)) {
-        CustomAppBar(
 
-            title = "Order Details",
-            onBackClick = {
-                // Handle back click, navigate back or pop from the navigation stack
-                navController.popBackStack()
-            },
-            modifier = Modifier.align(Alignment.TopCenter,)
-                .padding(bottom = vFactor(45))// Aligning app bar at the top
-        )
-        LazyColumn(
+    Column {
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 56.dp)
-                .padding(horizontal = 16.dp)
-                .statusBarsPadding()
                 .background(color = Color.White)
         ) {
-            item {
+            CustomAppBar(
 
-                Spacer(modifier = Modifier.height(vFactor(20)))
+                title = "Order Details",
+                onBackClick = {
+                    // Handle back click, navigate back or pop from the navigation stack
+                    navController.popBackStack()
+                },
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .padding(bottom = vFactor(45))// Aligning app bar at the top
+            )
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 56.dp)
+                    .padding(horizontal = 16.dp)
+                    .statusBarsPadding()
+                    .background(color = Color.White)
+            ) {
+                item {
 
-                CustomMontserratText(
-                    text = "Order Details",
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight(600),
-                    color = PrimaryColor
-                )
+                    Spacer(modifier = Modifier.height(vFactor(20)))
 
-                Spacer(modifier = Modifier.height(16.dp))
+                    CustomMontserratText(
+                        text = "Order Details",
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight(600),
+                        color = PrimaryColor
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
 
 
-                // Order Detail Rows
-//                OrderDetailRow(
-//                    label = "Order status",
-//                    value = orderStatusEnum?.text ?: "Unknown",
-//                    status = true
-//                )
-                orderDetails.forEach { orderDetail ->
-                    OrderDetailRow(
-                        label = orderDetail.label,
-                        value = orderDetail.value,
-                        status = orderDetail.status
+                    // Order Detail Rows
+                    //                OrderDetailRow(
+                    //                    label = "Order status",
+                    //                    value = orderStatusEnum?.text ?: "Unknown",
+                    //                    status = true
+                    //                )
+                    orderDetails.forEach { orderDetail ->
+                        OrderDetailRow(
+                            label = orderDetail.label,
+                            value = orderDetail.value,
+                            status = orderDetail.status
+                        )
+                        Spacer(modifier = Modifier.height(vFactor(8)))
+                    }
+
+
+                    Spacer(modifier = Modifier.height(vFactor(28)))
+
+                    // Contact Details Section
+                    CustomMontserratText(
+                        "Contact Details",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight(700),
+                        color = PrimaryColor
+                    )
+                    Spacer(modifier = Modifier.height(vFactor(12)))
+                    CustomMontserratText(
+                        "$contactName",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
                     )
                     Spacer(modifier = Modifier.height(vFactor(8)))
-                }
+                    CustomMontserratText("$contactPhone", fontSize = 14.sp, color = AppTextGray)
+                    Spacer(modifier = Modifier.height(vFactor(8)))
+                    CustomMontserratText("$contactAddress", fontSize = 14.sp, color = AppTextGray)
+
+                    Spacer(modifier = Modifier.height(vFactor(28)))
 
 
-                Spacer(modifier = Modifier.height(vFactor(28)))
+                    // Items List Section
+                    CustomMontserratText(
+                        "Items",
+                        fontSize = 16.sp,
+                        color = PrimaryColor,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
 
-                // Contact Details Section
-                CustomMontserratText(
-                    "Contact Details",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight(700),
-                    color = PrimaryColor
-                )
-                Spacer(modifier = Modifier.height(vFactor(12)))
-                CustomMontserratText(
-                    "$contactName",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
-                )
-                Spacer(modifier = Modifier.height(vFactor(8)))
-                CustomMontserratText("$contactPhone", fontSize = 14.sp, color = AppTextGray)
-                Spacer(modifier = Modifier.height(vFactor(8)))
-                CustomMontserratText("$contactAddress", fontSize = 14.sp, color = AppTextGray)
+                    items.forEach { item ->
 
-                Spacer(modifier = Modifier.height(vFactor(28)))
-
-
-                // Items List Section
-                CustomMontserratText(
-                    "Items",
-                    fontSize = 16.sp,
-                    color = PrimaryColor,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-
-                items.forEach { item ->
-
-                    // Depending on the order status, display the appropriate item card
-//                    if (orderStatusEnum == OrderStatusEnum.Processing ||
-//                        orderStatusEnum == OrderStatusEnum.Shipped ||
-//                        orderStatusEnum == OrderStatusEnum.Canceled
-//                    ) {
+                        // Depending on the order status, display the appropriate item card
+                        //                    if (orderStatusEnum == OrderStatusEnum.Processing ||
+                        //                        orderStatusEnum == OrderStatusEnum.Shipped ||
+                        //                        orderStatusEnum == OrderStatusEnum.Canceled
+                        //                    ) {
                         OrderDetailCard(item)
-//                    }
-//                    else {
-//
-//                        OrderDetailReviewCard(item)
-//                    }
+                        //                    }
+                        //                    else {
+                        //
+                        //                        OrderDetailReviewCard(item)
+                        //                    }
 
-                    // Add 12dp height spacing after each item
-                    Spacer(modifier = Modifier.height(vFactor(12)))
+                        // Add 12dp height spacing after each item
+                        Spacer(modifier = Modifier.height(vFactor(12)))
+                    }
+
+                    Spacer(modifier = Modifier.height(vFactor(24)))
+
+                    // Cancel Order Button for specific statuses
+                    if (orderStatusEnum == OrderStatusEnum.Processing) {
+                        CustomButton(
+                            label = "Cancel Order?",
+                            onClick = {
+                                // Show the bottom sheet when the Cancel Order button is clicked
+                                showBottomSheet.value = true
+
+                            },
+
+                            containerColor = Color(0xFFDB5A5A).copy(alpha = 0.05f),
+                            textColor = Color(0xFFDB5A5A),
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
+                        Spacer(modifier = Modifier.width(hFactor(16)))
+                    }
+
+                    // Conditional button text for specific order statuses
+                    if (orderStatusEnum != null && orderStatusEnum in listOf(
+                            OrderStatusEnum.Shipped,
+                            OrderStatusEnum.Canceled,
+                            OrderStatusEnum.Delivered,
+                            OrderStatusEnum.Refund,
+                            OrderStatusEnum.Returned,
+                            OrderStatusEnum.Confirmed
+                        )
+                    ) {
+                        CustomButton(
+                            label = "Have an issue? Contact us",
+                            onClick = { /* Handle Click */ },
+                            containerColor = Color(0xFFF2FBF8),
+                            textColor = Color(0xFF07BD74),
+                            icon = R.drawable.img_whatsapp // Pass the resource ID of the icon
+                        )
+
+                         Spacer(modifier = Modifier.height(hFactor(16)))
+                    }
+
+
+
+                    //                CustomButton(
+                    //
+                    //                    label = "Return request",
+                    //                    onClick = {},
+                    //                    containerColor = LightBrown,
+                    //                    textColor = PrimaryColor,
+                    //
+                    //                    )
+                    //Spacer(modifier = Modifier.width(hFactor(12)))
+                    //  }
+
+                    Spacer(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(60.dp)
+                    )
                 }
+                // Show the bottom sheet when needed
 
-                Spacer(modifier = Modifier.height(vFactor(36)))
-
-                // Cancel Order Button for specific statuses
-                if (orderStatusEnum == OrderStatusEnum.Processing) {
-                    CustomButton(
-                        label = "Cancel Order?",
-                        onClick = {
-                            // Show the bottom sheet when the Cancel Order button is clicked
-                            showBottomSheet.value = true
-
-                        },
-                        required = true,
-                        containerColor = Color(0xFFDB5A5A).copy(alpha = 0.05f),
-                        textColor = Color(0xFFDB5A5A),
-                        modifier = Modifier.padding(bottom = 8.dp)
-                    )
-                    Spacer(modifier = Modifier.width(hFactor(16)))
-                }
-
-                // Conditional button text for specific order statuses
-                if (orderStatusEnum != null && orderStatusEnum in listOf(
-                        OrderStatusEnum.Shipped,
-                        OrderStatusEnum.Canceled,
-                        OrderStatusEnum.Delivered,
-                        OrderStatusEnum.Refund,
-                        OrderStatusEnum.Returned,
-                        OrderStatusEnum.Confirmed
-                    )
-                ) {
-                    CustomButton(
-                        label = "Have an issue? Contact us",
-                        onClick = { /* Handle Click */ },
-                        containerColor = Color(0xFFF2FBF8),
-                        textColor = Color(0xFF07BD74),
-                        icon = R.drawable.img_whatsapp // Pass the resource ID of the icon
-                    )
-
-                    Spacer(modifier = Modifier.height(hFactor(16)))
-                }
-
-
-                CustomButton(
-
-                    label = "Return request",
-                    onClick = {},
-                    containerColor = LightBrown,
-                    textColor = PrimaryColor,
-
-                    )
-                Spacer(modifier = Modifier.width(hFactor(12)))
-                //  }
-
-                Spacer(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(60.dp)
+            }
+            if (showBottomSheet.value) {
+                OrderCancelBottomSheet(
+                    orderId = orderId,
+                    onDismiss = { showBottomSheet.value = false },
+                    onCancelOrder = { orderId ->
+                        // Handle order cancellation logic here
+                        showBottomSheet.value = false // Close bottom sheet after canceling
+                    }
                 )
             }
-            // Show the bottom sheet when needed
-
-        }
-        if (showBottomSheet.value) {
-            OrderCancelBottomSheet(
-                orderId = orderId,
-                onDismiss = { showBottomSheet.value = false },
-                onCancelOrder = { orderId ->
-                    // Handle order cancellation logic here
-                    showBottomSheet.value = false // Close bottom sheet after canceling
-                }
-            )
         }
     }
 }
@@ -467,8 +473,16 @@ fun OrderDetailRow(label: String, value: String, status: Boolean = false) {
 fun OrderDetailCard(order: OrderItem) {
     Card(
         modifier = Modifier
-            .shadow(elevation = 24.dp, spotColor = Color(0x0D000000), ambientColor = Color(0x0D000000))
-            .border(width = 1.dp, color = Color.Black.copy(alpha = 0.1f), shape = RoundedCornerShape(size = 15.dp))
+            .shadow(
+                elevation = 24.dp,
+                spotColor = Color(0x0D000000),
+                ambientColor = Color(0x0D000000)
+            )
+            .border(
+                width = 1.dp,
+                color = Color.Black.copy(alpha = 0.1f),
+                shape = RoundedCornerShape(size = 15.dp)
+            )
             .padding(vertical = vFactor(8), horizontal = hFactor(6))
             .fillMaxWidth()
             .height(vFactor(80))
@@ -480,7 +494,12 @@ fun OrderDetailCard(order: OrderItem) {
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(start = hFactor(8), end = hFactor(16), top = vFactor(8), bottom = vFactor(8))
+                .padding(
+                    start = hFactor(8),
+                    end = hFactor(16),
+                    top = vFactor(8),
+                    bottom = vFactor(8)
+                )
         ) {
             // Order Details Column
             Column(
@@ -500,8 +519,16 @@ fun OrderDetailCard(order: OrderItem) {
                             .align(Alignment.CenterVertically)
                             .width(80.dp)
                             .height(80.dp)
-                            .background(color = ImageBackgroundColor, shape = RoundedCornerShape(size = 8.dp))
-                            .padding(start = 4.32432.dp, top = 4.32432.dp, end = 4.32432.dp, bottom = 4.32432.dp)
+                            .background(
+                                color = ImageBackgroundColor,
+                                shape = RoundedCornerShape(size = 8.dp)
+                            )
+                            .padding(
+                                start = 4.32432.dp,
+                                top = 4.32432.dp,
+                                end = 4.32432.dp,
+                                bottom = 4.32432.dp
+                            )
                     )
                     Spacer(modifier = Modifier.width(hFactor(10)))
 
@@ -637,7 +664,7 @@ fun OrderDetailReviewCard(order: OrderItem) {
                         modifier = Modifier
                             .align(Alignment.CenterVertically)
                             .clickable {
-                                navController.navigate(Dest.AddReviewScreen ::class.toRoute())
+                                navController.navigate(Dest.AddReviewScreen::class.toRoute())
                             }
                     )
                 }
