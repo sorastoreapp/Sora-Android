@@ -1,5 +1,6 @@
 package com.sora.sora.features.dashboard
 
+import EmptyCartScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -19,7 +20,13 @@ import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,19 +51,88 @@ import com.sora.sora.core.navigations.Dest
 import com.sora.sora.core.navigations.NavigationManager
 import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.navigations.toRoute
+import com.sora.sora.features.cart_screen.controller.CartController
 import com.sora.sora.ui.components.AppTextField
 import com.sora.sora.ui.theme.IconBackgroundColor
 import com.sora.sora.ui.theme.PrimaryColor
 import com.sora.sora.ui.theme.ProductCardColor
 import com.sora.sora.ui.theme.TextFieldBackgroundColors
 import com.sora.sora.ui.theme.YellowApp
+import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun CartScreen() {
-    // ----------------------------
-    // 1) Dummy cart data + state
-    // ----------------------------
+
+
+    // Initialize controller
+    val controller = remember { CartController() }
+
+    // Observe the state of cart being empty and refreshing
+    val isCartEmpty by controller.isEmptyStateTrue.collectAsState()
+    val isRefreshing by controller.isRefreshing.collectAsState()
+
+    // Pull-to-refresh state
+    val scope = rememberCoroutineScope()
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = isRefreshing,
+        onRefresh = {
+            scope.launch {
+                controller.refreshCart()
+            }
+        }
+    )
+
+
+    Scaffold (
+        backgroundColor = Color.White,
+        modifier = Modifier
+        .fillMaxSize()
+        .pullRefresh(pullRefreshState),
+            topBar = {
+
+        CenterAlignedTopAppBar(
+            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                containerColor = Color.White
+            ),
+            modifier = Modifier.padding(0.dp),
+            title = {
+                CustomMontserratText(
+                    text = "Cart",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            },
+
+            )
+
+    }
+
+    ){
+        paddingValues ->
+        Box{
+
+            if (isCartEmpty)  CartScreenMainView()
+            else  EmptyCartScreen()
+
+
+
+            PullRefreshIndicator(
+                refreshing = isRefreshing,
+                state = pullRefreshState,
+                modifier = Modifier.align(Alignment.TopCenter)
+            )
+
+        }
+    }
+}
+
+
+@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
+@Composable
+fun CartScreenMainView() {
+
     var cartItems by remember {
         mutableStateOf(
             mutableListOf(
@@ -79,241 +155,238 @@ fun CartScreen() {
     val totalAmount = subtotal - discountAmount + deliveryCharges + otherCharges
     val itemCount = cartItems.sumOf { it.quantity }
 
-    // ------------------------------------------------------
-    // 2) Entire screen as one LazyColumn (header + all parts)
-    // ------------------------------------------------------
-    Scaffold { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 16.dp)
-                .padding(horizontal = 16.dp)
-                .systemBarsPadding()
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp)
+    ) {
+
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            contentPadding = PaddingValues(bottom = 32.dp) // so bottom button isn't cut off
         ) {
-            CustomMontserratText(
-                text = "Cart",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 10.dp),
-                color = Color.Black,
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                textAlign = TextAlign.Center
-            )
+            item {
+                CustomMontserratText(
+                    text = "Products",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 10.dp),
+                    color = PrimaryColor,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Start
+                )
 
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                contentPadding = PaddingValues(bottom = 32.dp) // so bottom button isn't cut off
-            ) {
-                item{
-                    CustomMontserratText(
-                        text = "Products",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 10.dp),
-                        color = PrimaryColor,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp,
-                        textAlign = TextAlign.Start
-                    )
-
-                }
+            }
 
 
-                itemsIndexed(
-                    items = cartItems,
-                    key = { index, item -> item.name + index } // unique key
-                ) { index, item ->
+            itemsIndexed(
+                items = cartItems,
+                key = { index, item -> item.name + index } // unique key
+            ) { index, item ->
 
-                    CartItemCard(
-                        cartItems = cartItems,
-                        index = index,
-                        item = item,
-                        onIncrease = {
+                CartItemCard(
+                    cartItems = cartItems,
+                    index = index,
+                    item = item,
+                    onIncrease = {
+                        cartItems = cartItems.toMutableList().also {
+                            it[index] =
+                                it[index].copy(quantity = it[index].quantity + 1)
+                        }
+                    },
+                    onDecrease = {
+                        if (item.quantity > 1) {
                             cartItems = cartItems.toMutableList().also {
                                 it[index] =
-                                    it[index].copy(quantity = it[index].quantity + 1)
-                            }
-                        },
-                        onDecrease = {
-                            if (item.quantity > 1) {
-                                cartItems = cartItems.toMutableList().also {
-                                    it[index] =
-                                        it[index].copy(quantity = it[index].quantity - 1)
-                                }
-                            }
-                        },
-                        onDelete = { i ->
-                            cartItems = cartItems.toMutableList().apply {
-                                removeAt(i)
+                                    it[index].copy(quantity = it[index].quantity - 1)
                             }
                         }
-                    )
-                }
-
-                if (cartItems.isEmpty()) {
-                    item {
-                        Text(
-                            "Your cart is empty",
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 24.dp),
-                            textAlign = TextAlign.Center,
-                            color = Color.Gray
-                        )
+                    },
+                    onDelete = { i ->
+                        cartItems = cartItems.toMutableList().apply {
+                            removeAt(i)
+                        }
                     }
-                }
+                )
+            }
 
-
+            if (cartItems.isEmpty()) {
                 item {
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    CustomMontserratText(
-                        text = "Address",
+                    Text(
+                        "Your cart is empty",
                         modifier = Modifier
                             .fillMaxWidth()
-                            .pointerInput(Unit) {
-                                detectTapGestures(
-                                    onPress = { /* Unused */ },
-                                    onTap = {
-                                        navController.navigate(Dest.MyAddressScreen::class.toRoute())
-                                    }
-                                )
-                            }
-                            .padding(vertical = 10.dp),
-                        color = PrimaryColor,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp,
-                        textAlign = TextAlign.Start
+                            .padding(vertical = 24.dp),
+                        textAlign = TextAlign.Center,
+                        color = Color.Gray
                     )
+                }
+            }
 
 
-                    //hey chatgpt i wnat row at the center of the box
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(57.dp)
-                            .clip(RoundedCornerShape(16.dp))
-                            .background(ProductCardColor),
-                        contentAlignment = Alignment.Center // Centers Row both horizontally & vertically
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_location),
-                                tint = PrimaryColor,
-                                contentDescription = "location",
-                                modifier = Modifier.size(25.dp)
-                            )
+            item {
+                Spacer(modifier = Modifier.height(8.dp))
 
-                            Spacer(modifier = Modifier.width(8.dp))
-
-                            CustomMontserratText(
-                                text = "Add your address",
-                                color = PrimaryColor,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 14.sp
+                CustomMontserratText(
+                    text = "Address",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .pointerInput(Unit) {
+                            detectTapGestures(
+                                onPress = { /* Unused */ },
+                                onTap = {
+                                    navController.navigate(Dest.MyAddressScreen::class.toRoute())
+                                }
                             )
                         }
-                    }
-
-                    Spacer(modifier = Modifier.height(14.dp))
-
-                    CustomMontserratText(
-                        text = "Coupon",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 10.dp),
-                        color = PrimaryColor,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp,
-                        textAlign = TextAlign.Start
-                    )
+                        .padding(vertical = 10.dp),
+                    color = PrimaryColor,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Start
+                )
 
 
+                //hey chatgpt i wnat row at the center of the box
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(57.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(ProductCardColor),
+                    contentAlignment = Alignment.Center // Centers Row both horizontally & vertically
+                ) {
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(16.dp))
-                            .background(Color(0xFFF2F2F2))
-                            .height(57.dp)
-                            .border(1.dp, Color(0xFFF2F2F2), RoundedCornerShape(16.dp))
-                            .padding(start = 20.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_coupon),
-                            contentDescription = "coupon",
-                            tint = Color(0xff928C8A) ,
-                            modifier = Modifier.size(18.dp)
+                            painter = painterResource(id = R.drawable.ic_location),
+                            tint = PrimaryColor,
+                            contentDescription = "location",
+                            modifier = Modifier.size(25.dp)
                         )
 
-                        SmallCouponTextField(
-                            value = couponCode,
-                            onValueChange = { couponCode = it },
-                            placeholder = "Code (Optional)",
-                            modifier = Modifier.weight(1f)
+                        Spacer(modifier = Modifier.width(8.dp))
+
+                        CustomMontserratText(
+                            text = "Add your address",
+                            color = PrimaryColor,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 14.sp
                         )
-
-                        Spacer(modifier = Modifier.width(12.dp))
-
-                        Button(
-                            onClick = { /* Apply coupon logic */ },
-                            colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF7B3F00)),
-                            shape = RoundedCornerShape(topEnd = 20.dp, bottomEnd = 20.dp),
-                            modifier = Modifier
-                                .height(57.dp)
-                                .width(100.dp)
-                        ) {
-                            Text(
-                                "Apply",
-                                color = Color.White,
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
                     }
-
                 }
 
+                Spacer(modifier = Modifier.height(14.dp))
 
-                item {
-                    Spacer(modifier = Modifier.height(24.dp))
+                CustomMontserratText(
+                    text = "Coupon",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 10.dp),
+                    color = PrimaryColor,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Start
+                )
 
-                    PriceRow(label = "Price ($itemCount Items)", value = "KD %.3f".format(subtotal))
-                    PriceRow(
-                        label = "Discount ($discountPercent%)",
-                        value = "KD %.3f".format(discountAmount)
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(Color(0xFFF2F2F2))
+                        .height(57.dp)
+                        .border(1.dp, Color(0xFFF2F2F2), RoundedCornerShape(16.dp))
+                        .padding(start = 20.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_coupon),
+                        contentDescription = "coupon",
+                        tint = Color(0xff928C8A),
+                        modifier = Modifier.size(18.dp)
                     )
-                    PriceRow(label = "Delivery Charges", value = "KD %.3f".format(deliveryCharges))
-                    PriceRow(label = "Other Charges", value = "KD %.3f".format(otherCharges))
 
-                    Spacer(modifier = Modifier.height(8.dp))
-//                    Divider(color = Color.LightGray, thickness = 1.dp)
-//                    Spacer(modifier = Modifier.height(8.dp))
+                    SmallCouponTextField(
+                        value = couponCode,
+                        onValueChange = { couponCode = it },
+                        placeholder = "Code (Optional)",
+                        modifier = Modifier.weight(1f)
+                    )
 
-                    // Total line
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                    Spacer(modifier = Modifier.width(12.dp))
+
+                    Button(
+                        onClick = { /* Apply coupon logic */ },
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color(
+                                0xFF7B3F00
+                            )
+                        ),
+                        shape = RoundedCornerShape(topEnd = 20.dp, bottomEnd = 20.dp),
+                        modifier = Modifier
+                            .height(57.dp)
+                            .width(100.dp)
                     ) {
                         Text(
-                            text = "Total Amount",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 16.sp
-                        )
-                        Text(
-                            text = "KD %.3f".format(totalAmount),
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 16.sp
+                            "Apply",
+                            color = Color.White,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
                         )
                     }
+                }
+
+            }
+
+
+            item {
+                Spacer(modifier = Modifier.height(24.dp))
+
+                PriceRow(
+                    label = "Price ($itemCount Items)",
+                    value = "KD %.3f".format(subtotal)
+                )
+                PriceRow(
+                    label = "Discount ($discountPercent%)",
+                    value = "KD %.3f".format(discountAmount)
+                )
+                PriceRow(
+                    label = "Delivery Charges",
+                    value = "KD %.3f".format(deliveryCharges)
+                )
+                PriceRow(
+                    label = "Other Charges",
+                    value = "KD %.3f".format(otherCharges)
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+//                    Divider(color = Color.LightGray, thickness = 1.dp)
+//                    Spacer(modifier = Modifier.height(8.dp))
+
+                // Total line
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "Total Amount",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
+                    )
+                    Text(
+                        text = "KD %.3f".format(totalAmount),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
+                    )
+                }
 
 //                    Spacer(modifier = Modifier.height(8.dp))
 //                    Divider(color = Color.LightGray, thickness = 1.dp)
-                }
+            }
 
 
 //                item {
@@ -332,34 +405,35 @@ fun CartScreen() {
 //                }
 
 
-                item {
-                    Button(
-                        onClick = {
-                             navController.navigate(Dest.PaymentSuccessScreen::class.toRoute())
-                                  },
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF7B3F00)),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(56.dp),
-                        shape = RoundedCornerShape(16.dp)
-                    ) {
-                        CustomMontserratText(
-                            "Checkout",
-                            color = Color.White,
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold
+            item {
+                Button(
+                    onClick = {
+                        navController.navigate(Dest.PaymentSuccessScreen::class.toRoute())
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color(
+                            0xFF7B3F00
                         )
-                    }
-                    Spacer(modifier = Modifier.height(50.dp))
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    shape = RoundedCornerShape(16.dp)
+                ) {
+                    CustomMontserratText(
+                        "Checkout",
+                        color = Color.White,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
+                Spacer(modifier = Modifier.height(50.dp))
             }
         }
     }
+
 }
 
-// ---------------------------------
-//  Helper Composables & Data Class
-// ---------------------------------
 
 @Composable
 fun CartItemCard(
@@ -420,7 +494,9 @@ fun CartItemCard(
                         painter = painterResource(id = R.drawable.ic_delete_bucket,),
                         contentDescription = "Decrease",
                         tint = Color.Red,
-                        modifier = Modifier.size(18.dp) .clickable { onDelete(index) }
+                        modifier = Modifier
+                            .size(18.dp)
+                            .clickable { onDelete(index) }
                     )
 
                 }
@@ -510,9 +586,11 @@ fun QuantitySelector(
                 painter = painterResource(id = R.drawable.ic_remove_bar,),
                 contentDescription = "Decrease",
                 tint = PrimaryColor,
-                modifier = Modifier.size(size).clickable(enabled = quantity > 1) {
-                    if (quantity > 1) onDecrease()
-                }
+                modifier = Modifier
+                    .size(size)
+                    .clickable(enabled = quantity > 1) {
+                        if (quantity > 1) onDecrease()
+                    }
             )
         }
 
