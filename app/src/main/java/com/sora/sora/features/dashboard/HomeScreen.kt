@@ -126,18 +126,18 @@ fun HomeScreen() {
                 ),
                 // This is likely line 117 or around it
                 title = {
-                    Image(
-                        painter = painterResource(R.drawable.ic_sora_logo),
-                        contentDescription = "Sora Logo",
-                        modifier = Modifier.size(80.dp)
-                            .background(Color.White),
-
-                    )
+//                    Image(
+//                        painter = painterResource(R.drawable.ic_sora_logo),
+//                        contentDescription = "Sora Logo",
+//                        modifier = Modifier.size(80.dp)
+//                            .background(Color.White),
+//
+//                    )
                 },
                 modifier = Modifier.background(Color.White),
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.White
-                )
+//                colors = TopAppBarDefaults.topAppBarColors(
+//                    containerColor = Color.White
+//                )
             )
         }
 

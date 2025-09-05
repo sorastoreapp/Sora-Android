@@ -38,12 +38,14 @@ import com.sora.sora.R
 import com.sora.sora.core.CustomAppBar
 import com.sora.sora.core.customButtons.CustomButton
 import com.sora.sora.core.customText.CustomMontserratText
+import com.sora.sora.core.hFactor
 import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.vFactor
 import com.sora.sora.features.profile.widgets.DeleteAccountBottomSheet
 import com.sora.sora.ui.components.AppTextField2
 import com.sora.sora.ui.components.AppTextFieldWithSuffix
 import com.sora.sora.ui.theme.AppGray
+import com.sora.sora.ui.theme.AppTextGray
 import com.sora.sora.ui.theme.PrimaryColor
 import com.sora.sora.ui.theme.TextFieldBackgroundColors
 import com.sora.sora.ui.theme.TextFieldBorderColors
@@ -104,7 +106,7 @@ fun EditProfileScreen() {
             AppTextFieldWithSuffix(
                 value = name,
                 onValueChange = { name = it },
-                placeholder = "Faisal Alajmi",
+                placeholder = "Full Name",
                 keyboardType = KeyboardType.Text,
                 suffix = {
                     Icon(painter = painterResource(id = R.drawable.ic_profile2), contentDescription = "Some Icon",tint = PrimaryColor)
@@ -124,7 +126,7 @@ fun EditProfileScreen() {
             AppTextFieldWithSuffix(
                 value = email,
                 onValueChange = { email = it },
-                placeholder = "Faisalajmi95@gmail.com",
+                placeholder = "Email",
                 suffix = {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_email),
@@ -510,10 +512,20 @@ fun PhoneNumberInputField(
 
         DropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onDismissRequest = { expanded = false
+            },
+            modifier = Modifier.background(Color.White)
+
+                .padding(horizontal = hFactor(10))
+                .fillMaxWidth()
+
         ) {
             countries.forEach { country ->
                 DropdownMenuItem(
+                    colors = MenuDefaults.itemColors(textColor = AppTextGray, trailingIconColor = Color.White),
+                    //modifier = Modifier.background(Color.White),
+                    contentPadding = MenuDefaults.DropdownMenuItemContentPadding ,
+
                     text = { Text("${country.flag} ${country.name} (${country.code})") },
                     onClick = {
                         onCountrySelected(country)

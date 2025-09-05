@@ -286,14 +286,9 @@ fun AddNewAddressScreen() {
         ) {
             Spacer(modifier = Modifier.height(vFactor(24)))
 
-
-
-
-
-
             // Name Field
             AppTextField2(
-                placeholder = "Faisal Alajmi",
+                placeholder = "Full Name",
                 value = name,
                 onValueChange = { name = it },
                 keyboardType = KeyboardType.Text,
@@ -307,8 +302,6 @@ fun AddNewAddressScreen() {
                 phoneNumber = phoneNumber,
                 onPhoneNumberChange = { phoneNumber = it }
             )
-
-
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -339,15 +332,15 @@ fun AddNewAddressScreen() {
             Spacer(modifier = Modifier.height(16.dp))
 
             // Block Field
-            AppTextField2(
-                placeholder = "Block",
-                value = block,
-                onValueChange = { block = it },
-                keyboardType = KeyboardType.Text,
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
+//            AppTextField2(
+//                placeholder = "Block",
+//                value = block,
+//                onValueChange = { block = it },
+//                keyboardType = KeyboardType.Text,
+//                modifier = Modifier.fillMaxWidth()
+//            )
+//
+//            Spacer(modifier = Modifier.height(16.dp))
 
             // House No Field
             AppTextField2(

@@ -36,6 +36,9 @@ import com.sora.sora.core.hFactor
 import com.sora.sora.core.navigations.Dest
 import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.navigations.toRoute
+import com.sora.sora.core.snackbar.CenterExpandSnackBar
+import com.sora.sora.core.snackbar.SnackBarData
+import com.sora.sora.core.snackbar.SnackBarType
 import com.sora.sora.core.vFactor
 import com.sora.sora.features.profile.widgets.CommonDivider
 import com.sora.sora.features.profile.widgets.CustomSwitch
@@ -53,6 +56,9 @@ fun ProfileScreen() {
     var notificationsEnabled by remember { mutableStateOf(true) }
     var selectedLanguage by remember { mutableStateOf("English") }
     var showLanguageSheet by remember { mutableStateOf(false) }
+    var showSnackbar by remember { mutableStateOf(false) } // Control snackbar visibility
+    var switchEnabled by remember { mutableStateOf(true) }
+
 
 
   Scaffold(
@@ -205,19 +211,21 @@ fun ProfileScreen() {
               iconRes = R.drawable.ic_notifications,
               title = "Notifications",
               trailingContent = {
-
                   CustomSwitch(
                       checked = notificationsEnabled,
-                      onCheckedChange = { notificationsEnabled = it },
+                      onCheckedChange = { checked ->
+                          // Update the state and trigger showing the snackbar
+                          notificationsEnabled = checked
+                          showSnackbar = checked // Show Snackbar if notifications are enabled
+                      },
                       enabled = switchEnabled
                   )
               },
               onClick = {
-                  // Example: toggle whether the switch is enabled/disabled
-                  // switchEnabled = !switchEnabled
                   navController.navigate(Dest.NotificationScreen::class.toRoute())
               }
           )
+
 
 
 
@@ -311,9 +319,30 @@ fun ProfileScreen() {
 
 
       }
+
+  }
+    if (showSnackbar) {
+        CenterExpandSnackBar(
+            visible = showSnackbar,
+            topPadding = 50.dp,
+            horizontalMargin = 10.dp,
+
+
+
+            data = SnackBarData(
+                title = "Success!",
+                message = "Notification enabled successfully",
+                type = SnackBarType.Success,
+                iconRes = R.drawable.ic_sora_logo
+            ),
+            onDismiss = { showSnackbar = false } // Hide the snackbar when dismissed
+        )
     }
 
-}
+    }
+
+
+
 
 
 
