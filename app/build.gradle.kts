@@ -72,5 +72,6 @@ dependencies {
     // Lottie Compose
     implementation("com.airbnb.android:lottie-compose:5.0.3")
     implementation("io.coil-kt:coil-compose:2.1.0")
+    implementation("com.google.accompanist:accompanist-swiperefresh:0.30.1")
 
 }
