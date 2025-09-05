@@ -108,7 +108,7 @@ fun SignInScreen(
             AppTextFieldWithSuffix(
                 value = emailController,
                 onValueChange = { emailController = it },
-                placeholder = "Enter some text",
+                placeholder = "Faisalajmi95@gmail.com",
 
                 suffix = {
                     Icon(painter = painterResource(id = R.drawable.ic_email), contentDescription = "Some Icon", tint = PrimaryColor)
@@ -153,7 +153,7 @@ fun SignInScreen(
                 },
             )
 
-            Spacer(modifier = Modifier.height(vFactor(15)))
+            Spacer(modifier = Modifier.height(vFactor(20)))
 
             // OR separator
             Row(
@@ -180,7 +180,7 @@ fun SignInScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(30.dp))
+            Spacer(modifier = Modifier.height(vFactor(20)))
 
             // Social login buttons
             Row(
@@ -192,7 +192,7 @@ fun SignInScreen(
 //                Spacer(modifier = Modifier.width(10.dp))
 //                SocialLoginButton(R.drawable.ic_facebook) { onSocialLoginClick("Facebook") }
                 Spacer(modifier = Modifier.width(10.dp))
-                SocialLoginButton(R.drawable.ic_apple) { onSocialLoginClick("Apple") }
+               /// SocialLoginButton(R.drawable.ic_apple) { onSocialLoginClick("Apple") }
             }
 
             Spacer(modifier = Modifier.height(vFactor(20)))

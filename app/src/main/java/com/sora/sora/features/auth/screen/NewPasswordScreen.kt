@@ -89,7 +89,7 @@ fun NewPasswordScreen(
                 AppTextFieldWithSuffix(
                     value = confirmPassController,
                     onValueChange = { confirmPassController = it },
-                    placeholder = "Confirm Password",
+                    placeholder = "Confirm New Password",
                     isPassword = true,  // Set to true for password field
                     modifier = Modifier.fillMaxWidth()
                 )
