@@ -7,6 +7,7 @@ import android.media.SoundPool
 import android.util.Log
 import java.io.FileDescriptor
 import android.content.res.AssetFileDescriptor
+import androidx.compose.animation.core.EaseInOut
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -164,17 +165,20 @@ fun NotificationEmptyStateView() {
 
     // Shake animation (rotation)
     val rotation by animateFloatAsState(
+
         targetValue = if (shake) -15f else 15f, // Rotate back and forth
         animationSpec = infiniteRepeatable(
             animation = keyframes {
-                durationMillis = 600 // Duration of one full shake cycle
-                0f at 0 with LinearEasing // Start at 0 degrees
-               15f at 290 with LinearEasing // Rotate to 15 degrees at 300ms
-                -15f at 600 with LinearEasing // Rotate to -15 degrees at 600ms
+                durationMillis = 300 // Duration of one full shake cycle (increased for smoothness)
+                0f at 0 with EaseInOut // Start at 0 degrees with smooth easing
+                15f at 150 with EaseInOut // Rotate to 15 degrees at 400ms
+                -15f at 300 with EaseInOut // Rotate to -15 degrees at 800ms
             },
+
             repeatMode = RepeatMode.Restart // Restart the animation after each cycle
         )
     )
+
 
     // Layout of the notification with shaking effect
     Box(
