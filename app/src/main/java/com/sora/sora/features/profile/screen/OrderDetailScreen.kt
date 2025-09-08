@@ -77,187 +77,204 @@ fun OrderDetailScreen(status: String ="Processing", ) {
         OrderDetail("Shipping Method", shippingMethod)
     )
 
+    Scaffold (
+        containerColor = Color.White,
 
-    Column {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = Color.White)
-        ) {
+
+        modifier = Modifier
+            .background(Color.White)
+            .padding(
+                bottom = WindowInsets.systemBars
+                    .asPaddingValues()
+                    .calculateBottomPadding()
+            )
+            .fillMaxSize(),
+
+        topBar = {
             CustomAppBar(
-
                 title = "Order Details",
+                isBackButton = true,
                 onBackClick = {
                     // Handle back click, navigate back or pop from the navigation stack
                     navController.popBackStack()
                 },
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .padding(bottom = vFactor(45))// Aligning app bar at the top
+                bottomPadding = 20.dp
             )
-            LazyColumn(
+        }
+
+    ){
+        paddingValues ->
+        Column {
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 56.dp)
-                    .padding(horizontal = 16.dp)
-                    .statusBarsPadding()
                     .background(color = Color.White)
             ) {
-                item {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 70.dp)
+                        .padding(horizontal = 16.dp)
+                        .statusBarsPadding()
+                        .background(color = Color.White)
+                ) {
+                    item {
 
-                    Spacer(modifier = Modifier.height(vFactor(20)))
+                        Spacer(modifier = Modifier.height(vFactor(20)))
 
-                    CustomMontserratText(
-                        text = "Order Details",
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight(600),
-                        color = PrimaryColor
-                    )
+                        CustomMontserratText(
+                            text = "Order Details",
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight(600),
+                            color = PrimaryColor
+                        )
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(16.dp))
 
 
-                    // Order Detail Rows
-                    //                OrderDetailRow(
-                    //                    label = "Order status",
-                    //                    value = orderStatusEnum?.text ?: "Unknown",
-                    //                    status = true
-                    //                )
-                    orderDetails.forEach { orderDetail ->
-                        OrderDetailRow(
-                            label = orderDetail.label,
-                            value = orderDetail.value,
-                            status = orderDetail.status
+                        // Order Detail Rows
+                        //                OrderDetailRow(
+                        //                    label = "Order status",
+                        //                    value = orderStatusEnum?.text ?: "Unknown",
+                        //                    status = true
+                        //                )
+                        orderDetails.forEach { orderDetail ->
+                            OrderDetailRow(
+                                label = orderDetail.label,
+                                value = orderDetail.value,
+                                status = orderDetail.status
+                            )
+                            Spacer(modifier = Modifier.height(vFactor(8)))
+                        }
+
+
+                        Spacer(modifier = Modifier.height(vFactor(28)))
+
+                        // Contact Details Section
+                        CustomMontserratText(
+                            "Contact Details",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight(700),
+                            color = PrimaryColor
+                        )
+                        Spacer(modifier = Modifier.height(vFactor(12)))
+                        CustomMontserratText(
+                            "$contactName",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Black
                         )
                         Spacer(modifier = Modifier.height(vFactor(8)))
-                    }
+                        CustomMontserratText("$contactPhone", fontSize = 14.sp, color = AppTextGray)
+                        Spacer(modifier = Modifier.height(vFactor(8)))
+                        CustomMontserratText("$contactAddress", fontSize = 14.sp, color = AppTextGray)
+
+                        Spacer(modifier = Modifier.height(vFactor(28)))
 
 
-                    Spacer(modifier = Modifier.height(vFactor(28)))
+                        // Items List Section
+                        CustomMontserratText(
+                            "Items",
+                            fontSize = 16.sp,
+                            color = PrimaryColor,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
 
-                    // Contact Details Section
-                    CustomMontserratText(
-                        "Contact Details",
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight(700),
-                        color = PrimaryColor
-                    )
-                    Spacer(modifier = Modifier.height(vFactor(12)))
-                    CustomMontserratText(
-                        "$contactName",
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black
-                    )
-                    Spacer(modifier = Modifier.height(vFactor(8)))
-                    CustomMontserratText("$contactPhone", fontSize = 14.sp, color = AppTextGray)
-                    Spacer(modifier = Modifier.height(vFactor(8)))
-                    CustomMontserratText("$contactAddress", fontSize = 14.sp, color = AppTextGray)
+                        items.forEach { item ->
 
-                    Spacer(modifier = Modifier.height(vFactor(28)))
+                            // Depending on the order status, display the appropriate item card
+                            //                    if (orderStatusEnum == OrderStatusEnum.Processing ||
+                            //                        orderStatusEnum == OrderStatusEnum.Shipped ||
+                            //                        orderStatusEnum == OrderStatusEnum.Canceled
+                            //                    ) {
+                            OrderDetailCard(item)
+                            //                    }
+                            //                    else {
+                            //
+                            //                        OrderDetailReviewCard(item)
+                            //                    }
+
+                            // Add 12dp height spacing after each item
+                            Spacer(modifier = Modifier.height(vFactor(12)))
+                        }
+
+                        Spacer(modifier = Modifier.height(vFactor(24)))
+
+                        // Cancel Order Button for specific statuses
+                        if (orderStatusEnum == OrderStatusEnum.Processing) {
+                            CustomButton(
+                                label = "Cancel Order?",
+                                onClick = {
+                                    // Show the bottom sheet when the Cancel Order button is clicked
+                                    showBottomSheet.value = true
+
+                                },
+
+                                containerColor = Color(0xFFDB5A5A).copy(alpha = 0.05f),
+                                textColor = Color(0xFFDB5A5A),
+                                modifier = Modifier.padding(bottom = 8.dp)
+                            )
+                            Spacer(modifier = Modifier.width(hFactor(16)))
+                        }
+
+                        // Conditional button text for specific order statuses
+                        if (orderStatusEnum != null && orderStatusEnum in listOf(
+                                OrderStatusEnum.Shipped,
+                                OrderStatusEnum.Canceled,
+                                OrderStatusEnum.Delivered,
+                                OrderStatusEnum.Refund,
+                                OrderStatusEnum.Returned,
+                                OrderStatusEnum.Confirmed
+                            )
+                        ) {
+                            CustomButton(
+                                label = "Have an issue? Contact us",
+                                onClick = { /* Handle Click */ },
+                                containerColor = Color(0xFFF2FBF8),
+                                textColor = Color(0xFF07BD74),
+                                icon = R.drawable.img_whatsapp // Pass the resource ID of the icon
+                            )
+
+                            Spacer(modifier = Modifier.height(hFactor(16)))
+                        }
 
 
-                    // Items List Section
-                    CustomMontserratText(
-                        "Items",
-                        fontSize = 16.sp,
-                        color = PrimaryColor,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(modifier = Modifier.height(12.dp))
 
-                    items.forEach { item ->
-
-                        // Depending on the order status, display the appropriate item card
-                        //                    if (orderStatusEnum == OrderStatusEnum.Processing ||
-                        //                        orderStatusEnum == OrderStatusEnum.Shipped ||
-                        //                        orderStatusEnum == OrderStatusEnum.Canceled
-                        //                    ) {
-                        OrderDetailCard(item)
-                        //                    }
-                        //                    else {
+                        //                CustomButton(
                         //
-                        //                        OrderDetailReviewCard(item)
-                        //                    }
+                        //                    label = "Return request",
+                        //                    onClick = {},
+                        //                    containerColor = LightBrown,
+                        //                    textColor = PrimaryColor,
+                        //
+                        //                    )
+                        //Spacer(modifier = Modifier.width(hFactor(12)))
+                        //  }
 
-                        // Add 12dp height spacing after each item
-                        Spacer(modifier = Modifier.height(vFactor(12)))
-                    }
-
-                    Spacer(modifier = Modifier.height(vFactor(24)))
-
-                    // Cancel Order Button for specific statuses
-                    if (orderStatusEnum == OrderStatusEnum.Processing) {
-                        CustomButton(
-                            label = "Cancel Order?",
-                            onClick = {
-                                // Show the bottom sheet when the Cancel Order button is clicked
-                                showBottomSheet.value = true
-
-                            },
-
-                            containerColor = Color(0xFFDB5A5A).copy(alpha = 0.05f),
-                            textColor = Color(0xFFDB5A5A),
-                            modifier = Modifier.padding(bottom = 8.dp)
+                        Spacer(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(60.dp)
                         )
-                        Spacer(modifier = Modifier.width(hFactor(16)))
                     }
+                    // Show the bottom sheet when needed
 
-                    // Conditional button text for specific order statuses
-                    if (orderStatusEnum != null && orderStatusEnum in listOf(
-                            OrderStatusEnum.Shipped,
-                            OrderStatusEnum.Canceled,
-                            OrderStatusEnum.Delivered,
-                            OrderStatusEnum.Refund,
-                            OrderStatusEnum.Returned,
-                            OrderStatusEnum.Confirmed
-                        )
-                    ) {
-                        CustomButton(
-                            label = "Have an issue? Contact us",
-                            onClick = { /* Handle Click */ },
-                            containerColor = Color(0xFFF2FBF8),
-                            textColor = Color(0xFF07BD74),
-                            icon = R.drawable.img_whatsapp // Pass the resource ID of the icon
-                        )
-
-                         Spacer(modifier = Modifier.height(hFactor(16)))
-                    }
-
-
-
-                    //                CustomButton(
-                    //
-                    //                    label = "Return request",
-                    //                    onClick = {},
-                    //                    containerColor = LightBrown,
-                    //                    textColor = PrimaryColor,
-                    //
-                    //                    )
-                    //Spacer(modifier = Modifier.width(hFactor(12)))
-                    //  }
-
-                    Spacer(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(60.dp)
+                }
+                if (showBottomSheet.value) {
+                    OrderCancelBottomSheet(
+                        orderId = orderId,
+                        onDismiss = { showBottomSheet.value = false },
+                        onCancelOrder = { orderId ->
+                            // Handle order cancellation logic here
+                            showBottomSheet.value = false // Close bottom sheet after canceling
+                        }
                     )
                 }
-                // Show the bottom sheet when needed
-
-            }
-            if (showBottomSheet.value) {
-                OrderCancelBottomSheet(
-                    orderId = orderId,
-                    onDismiss = { showBottomSheet.value = false },
-                    onCancelOrder = { orderId ->
-                        // Handle order cancellation logic here
-                        showBottomSheet.value = false // Close bottom sheet after canceling
-                    }
-                )
             }
         }
     }
+
 }
 
 

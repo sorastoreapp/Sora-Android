@@ -48,35 +48,58 @@ fun OrdersScreen() {
         OrderModel(orderId = "Order #87778", items = 10, date = "March 28, 2025", productName = "Soft Plush Bear Toy", amount = "KD 20", status = OrderStatusEnum.Processing, image = R.drawable.img_temp_teddy_without_bg),
         OrderModel(orderId = "Order #87778", items = 10, date = "March 30, 2025", productName = "Brown Men Full T-shirt", amount = "KD 20", status = OrderStatusEnum.Confirmed, image = R.drawable.img_temp_teddy_without_bg),
         OrderModel(orderId = "Order #87778", items = 10, date = "April 2, 2025", productName = "Basket of clean towels", amount = "KD 20", status = OrderStatusEnum.Delivered, image = R.drawable.img_temp_teddy_without_bg),
-        OrderModel(orderId = "Order #87778", items = 10, date = "April 2, 2025", productName = "Basket of clean towels", amount = "KD 20", status = OrderStatusEnum.Returned, image = R.drawable.img_temp_teddy_without_bg)
+        OrderModel(orderId = "Order #87778", items = 10, date = "April 2, 2025", productName = "Basket of clean towels", amount = "KD 20", status = OrderStatusEnum.Returned, image = R.drawable.img_temp_teddy_without_bg),
+        OrderModel(orderId = "Order #87778", items = 10, date = "April 2, 2025", productName = "Basket of clean towels", amount = "KD 20", status = OrderStatusEnum.Returned, image = R.drawable.img_temp_teddy_without_bg),
+        OrderModel(orderId = "Order #87778", items = 10, date = "April 2, 2025", productName = "Basket of clean towels", amount = "KD 20", status = OrderStatusEnum.Returned, image = R.drawable.img_temp_teddy_without_bg),
+        OrderModel(orderId = "Order #87778", items = 10, date = "April 2, 2025", productName = "Basket of clean towels", amount = "KD 20", status = OrderStatusEnum.Returned, image = R.drawable.img_temp_teddy_without_bg),
+        OrderModel(orderId = "Order #87778", items = 10, date = "April 2, 2025", productName = "Basket of clean towels", amount = "KD 20", status = OrderStatusEnum.Returned, image = R.drawable.img_temp_teddy_without_bg),
+        OrderModel(orderId = "Order #87778", items = 10, date = "April 2, 2025", productName = "Basket of clean towels", amount = "KD 20", status = OrderStatusEnum.Returned, image = R.drawable.img_temp_teddy_without_bg),
+        OrderModel(orderId = "Order #87778", items = 10, date = "April 2, 2025", productName = "Basket of clean towels", amount = "KD 20", status = OrderStatusEnum.Returned, image = R.drawable.img_temp_teddy_without_bg),
+        OrderModel(orderId = "Order #87778", items = 10, date = "April 2, 2025", productName = "Basket of clean towels", amount = "KD 20", status = OrderStatusEnum.Returned, image = R.drawable.img_temp_teddy_without_bg),
+        OrderModel(orderId = "Order #87778", items = 10, date = "April 2, 2025", productName = "Basket of clean towels", amount = "KD 20", status = OrderStatusEnum.Returned, image = R.drawable.img_temp_teddy_without_bg),
+        OrderModel(orderId = "Order #87778", items = 10, date = "April 2, 2025", productName = "Basket of clean towels", amount = "KD 20", status = OrderStatusEnum.Returned, image = R.drawable.img_temp_teddy_without_bg),
+        OrderModel(orderId = "Order #87778", items = 10, date = "April 2, 2025", productName = "Basket of clean towels", amount = "KD 20", status = OrderStatusEnum.Returned, image = R.drawable.img_temp_teddy_without_bg),
+        OrderModel(orderId = "Order #87778", items = 10, date = "April 2, 2025", productName = "Basket of clean towels", amount = "KD 20", status = OrderStatusEnum.Returned, image = R.drawable.img_temp_teddy_without_bg),
+        OrderModel(orderId = "Order #87778", items = 10, date = "April 2, 2025", productName = "Basket of clean towels", amount = "KD 20", status = OrderStatusEnum.Returned, image = R.drawable.img_temp_teddy_without_bg),
     )
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-    ) {
-        // AppBar should be outside the scrollable content
-        CustomAppBar(
-            title = "My Orders",
-            onBackClick = {
-                // Handle back click, navigate back or pop from the navigation stack
-                navController.popBackStack()
-            },
-            modifier = Modifier.align(Alignment.TopCenter) // Aligning app bar at the top
-        )
+    Scaffold (
+        containerColor = Color.White,
 
+
+        modifier = Modifier
+            .background(Color.White)
+            .padding(
+                bottom = WindowInsets.systemBars
+                    .asPaddingValues()
+                    .calculateBottomPadding()
+            )
+            .fillMaxSize(),
+
+        topBar = {
+            CustomAppBar(
+                title = "My Orders",
+                isBackButton = true,
+                onBackClick = {
+                    // Handle back click, navigate back or pop from the navigation stack
+                    navController.popBackStack()
+                },
+            )
+        }
+
+    ) {
+        paddingValues ->
         // Column that holds the scrollable content
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 56.dp) // Adjust to make space for the app bar
-                .statusBarsPadding()
-                .background(Color.White)
-                .padding(horizontal = 20.dp, )
-                .verticalScroll(rememberScrollState())
+                .padding(top = paddingValues.calculateTopPadding())
+                .padding(horizontal = 20.dp)
+                .verticalScroll(rememberScrollState())//  Makes the content scrollable
         ) {
-            Spacer(modifier = Modifier.height(15.dp)) // Spacing before content
+            // Back Button Section
 
+
+            Spacer(modifier = Modifier.height(vFactor(10)))
             orderModels.forEach { order ->
                 OrderCard(orderModel = order)
                 Spacer(modifier = Modifier.height(12.dp))

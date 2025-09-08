@@ -37,7 +37,8 @@ import com.sora.sora.ui.theme.SecondaryColor100
 @Preview(showBackground = true)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PrivacyPolicyScreen() {
+fun PrivacyPolicyScreen()
+{
     val context = LocalContext.current
     var showBackPressed by remember { mutableStateOf(false) }
 
@@ -47,64 +48,24 @@ fun PrivacyPolicyScreen() {
 
      modifier = Modifier
          .background(Color.White)
+         .padding(
+             bottom = WindowInsets.systemBars
+                 .asPaddingValues()
+                 .calculateBottomPadding()
+         )
          .fillMaxSize(),
 
         topBar = {
-
-
-
-            CenterAlignedTopAppBar(
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color.White
-                ),
-                modifier = Modifier.
-                padding(start = 10.dp),
-                title = {
-                    CustomMontserratText(
-                        text = "Privacy Policy",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black
-                    )
+            CustomAppBar(
+                title = "Privacy Policy",
+                isBackButton = true,
+                onBackClick = {
+                    // Handle back click, navigate back or pop from the navigation stack
+                    navController.popBackStack()
                 },
-                navigationIcon = {
-                    Row(
-                        modifier = Modifier
-                            .pointerInput(Unit) {
-                                detectTapGestures(
-                                    onPress = { offset ->
-
-                                            navController?.popBackStack()
-
-                                        awaitRelease()
-                                    }
-                                )
-                            },
-
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                       Box(
-                            modifier = Modifier
-                                .size(45.dp)
-                                .clip(CircleShape)
-                                .background(SecondaryColor100)
-
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.ArrowBack,
-                                contentDescription = "Back",
-                                tint = SecondaryColor,
-                                modifier = Modifier
-                                    .align(Alignment.Center)
-                                    .size(24.dp)
-                            )
-                        }
-                    }
-                }
-
-                )
-
-        },
+                bottomPadding = 20.dp
+            )
+        }
 
     ) {
             paddingValues ->
@@ -113,11 +74,16 @@ fun PrivacyPolicyScreen() {
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
+            // Background image at the bottom
+            BackgrountOtherImage(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+            )
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(top = 70.dp) //
-
                     .padding(horizontal = 20.dp)
                     .verticalScroll(rememberScrollState())//  Makes the content scrollable
             ) {
@@ -148,12 +114,7 @@ fun PrivacyPolicyScreen() {
 
 
             }
-            // Background image at the bottom
-            BackgrountOtherImage(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .fillMaxWidth()
-            )
+
         }
 
 

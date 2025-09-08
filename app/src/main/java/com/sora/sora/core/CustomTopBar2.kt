@@ -1,4 +1,6 @@
 package com.sora.sora.core
+import BackPressHandler
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Row
@@ -28,11 +30,15 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
 import com.sora.sora.ui.theme.SecondaryColor
 import com.sora.sora.ui.theme.SecondaryColor100
+import kotlinx.coroutines.delay
 
 @Composable
 fun CustomAppBar(
@@ -43,13 +49,24 @@ fun CustomAppBar(
     backIconColor: Color = SecondaryColor,  // Back icon color, default is black
     titleColor: Color = Color.Black,  // Title color, default is black
     onBackClick: (() -> Unit)? = null,  // onBackClick is nullable for flexible back action handling
+    bottomPadding  : Dp = 0.dp,
     modifier: Modifier = Modifier  // To allow further customization
 ) {
+    // Remember the state to control the back button click
+    val isBackPressed = remember { mutableStateOf(false) }
+    // This ensures that LaunchedEffect is used in a Composable scope
+    if (isBackPressed.value) {
+        LaunchedEffect(Unit) {
+            delay(300)  // Delay to prevent multiple pops in quick succession
+            isBackPressed.value = false
+        }
+    }
+
     Box(
         modifier =  modifier
             .fillMaxWidth()
             .background(backgroundColor)
-            .padding(top = 55.dp, start = 16.dp, end = 16.dp),
+            .padding(top = 55.dp, start = 16.dp, end = 16.dp, bottom = bottomPadding),
     ) {
         // Back button
         if (isBackButton == true) {
@@ -58,10 +75,16 @@ fun CustomAppBar(
                     .pointerInput(Unit) {
                         detectTapGestures(
                             onPress = { offset ->
-                                if (onBackClick == null) {
-                                    navController?.popBackStack()
-                                } else {
-                                    onBackClick()
+                                // If the button is pressed and no previous action was triggered, handle the navigation
+                                if (!isBackPressed.value) {
+                                    isBackPressed.value = true
+
+                                    // Call the provided onBackClick action or default navigation action
+                                    if (onBackClick == null) {
+                                        navController?.popBackStack()
+                                    } else {
+                                        onBackClick()
+                                    }
                                 }
                                 awaitRelease()
                             }
