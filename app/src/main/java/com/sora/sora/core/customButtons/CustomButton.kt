@@ -357,8 +357,9 @@ fun CountButton(
             ) {
                 Box(
                     modifier = Modifier
+                        .height(65.dp)
                         .size( if(expanded)36.dp else   100.dp)
-                        .clip(RoundedCornerShape(10.dp))
+                        .clip(RoundedCornerShape(20.dp))
                         .clickable {
                             if (quantity < maxQty) {
                                 expanded = true
