@@ -1,9 +1,10 @@
 package com.sora.sora.features.profile.screen
 
-
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -14,8 +15,9 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -26,77 +28,95 @@ import androidx.compose.ui.unit.sp
 import com.sora.sora.R
 import com.sora.sora.core.CustomAppBar
 import com.sora.sora.core.customText.CustomMontserratText
+import com.sora.sora.core.navigations.Dest
 import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.vFactor
-import com.sora.sora.ui.theme.AppGray
 import com.sora.sora.ui.theme.AppTextGray
+import com.sora.sora.ui.theme.SecondaryColor
+import com.sora.sora.ui.theme.SecondaryColor100
 
 @Preview(showBackground = true)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TermsAndConditionsScreen() {
+fun TermsAndConditionsScreen()
+{
     val context = LocalContext.current
     var showBackPressed by remember { mutableStateOf(false) }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
+    Scaffold (
+        containerColor = Color.White,
 
-            .background(Color.White) // Background for the entire screen
+
+        modifier = Modifier
+            .background(Color.White)
+            .padding(
+                bottom = WindowInsets.systemBars
+                    .asPaddingValues()
+                    .calculateBottomPadding()
+            )
+            .fillMaxSize(),
+
+        topBar = {
+            CustomAppBar(
+                title = "Terms & Condition",
+                isBackButton = true,
+                onBackClick = {
+                    // Handle back click, navigate back or pop from the navigation stack
+                    navController.popBackStack()
+                },
+                bottomPadding = 20.dp
+            )
+        }
+
     ) {
-        CustomAppBar(
-            title = "Terms & Conditions",
-            onBackClick = {
-                // Handle back click, navigate back or pop from the navigation stack
-                navController.popBackStack()
-            },
-            modifier = Modifier.align(Alignment.TopCenter) // Aligning app bar at the top
-        )
+            paddingValues ->
 
         // Column for text content
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 76.dp) //
-
-                .padding(horizontal = 20.dp, )
-                .verticalScroll(rememberScrollState())//  Makes the content scrollable
+        Box(
+            modifier = Modifier.fillMaxSize()
         ) {
-            // Back Button Section
-
-
-            Spacer(modifier = Modifier.height(vFactor(45)))
-            QuestionAnswer(
-                question = "Introduction",
-                answer = "Welcome to Sora Store, your trusted e-commerce platform in Kuwait. By accessing or using our mobile application, you agree to comply with and be bound by these Terms and Conditions. These terms govern your use of the app and establish your legal rights and obligations. Please read them thoroughly before using the application."
+            // Background image at the bottom
+            BackgrountOtherImage(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
             )
-            QuestionAnswer(
-                question = "Acceptance of Terms",
-                answer = "By using Sora Store, you confirm that you have read, understood, and agreed to these Terms and Conditions, along with our Privacy Policy. If you disagree with any part of these terms, please refrain from using our application."
-            )
-            QuestionAnswer(
-                question = "Eligibility",
-                answer = "• You must be at least 18 years of age to use this application. Users under 18 may only use the app with parental consent.\n" +
-                        "• The application is designed for residents of Kuwait and is subject to the laws and regulations of Kuwait.\n" +
-                        "• Users are responsible for ensuring that their use of the application complies with local laws and regulations."
-            )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 70.dp) //
+
+                    .padding(horizontal = 20.dp)
+                    .verticalScroll(rememberScrollState())//  Makes the content scrollable
+            ) {
+                Spacer(modifier = Modifier.height(vFactor(45)))
+                QuestionAnswer(
+                    question = "Introduction",
+                    answer = "Welcome to Sora Store, your trusted e-commerce platform in Kuwait. By accessing or using our mobile application, you agree to comply with and be bound by these Terms and Conditions. These terms govern your use of the app and establish your legal rights and obligations. Please read them thoroughly before using the application."
+                )
+                QuestionAnswer(
+                    question = "Acceptance of Terms",
+                    answer = "By using Sora Store, you confirm that you have read, understood, and agreed to these Terms and Conditions, along with our Privacy Policy. If you disagree with any part of these terms, please refrain from using our application."
+                )
+                QuestionAnswer(
+                    question = "Eligibility",
+                    answer = "• You must be at least 18 years of age to use this application. Users under 18 may only use the app with parental consent.\n" +
+                            "• The application is designed for residents of Kuwait and is subject to the laws and regulations of Kuwait.\n" +
+                            "• Users are responsible for ensuring that their use of the application complies with local laws and regulations."
+                )
 
 
+                // Acceptance of terms section
 
 
-
-            // Acceptance of terms section
-
-
+            }
 
         }
-        BackgrountOtherImage(
-            modifier = Modifier.align(Alignment.BottomCenter)
-                .fillMaxWidth()
-        )
 
 
     }
 }
+
 @Composable
 fun BackgrountOtherImage(
     modifier: Modifier = Modifier,

@@ -88,6 +88,7 @@ fun CartScreen() {
         backgroundColor = Color.White,
         modifier = Modifier
         .fillMaxSize()
+            .systemBarsPadding()
         .pullRefresh(pullRefreshState),
             topBar = {
 
@@ -663,7 +664,7 @@ fun SmallCouponTextField(
     Box(
         modifier = modifier
             .height(44.dp)                                   // total height ~44 dp
-            .background(TextFieldBackgroundColors, RoundedCornerShape(12.dp))
+            .background(Color(0xFFF2F2F2), RoundedCornerShape(12.dp))
             // NOTE: we removed the .border(...) here
             .padding(horizontal = 12.dp),                    // left/right padding
         contentAlignment = Alignment.CenterStart
@@ -683,6 +684,7 @@ fun SmallCouponTextField(
             cursorBrush = SolidColor(Color(0xFF8B5E3C)),      // brown cursor
             modifier = Modifier
                 .fillMaxWidth()
+                .background(Color(0xFFF2F2F2),)
             // no top/bottom padding here so the text sits centered
         )
 
