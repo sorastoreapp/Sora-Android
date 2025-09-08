@@ -214,7 +214,6 @@ fun DashboardScreen(navController: NavController) {
                 3 -> FavoritesScreen()
                 4 -> ProfileScreen()
                 else -> HomeScreen()
-
             }
         }
     }
