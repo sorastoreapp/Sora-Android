@@ -63,6 +63,7 @@ import com.sora.sora.ui.theme.AppTextGray
 import com.sora.sora.ui.theme.IconBackgroundColor
 import com.sora.sora.ui.theme.PrimaryColor100
 import com.sora.sora.ui.theme.ProductCardColor
+import kotlinx.coroutines.delay
 
 @Composable
 fun ItemDetailScreen(
@@ -80,6 +81,15 @@ fun ItemDetailScreen(
     )
     var textExpanded by remember { mutableStateOf(false) }
 
+    //back button
+    var isClickEnabled by remember { mutableStateOf(true) }
+    var backPressDebouncing =  LaunchedEffect(Unit) {
+        isClickEnabled = false
+        delay(500)
+        isClickEnabled = true
+        navController.popBackStack()
+
+    }
 
     Column(
         modifier = Modifier
@@ -101,8 +111,10 @@ fun ItemDetailScreen(
                     .size(35.dp)
                     .clip(CircleShape)
                     .background(PrimaryColor100)
-                    .clickable {
-                        navController.popBackStack()
+                    .clickable(enabled = isClickEnabled) {
+
+                        backPressDebouncing
+
                     }
 
             ) {

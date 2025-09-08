@@ -74,6 +74,7 @@ import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.navigations.toRoute
 import com.sora.sora.features.category.CategoryDetailModel
 import com.sora.sora.features.dashboard.FancyPagerIndicator
+import kotlinx.coroutines.delay
 
 
 /** Working but there is no bottom bar**/
@@ -144,6 +145,16 @@ fun CategoryDetailScreen(categoryDetailModel : CategoryDetailModel) {
 
     Log.d("MyTag", "--------${categoryDetailModel.title}---")
 
+    //For back press debouncing
+    var isClickEnabled by remember { mutableStateOf(true) }
+   var backPressDebouncing =  LaunchedEffect(Unit) {
+       isClickEnabled = false
+        delay(500)
+        isClickEnabled = true
+       navController.popBackStack()
+
+   }
+
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(bottom = 40.dp)) {
@@ -188,6 +199,7 @@ fun CategoryDetailScreen(categoryDetailModel : CategoryDetailModel) {
                                 .background(themeColor2.copy(alpha = 0.1f))
 
                         ) {
+
                             Icon(
                                 imageVector = Icons.Filled.ArrowBack,
                                 contentDescription = "Back",
@@ -195,8 +207,10 @@ fun CategoryDetailScreen(categoryDetailModel : CategoryDetailModel) {
                                 modifier = Modifier
                                     .align(Alignment.Center)
                                     .size(30.dp)
-                                    .clickable {
-                                        navController.popBackStack()
+                                    .clickable(enabled = isClickEnabled) {
+
+                                        backPressDebouncing
+
                                     }
                             )
                         }
