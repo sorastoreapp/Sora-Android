@@ -108,7 +108,7 @@ fun SignInScreen(
             AppTextFieldWithSuffix(
                 value = emailController,
                 onValueChange = { emailController = it },
-                placeholder = "Faisalajmi95@gmail.com",
+                placeholder = "Email",
 
                 suffix = {
                     Icon(painter = painterResource(id = R.drawable.ic_email), contentDescription = "Some Icon", tint = PrimaryColor)
