@@ -1,6 +1,4 @@
 package com.sora.sora.core
-import BackPressHandler
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Row

@@ -146,14 +146,15 @@ fun CategoryDetailScreen(categoryDetailModel : CategoryDetailModel) {
     Log.d("MyTag", "--------${categoryDetailModel.title}---")
 
     //For back press debouncing
-    var isClickEnabled by remember { mutableStateOf(true) }
-   var backPressDebouncing =  LaunchedEffect(Unit) {
-       isClickEnabled = false
-        delay(500)
-        isClickEnabled = true
-       navController.popBackStack()
-
-   }
+    // Remember the state to control the back button click
+    val isBackPressed = remember { mutableStateOf(false) }
+    // This ensures that LaunchedEffect is used in a Composable scope
+    if (isBackPressed.value) {
+        LaunchedEffect(Unit) {
+            delay(300)  // Delay to prevent multiple pops in quick succession
+            isBackPressed.value = false
+        }
+    }
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -207,9 +208,16 @@ fun CategoryDetailScreen(categoryDetailModel : CategoryDetailModel) {
                                 modifier = Modifier
                                     .align(Alignment.Center)
                                     .size(30.dp)
-                                    .clickable(enabled = isClickEnabled) {
+                                    .clickable() {
 
-                                        backPressDebouncing
+                                        // If the button is pressed and no previous action was triggered, handle the navigation
+                                        if (!isBackPressed.value) {
+                                            isBackPressed.value = true
+
+                                            // Call the provided onBackClick action or default navigation action
+                                                navController?.popBackStack()
+
+                                        }
 
                                     }
                             )
