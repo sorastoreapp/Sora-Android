@@ -213,19 +213,19 @@ fun MainNavigation(modifier: Modifier = Modifier) {
         composable(Dest.AddReviewScreen::class.toRoute()) { AddReviewScreen() }
         composable(Dest.ReviewDetailScreen::class.toRoute()) { ReviewDetailScreen() }
         composable(Dest.SplashScreen::class.toRoute()) { SplashScreen() }
-       // composable(Dest.NotificationScreen::class.toRoute()) { NotificationScreen() }
+        composable(Dest.NotificationScreen::class.toRoute()) { NotificationScreen() }
 
-
-            composable(Dest.NotificationScreen::class.toRoute()) {
-                var context = LocalContext.current
-                // Passing parameters if necessary
-                val soundPool = remember { SoundPool.Builder().setMaxStreams(1).build() }
-                val soundId = remember { soundPool.load(context, R.raw.notification_sound, 1) }
-                NotificationEmptyStateView(
-//                    soundPool = soundPool,
-//                    soundId = soundId
-                )
-            }
+// testing notification sound
+//            composable(Dest.NotificationScreen::class.toRoute()) {
+//                var context = LocalContext.current
+//                // Passing parameters if necessary
+//                val soundPool = remember { SoundPool.Builder().setMaxStreams(1).build() }
+//                val soundId = remember { soundPool.load(context, R.raw.notification_sound, 1) }
+//                NotificationEmptyStateView(
+////                    soundPool = soundPool,
+////                    soundId = soundId
+//                )
+//            }
 
 
         /**Single Primitive Parameter*/
