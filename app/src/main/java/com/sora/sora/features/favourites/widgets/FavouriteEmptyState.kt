@@ -80,7 +80,7 @@ fun FavoriteEmptyStateView() {
 
         Spacer(modifier = Modifier.height(90.dp))
 
-        // Circle background with animated image
+
         Box(
             modifier = Modifier
                 .size(screenWidth * 0.27f)

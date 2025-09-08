@@ -1,5 +1,7 @@
 package com.sora.sora.core.navigations
 
+import android.media.SoundPool
+import com.sora.sora.R
 import com.sora.sora.features.category.screen.CategoryDetailScreen
 import CreateAccountScreen
 import EmptyCartScreen
@@ -10,10 +12,13 @@ import OtpScreen
 import SignInScreen
 import SplashScreen
 import WelcomeScreen
+
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -40,12 +45,15 @@ import com.sora.sora.features.profile.screen.AddReviewScreen
 import com.sora.sora.features.profile.screen.EditProfileScreen
 import com.sora.sora.features.profile.screen.FaqScreen
 import com.sora.sora.features.profile.screen.MyAddressesScreen
+import com.sora.sora.features.profile.screen.NotificationEmptyStateView
+
 import com.sora.sora.features.profile.screen.NotificationScreen
 import com.sora.sora.features.profile.screen.OrderDetailScreen
 import com.sora.sora.features.profile.screen.OrdersScreen
 import com.sora.sora.features.profile.screen.PaymentSuccessScreen
 import com.sora.sora.features.profile.screen.PrivacyPolicyScreen
 import com.sora.sora.features.profile.screen.ProfileScreen
+
 import com.sora.sora.features.profile.screen.TermsAndConditionsScreen
 
 
@@ -75,7 +83,7 @@ fun MainNavigation(modifier: Modifier = Modifier) {
 
     NavHost(
         navController = navController,
-        startDestination = Dest.DashBoardScreen::class.toRoute(),
+        startDestination = Dest.NotificationScreen::class.toRoute(),
         modifier = modifier
     ) {
          composable(Dest.OnboardingScreen::class.toRoute()) {
@@ -205,7 +213,20 @@ fun MainNavigation(modifier: Modifier = Modifier) {
         composable(Dest.AddReviewScreen::class.toRoute()) { AddReviewScreen() }
         composable(Dest.ReviewDetailScreen::class.toRoute()) { ReviewDetailScreen() }
         composable(Dest.SplashScreen::class.toRoute()) { SplashScreen() }
-        composable(Dest.NotificationScreen::class.toRoute()) { NotificationScreen() }
+       // composable(Dest.NotificationScreen::class.toRoute()) { NotificationScreen() }
+
+
+            composable(Dest.NotificationScreen::class.toRoute()) {
+                var context = LocalContext.current
+                // Passing parameters if necessary
+                val soundPool = remember { SoundPool.Builder().setMaxStreams(1).build() }
+                val soundId = remember { soundPool.load(context, R.raw.notification_sound, 1) }
+                NotificationEmptyStateView(
+//                    soundPool = soundPool,
+//                    soundId = soundId
+                )
+            }
+
 
         /**Single Primitive Parameter*/
         composable(Dest.OrderDetailScreen::class.toRoute() + "?status={status}") { backStackEntry ->

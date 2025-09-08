@@ -1,7 +1,20 @@
 package com.sora.sora.features.profile.screen
 
 
+import android.content.Context
+import android.media.AudioManager
+import android.media.SoundPool
 import android.util.Log
+import java.io.FileDescriptor
+import android.content.res.AssetFileDescriptor
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.keyframes
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -22,12 +35,15 @@ import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.ContentScale.Companion.Fit
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -42,11 +58,14 @@ import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.vFactor
 import com.sora.sora.ui.theme.AppGray
 import com.sora.sora.ui.theme.AppTextGray
+import com.sora.sora.ui.theme.ProductCardColor
 import com.sora.sora.ui.theme.SecondaryColor
 import com.sora.sora.ui.theme.SecondaryColor100
 import com.sora.sora.ui.theme.TextFieldBackgroundColors
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalMaterialApi::class)
 @Preview(showBackground = true)
@@ -129,6 +148,164 @@ fun NotificationScreen() {
         )
     }
 }
+
+
+@Composable
+fun NotificationEmptyStateView() {
+    // State for shake animation
+    var shake by remember { mutableStateOf(false) }
+    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+
+    // Start shaking when the composable is displayed
+    LaunchedEffect(Unit) {
+        // Start the shaking animation as soon as the screen is shown
+        shake = true
+    }
+
+    // Shake animation (rotation)
+    val rotation by animateFloatAsState(
+        targetValue = if (shake) -15f else 15f, // Rotate back and forth
+        animationSpec = infiniteRepeatable(
+            animation = keyframes {
+                durationMillis = 600 // Duration of one full shake cycle
+                0f at 0 with LinearEasing // Start at 0 degrees
+               15f at 290 with LinearEasing // Rotate to 15 degrees at 300ms
+                -15f at 600 with LinearEasing // Rotate to -15 degrees at 600ms
+            },
+            repeatMode = RepeatMode.Restart // Restart the animation after each cycle
+        )
+    )
+
+    // Layout of the notification with shaking effect
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // Notification circle with image inside
+            Box(
+                modifier = Modifier
+                    .size(screenWidth * 0.27f)
+                    .shadow(elevation = 8.dp, shape = CircleShape, clip = false)
+                    .background(color = ProductCardColor, shape = CircleShape),
+
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_notification), // Replace with your icon
+                    contentDescription = "Notification Icon",
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .size(50.dp)
+                        .rotate(rotation) // Apply rotation animation
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Text below the notification icon
+            Text("No New Notifications", style = MaterialTheme.typography.bodyLarge)
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewNotificationEmptyStateView() {
+    NotificationEmptyStateView()
+}
+
+
+//@Composable
+//fun NotificationEmptyStateView(
+////    soundPool: SoundPool,
+////    soundId: Int
+//) {
+//    // State for shake animation (start with true to initiate the shake)
+//    var shake by remember { mutableStateOf(true) }
+//
+//    // Shake animation (rotation and position)
+//    val rotation by animateFloatAsState(
+//        targetValue = if (shake) -15f else 15f,
+//        animationSpec = infiniteRepeatable(
+//            animation = keyframes {
+//                durationMillis = 200 // Duration of one shake
+//                0f at 0 with LinearEasing
+//                15f at 100 with LinearEasing
+//                -15f at 200 with LinearEasing
+//            },
+//            repeatMode = RepeatMode.Restart
+//        )
+//    )
+//
+//    // Timer for repeating system sound
+////    LaunchedEffect(Unit) {
+////        while (true) {
+////            soundPool.play(soundId, 1f, 1f, 0, 0, 1f)
+////            delay(2000) // Wait for 2 seconds before playing again
+////        }
+////    }
+////
+////    // Release SoundPool when the composable is disposed
+////    DisposableEffect(Unit) {
+////        onDispose {
+////            soundPool.release()
+////        }
+////    }
+//
+//    // Layout of the notification with shaking effect
+//    Box(
+//        modifier = Modifier.fillMaxSize(),
+//        contentAlignment = Alignment.Center
+//    ) {
+//        Column(
+//            horizontalAlignment = Alignment.CenterHorizontally
+//        ) {
+//            // Notification circle with image inside
+//            Box(
+//                modifier = Modifier
+//                    .size(100.dp)
+//                    .background(Color.Gray, shape = CircleShape)
+//            ) {
+//                Image(
+//                    painter = painterResource(id = R.drawable.ic_notification), // Replace with your icon
+//                    contentDescription = "Notification Icon",
+//                    modifier = Modifier
+//                        .align(Alignment.Center)
+//                        .size(50.dp)
+//                        .rotate(rotation) // Apply rotation animation
+//                )
+//            }
+//
+//            Spacer(modifier = Modifier.height(16.dp))
+//
+//            // Text below the notification icon
+//            Text("No New Notifications", style = MaterialTheme.typography.bodyLarge)
+//        }
+//    }
+//}
+//
+//@Preview(showBackground = true)
+//@Composable
+//fun PreviewNotificationEmptyStateView() {
+//    // For preview purposes, we'll use a mock SoundPool
+//    val mockSoundPool = object : SoundPool(1, AudioManager.STREAM_MUSIC, 0) {
+//        override fun load(path: String?, priority: Int): Int = 1
+//        override fun load(fd: FileDescriptor?, offset: Long, length: Long, priority: Int): Int = 1
+//        override fun load(context: Context?, resId: Int, priority: Int): Int = 1
+//        override fun load(afd: AssetFileDescriptor?, priority: Int): Int = 1
+//        // Implement other required methods with empty implementations
+//    }
+//
+////    NotificationEmptyStateView(
+////        soundPool = mockSoundPool,
+////        soundId = 1 // Mock sound ID
+////    )
+//}
+
+
 
 data class NotificationItem(
     val icon: Int,
