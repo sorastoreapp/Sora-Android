@@ -117,7 +117,8 @@ fun HomeScreen() {
 
 //        bottomBar = { BottomNavigationBar() },
         modifier = Modifier.fillMaxSize()
-            //.systemBarsPadding()
+            .systemBarsPadding()
+
             .background(Color.White),
         topBar = {
             TopAppBar(
