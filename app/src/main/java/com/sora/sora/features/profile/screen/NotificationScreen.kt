@@ -23,8 +23,10 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
@@ -64,6 +66,7 @@ import com.sora.sora.features.dashboard.CartScreenMainView
 import com.sora.sora.features.profile.controllers.NotificationController
 import com.sora.sora.ui.theme.AppGray
 import com.sora.sora.ui.theme.AppTextGray
+import com.sora.sora.ui.theme.PrimaryColor
 import com.sora.sora.ui.theme.ProductCardColor
 import com.sora.sora.ui.theme.SecondaryColor
 import com.sora.sora.ui.theme.SecondaryColor100
@@ -157,9 +160,14 @@ fun NotificationScreen() {
         }
 
         PullRefreshIndicator(
+
             refreshing = isRefreshing,
             state = pullRefreshState,
             modifier = Modifier.align(Alignment.TopCenter)
+                .padding(top = 70.dp),
+            contentColor = PrimaryColor,
+
+
         )
     }
 }
@@ -208,10 +216,9 @@ fun NotificationEmptyStateView() {
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.White)
+                .verticalScroll(rememberScrollState())
                 .systemBarsPadding()
                 .padding(horizontal = 16.dp, vertical = 8.dp)
-
-
         ) {
 
             Box(

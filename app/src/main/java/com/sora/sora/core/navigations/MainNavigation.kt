@@ -193,9 +193,6 @@ fun MainNavigation(modifier: Modifier = Modifier) {
         composable(Dest.ItemDetailScreen::class.toRoute()) { ItemDetailScreen()}
 //        composable(Dest.CategoryDetailScreen::class.toRoute()) { CategoryDetailScreen()}
 
-
-
-
         composable(Dest.ProfileScreen::class.toRoute()) { ProfileScreen()}
         composable(Dest.OrdersScreen::class.toRoute()) { OrdersScreen()}
         composable(Dest.MyAddressScreen::class.toRoute()) { MyAddressesScreen() }

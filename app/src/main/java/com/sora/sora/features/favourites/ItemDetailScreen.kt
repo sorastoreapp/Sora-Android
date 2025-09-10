@@ -60,7 +60,9 @@ import com.sora.sora.core.customButtons.CustomButton
 import com.sora.sora.core.customButtons.PrimaryButton
 import com.sora.sora.core.customText.CustomMontserratText
 import com.sora.sora.core.navigations.Dest
+
 import com.sora.sora.core.navigations.NavigationManager
+
 import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.navigations.toRoute
 import com.sora.sora.core.widgets.AnimatedAddToCart
@@ -167,6 +169,7 @@ fun ItemDetailScreen(
                     .size(35.dp)
                     .clip(CircleShape)
                     .background(PrimaryColor100)
+
                     .pointerInput(Unit) {
                         detectTapGestures(
                             onPress = { /* No animation on press */ },
