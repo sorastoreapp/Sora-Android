@@ -72,11 +72,13 @@ import com.sora.sora.ui.theme.AppGray
 import com.sora.sora.ui.theme.PrimaryColor
 import com.sora.sora.ui.theme.PrimaryColorFaded
 import com.sora.sora.core.widgets.ProductSection
+import com.sora.sora.features.favourites.widgets.AddToCartBottomSheet
 import com.sora.sora.ui.theme.AppTextGray
 import com.sora.sora.ui.theme.IconBackgroundColor
 import com.sora.sora.ui.theme.PrimaryColor100
 import com.sora.sora.ui.theme.ProductCardColor
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun ItemDetailScreen(
@@ -360,13 +362,7 @@ fun ItemDetailScreen(
 
 
 //              CountButton()
-              PrimaryButton(
-                  text = "Add to Cart",
-                  backgroundColor = PrimaryColor,
-                  onClick = {
-//                      NavigationManager.navigateAndClearStack(Dest.DashBoardScreen::class.toRoute())
-                  },
-              )
+               AddToCartBottomSheet()
 
 
               Spacer(modifier = Modifier.height(24.dp))

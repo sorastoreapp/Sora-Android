@@ -36,6 +36,7 @@ import com.sora.sora.core.customButtons.PrimaryButton
 import com.sora.sora.core.customText.CustomMontserratText
 import com.sora.sora.core.hFactor
 import com.sora.sora.core.navigations.Dest
+import com.sora.sora.core.navigations.NavigationManager
 import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.navigations.toRoute
 import com.sora.sora.core.vFactor
@@ -178,7 +179,7 @@ fun CreateAccountScreen(
                  text = "Continue",
                  backgroundColor = PrimaryColor,
                  onClick = {
-                     navController.navigate(Dest.ForgetPasswordScreen::class.toRoute())
+                     NavigationManager.navigateAndClearStack(Dest.DashBoardScreen::class.toRoute())
                  },
              )
 

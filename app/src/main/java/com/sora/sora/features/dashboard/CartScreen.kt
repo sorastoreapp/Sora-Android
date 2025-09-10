@@ -55,6 +55,7 @@ import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.navigations.toRoute
 import com.sora.sora.features.cart_screen.controller.CartController
 import com.sora.sora.ui.components.AppTextField
+import com.sora.sora.ui.theme.AppTextGray
 import com.sora.sora.ui.theme.IconBackgroundColor
 import com.sora.sora.ui.theme.LightBrown
 import com.sora.sora.ui.theme.PrimaryColor
@@ -318,7 +319,7 @@ fun CartScreenMainView() {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_coupon),
                         contentDescription = "coupon",
-                        tint = LightBrown,
+                        tint = AppTextGray,
                         modifier = Modifier.size(18.dp)
                     )
 
