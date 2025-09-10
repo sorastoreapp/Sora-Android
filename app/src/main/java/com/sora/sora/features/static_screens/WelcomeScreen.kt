@@ -61,7 +61,7 @@ fun WelcomeScreen(
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             // Skip Text Button
             Box(
                 modifier = Modifier
@@ -78,7 +78,7 @@ fun WelcomeScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(25.dp))
         }
     }
 }

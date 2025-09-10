@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.sp
 import com.sora.sora.R
 import com.sora.sora.core.controller.GlobalController
 import com.sora.sora.core.customButtons.CustomButton
+import com.sora.sora.core.customButtons.PrimaryButton
 import com.sora.sora.core.customText.CustomMontserratText
 import com.sora.sora.core.navigations.Dest
 import com.sora.sora.core.navigations.NavigationManager
@@ -55,8 +56,11 @@ import com.sora.sora.core.navigations.toRoute
 import com.sora.sora.features.cart_screen.controller.CartController
 import com.sora.sora.ui.components.AppTextField
 import com.sora.sora.ui.theme.IconBackgroundColor
+import com.sora.sora.ui.theme.LightBrown
 import com.sora.sora.ui.theme.PrimaryColor
 import com.sora.sora.ui.theme.ProductCardColor
+import com.sora.sora.ui.theme.SecondaryColor100
+import com.sora.sora.ui.theme.SecondaryColor500
 import com.sora.sora.ui.theme.TextFieldBackgroundColors
 import com.sora.sora.ui.theme.YellowApp
 import kotlinx.coroutines.launch
@@ -87,9 +91,9 @@ fun CartScreen() {
     Scaffold (
         backgroundColor = Color.White,
         modifier = Modifier
-        .fillMaxSize()
+            .fillMaxSize()
             .systemBarsPadding()
-        .pullRefresh(pullRefreshState),
+            .pullRefresh(pullRefreshState),
             topBar = {
 
         CenterAlignedTopAppBar(
@@ -104,15 +108,8 @@ fun CartScreen() {
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
                 )
-            },
-            navigationIcon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.img_back_circular),
-                    contentDescription = "Back",
-                    tint = Color.Black,
-                    modifier = Modifier.size(24.dp)
-                )
             }
+
 
             )
 
@@ -136,7 +133,8 @@ fun CartScreen() {
             PullRefreshIndicator(
                 refreshing = isRefreshing,
                 state = pullRefreshState,
-                modifier = Modifier.align(Alignment.TopCenter)
+                modifier = Modifier.align(Alignment.TopCenter),
+                contentColor = PrimaryColor
             )
 
         }
@@ -178,14 +176,13 @@ fun CartScreenMainView() {
 
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(bottom = 32.dp) // so bottom button isn't cut off
+            contentPadding = PaddingValues(bottom = 10.dp) // so bottom button isn't cut off
         ) {
             item {
                 CustomMontserratText(
                     text = "Products",
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 10.dp),
+                        .fillMaxWidth(),
                     color = PrimaryColor,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,
@@ -262,14 +259,13 @@ fun CartScreenMainView() {
                     textAlign = TextAlign.Start
                 )
 
-
                 //hey chatgpt i wnat row at the center of the box
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(57.dp)
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(ProductCardColor),
+                        .height(70.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(LightBrown),
                     contentAlignment = Alignment.Center // Centers Row both horizontally & vertically
                 ) {
                     Row(
@@ -312,16 +308,16 @@ fun CartScreenMainView() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(16.dp))
-                        .background(Color(0xFFF2F2F2))
+                        .background(LightBrown)
                         .height(57.dp)
-                        .border(1.dp, Color(0xFFF2F2F2), RoundedCornerShape(16.dp))
+                        .border(1.dp, LightBrown, RoundedCornerShape(16.dp))
                         .padding(start = 20.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_coupon),
                         contentDescription = "coupon",
-                        tint = Color(0xff928C8A),
+                        tint = LightBrown,
                         modifier = Modifier.size(18.dp)
                     )
 
@@ -337,9 +333,7 @@ fun CartScreenMainView() {
                     Button(
                         onClick = { /* Apply coupon logic */ },
                         colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color(
-                                0xFF7B3F00
-                            )
+                            backgroundColor = PrimaryColor
                         ),
                         shape = RoundedCornerShape(topEnd = 20.dp, bottomEnd = 20.dp),
                         modifier = Modifier
@@ -421,28 +415,15 @@ fun CartScreenMainView() {
 
 
             item {
-                Button(
+                // Login Button
+                PrimaryButton(
+                    text = "Payment",
+                    backgroundColor = PrimaryColor,
                     onClick = {
                         navController.navigate(Dest.PaymentSuccessScreen::class.toRoute())
                     },
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color(
-                            0xFF7B3F00
-                        )
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    shape = RoundedCornerShape(16.dp)
-                ) {
-                    CustomMontserratText(
-                        "Checkout",
-                        color = Color.White,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-                Spacer(modifier = Modifier.height(50.dp))
+                )
+                Spacer(modifier = Modifier.height(70.dp))
             }
         }
     }
@@ -461,7 +442,7 @@ fun CartItemCard(
 ) {
     Card(
         shape = RoundedCornerShape(16.dp),
-        elevation = 1.dp,
+        elevation = 2.dp,
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
@@ -482,7 +463,7 @@ fun CartItemCard(
                     painter = painterResource(id = item.imageRes),
                     contentDescription = item.name,
                     modifier = Modifier
-                        .size(68.dp)
+                        .size(75.dp)
                         .clip(RoundedCornerShape(16.dp)),
                     contentScale = ContentScale.Fit
                 )
@@ -516,55 +497,55 @@ fun CartItemCard(
 
                 }
 
-                Spacer(Modifier.height(6.dp))
+                Spacer(Modifier.height(12.dp))
 
 
-
-
-                Row {
-                    Column(
+                Column(
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(6.dp)
-                        ) {
-                            CustomMontserratText(
-                                "KD 5.500",
-                                fontWeight = FontWeight.Bold,
+                        CustomMontserratText(
+                            "KD 5.500",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 12.sp,
+                            color = Color(0xFF605755)
+                        )
+                        Text(
+                            "KD6.500",
+                            style = LocalTextStyle.current.copy(
+                                textDecoration = TextDecoration.LineThrough,
+                                color = Color.Gray,
                                 fontSize = 12.sp,
-                                color = Color(0xFF605755)
+                                fontWeight = FontWeight.Normal
                             )
-                            Text(
-                                "KD6.500",
-                                style = LocalTextStyle.current.copy(
-                                    textDecoration = TextDecoration.LineThrough,
-                                    color = Color.Gray,
-                                    fontSize = 12.sp,
-                                    fontWeight = FontWeight.Normal
-                                )
-                            )
-                            CustomMontserratText(
-                                "10%",
-                                fontWeight = FontWeight.SemiBold,
-                                fontSize = 12.sp,
-                                color = Color.Red
-                            )
+                        )
+                        CustomMontserratText(
+                            "10%",
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 12.sp,
+                            color = Color.Red
+                        )
 
-                        }
+                    }
+                    Spacer(Modifier.height(6.dp))
+                    Row() {
                         Spacer(Modifier.height(6.dp))
                         CustomMontserratText(
                             "Size: S",
                             fontSize = 12.sp,
                             color = Color(0xFF605755)
                         )
+                        Spacer(Modifier.weight(1f))
+                        QuantitySelector(
+                            quantity = item.quantity,
+                            onIncrease = onIncrease,
+                            onDecrease = onDecrease,
+                        )
                     }
-                    Spacer(modifier = Modifier.weight(1f))
-                    QuantitySelector(
-                        quantity = item.quantity,
-                        onIncrease = onIncrease,
-                        onDecrease = onDecrease
-                    )
                 }
+
             }
         }
     }
@@ -574,13 +555,14 @@ fun CartItemCard(
 fun QuantitySelector(
     quantity: Int,
     onIncrease: () -> Unit,
-    onDecrease: () -> Unit
+    onDecrease: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    var size = 20.dp
+    var size = 25.dp
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
+        modifier = modifier
             .clip(RoundedCornerShape(20.dp))
             .background(IconBackgroundColor)
             .padding(horizontal = 6.dp, vertical = 4.dp)
@@ -609,10 +591,10 @@ fun QuantitySelector(
             )
         }
 
-        Text(
+        CustomMontserratText(
             "$quantity",
             fontWeight = FontWeight.SemiBold,
-            fontSize = 14.sp,
+            fontSize = 16.sp,
             color = Color.Black,
             modifier = Modifier.padding(horizontal = 10.dp)
         )
@@ -678,7 +660,7 @@ fun SmallCouponTextField(
     Box(
         modifier = modifier
             .height(44.dp)                                   // total height ~44 dp
-            .background(Color(0xFFF2F2F2), RoundedCornerShape(12.dp))
+            .background(LightBrown, RoundedCornerShape(12.dp))
             // NOTE: we removed the .border(...) here
             .padding(horizontal = 12.dp),                    // left/right padding
         contentAlignment = Alignment.CenterStart
@@ -698,7 +680,7 @@ fun SmallCouponTextField(
             cursorBrush = SolidColor(Color(0xFF8B5E3C)),      // brown cursor
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0xFFF2F2F2),)
+                .background(LightBrown,)
             // no top/bottom padding here so the text sits centered
         )
 

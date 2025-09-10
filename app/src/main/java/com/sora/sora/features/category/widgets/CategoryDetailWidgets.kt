@@ -238,26 +238,22 @@ fun CategoryResultRow(resultCount: Int = 23, verticalPadding: Dp = 8.dp, horizon
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = vFactor(2), horizontal = hFactor(12)),
+                        .padding(horizontal = 16.dp, vertical = 2.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.Top
                 ) {
-                    Box(
-                        modifier = Modifier.size(0.dp)
-                    )
-
+                    Spacer(modifier = Modifier.weight(1f))
                     CustomMontserratText(
-                        text = "Filter by",
-                        fontWeight = FontWeight(500),
-                        fontSize = 14.sp,
-                        textAlign = TextAlign.Center
+                        text = "Filter By",
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 14.sp
                     )
-
+                    Spacer(modifier = Modifier.weight(1f))
                     IconButton(
                         onClick = {
                             coroutineScope.launch {
-                                filterSheetState.hide()
-                                showFilterSheet = false
+                                sortSheetState.hide()
+                                showSortSheet = false
                             }
                         },
                         modifier = Modifier.size(24.dp)
