@@ -77,7 +77,7 @@ fun MainNavigation(modifier: Modifier = Modifier) {
 
     NavHost(
         navController = navController,
-        startDestination = Dest.MyAddressScreen::class.toRoute(),
+        startDestination = Dest.Welcome::class.toRoute(),
         modifier = modifier
     ) {
          composable(Dest.DashBoardScreen::class.toRoute()) {
@@ -88,13 +88,14 @@ fun MainNavigation(modifier: Modifier = Modifier) {
         composable(Dest.Welcome::class.toRoute()) {
             WelcomeScreen(
                 onLoginClick = {
-                    navController.navigate(Dest.SignIn::class.toRoute())
+//                    navController.navigate(Dest.SignIn::class.toRoute())
+                    NavigationManager.navController.navigate(Dest.SignIn::class.toRoute())
                 },
                 onSignupClick = {
-                    navController.navigate(Dest.CreateAccountScreen::class.toRoute())
+                    NavigationManager.navController.navigate(Dest.CreateAccountScreen::class.toRoute())
                 },
                 onSkipClick = {
-                    navController.navigate(Dest.DashBoardScreen::class.toRoute())
+                    NavigationManager.navController.navigate(Dest.DashBoardScreen::class.toRoute())
                 }
             )
         }
