@@ -47,7 +47,7 @@ fun LanguageSelectionBottomSheet(
 ) {
     val languages = listOf("English", "العربية")
     val languageIcons = listOf(R.drawable.ic_usa_flat, R.drawable.ic_kuwait_flag)
-    val selectedLanguage = remember { mutableStateOf("English") }
+    val isSelectedEnglish = remember { mutableStateOf("English") }
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
@@ -90,9 +90,10 @@ fun LanguageSelectionBottomSheet(
                         .fillMaxWidth()
                         .height(48.dp)
                         .pointerInput(Unit) {
-                            // Custom touch handling for Skip Button without ripple effect
+
                             detectTapGestures {
-                                Log.d("ProfileScreen", "My orders clicked")
+                                isSelectedEnglish.value = language
+                                Log.d("ProfileScreen", "My orders clicked ${language} and ${index} ${isSelectedEnglish.value}")
                             }
                         }
                         .padding(start = 8.dp, end = 0.dp),
@@ -100,11 +101,11 @@ fun LanguageSelectionBottomSheet(
 
                     title = language,
                     onClick = {
-                        // Log.d("ProfileScreen", "My orders clicked")
+                        // Log.d("ProfileScreen", "My orders clicked---")
 
                     },
                     trailingContent = {
-                        if (selectedLanguage.value == language) Box(
+                        if (isSelectedEnglish.value == language) Box(
                             modifier = Modifier
                                 .clip(CircleShape)
                                 .background(
@@ -125,7 +126,7 @@ fun LanguageSelectionBottomSheet(
                     }
                 )
                 Spacer(modifier = Modifier.height(vFactor(3)))
-                if (selectedLanguage.value == language)
+                if (language == languages.first())
                     CommonDivider()
             }
 
@@ -135,7 +136,7 @@ fun LanguageSelectionBottomSheet(
             // Save Button
             CustomButton(
                 label = "Save",
-                onClick = { onDismiss },
+                onClick = { onDismiss() },
 
                 modifier = Modifier.padding(bottom = 8.dp) // Optional custom modifier
             )

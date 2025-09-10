@@ -77,7 +77,7 @@ fun MainNavigation(modifier: Modifier = Modifier) {
 
     NavHost(
         navController = navController,
-        startDestination = Dest.MyAddressScreen::class.toRoute(),
+        startDestination = Dest.DashBoardScreen::class.toRoute(),
         modifier = modifier
     ) {
          composable(Dest.DashBoardScreen::class.toRoute()) {
@@ -191,9 +191,6 @@ fun MainNavigation(modifier: Modifier = Modifier) {
         composable(Dest.CartScreen::class.toRoute()) { CartScreen()}
         composable(Dest.ItemDetailScreen::class.toRoute()) { ItemDetailScreen()}
 //        composable(Dest.CategoryDetailScreen::class.toRoute()) { CategoryDetailScreen()}
-
-
-
 
         composable(Dest.ProfileScreen::class.toRoute()) { ProfileScreen()}
         composable(Dest.OrdersScreen::class.toRoute()) { OrdersScreen()}

@@ -79,8 +79,7 @@ data class Address(
 @Preview(showBackground = true)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyAddressesScreen(
-) {
+fun MyAddressesScreen() {
     val controller = remember { AddressController() }
     val scope = rememberCoroutineScope()
 
@@ -103,18 +102,13 @@ fun MyAddressesScreen(
         }
     )
 
-
-
     Scaffold(
         backgroundColor = Color.White,
-
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .pullRefresh(pullRefreshState)
-            ,
+            .pullRefresh(pullRefreshState),
         topBar = {
-
             CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = Color.White,
@@ -122,17 +116,15 @@ fun MyAddressesScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(Color.White)
-                    .padding(start = 16.dp, end = 16.dp,),
+                    .padding(start = 16.dp, end = 16.dp),
                 title = {
                     CustomMontserratText(
-                        text = "My Address",
-                        color =  Color.Black,
+                        text = "My Addresses",
+                        color = Color.Black,
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
-                        textAlign = TextAlign.Center,
-
-
-                        )
+                        textAlign = TextAlign.Center
+                    )
                 },
                 navigationIcon = {
                     Row(
@@ -140,23 +132,17 @@ fun MyAddressesScreen(
                             .pointerInput(Unit) {
                                 detectTapGestures(
                                     onPress = { offset ->
-
-
-                                                navController?.popBackStack()
-
-
+                                        navController?.popBackStack()
                                     }
                                 )
                             },
-
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                          Box(
+                        Box(
                             modifier = Modifier
                                 .size(45.dp)
                                 .clip(CircleShape)
                                 .background(SecondaryColor100)
-
                         ) {
                             Icon(
                                 imageVector = Icons.Filled.ArrowBack,
@@ -169,42 +155,37 @@ fun MyAddressesScreen(
                         }
                     }
                 }
-
             )
-
         }
-
-
     ) { paddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = Color.White),
-            contentAlignment = Alignment.TopCenter,
-
-            
-
+                .background(color = Color.White)
+                .padding(paddingValues), // This ensures padding is applied properly
+            contentAlignment = Alignment.TopCenter
         ) {
-if(isAddressEmpty)
-
-{
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 20.dp)
-                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = hFactor(16))
+                    .verticalScroll(rememberScrollState()) // Make the entire content scrollable
             ) {
-
-                //            }
-
-
-                Spacer(modifier = Modifier.height(vFactor(10)))
-                // Address List
-                addresses.forEach { address ->
-                    AddressCard(address = address)
-                    Spacer(modifier = Modifier.height(vFactor(12)))
+                if (isAddressEmpty) {
+                    // Show address list
+                    Spacer(modifier = Modifier.height(vFactor(10)))
+                    addresses.forEach { address ->
+                        AddressCard(address = address)
+                        Spacer(modifier = Modifier.height(vFactor(12)))
+                    }
+                } else {
+                    // Show empty state
+                    AnimatedIconWithText(modifier = Modifier.fillMaxWidth())
                 }
-                Spacer(modifier = Modifier.height(vFactor(35)))
+
+                Spacer(modifier = Modifier.height(vFactor(35))) // Pushes the "Add new address" button to the bottom
+
+                // "Add new address" button
                 CustomButton(
                     icon = R.drawable.ic_add_brown,
                     label = "Add new address",
@@ -212,23 +193,16 @@ if(isAddressEmpty)
                         navController.navigate(Dest.AddNewAddressScreen::class.toRoute())
                     },
                     containerColor = LightBrown,
-                    textColor = PrimaryColor,
-
-                    )
-
+                    textColor = PrimaryColor
+                )
             }
-}
-            else AnimatedIconWithText(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState()),
 
-            )
-
+            // Pull-to-refresh indicator
             PullRefreshIndicator(
                 refreshing = isRefreshing,
                 state = pullRefreshState,
-                modifier = Modifier.align(Alignment.TopCenter)
+                modifier = Modifier.align(Alignment.TopCenter),
+                contentColor = PrimaryColor
             )
         }
     }
@@ -478,7 +452,7 @@ fun AnimatedIconWithText(
                 fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Center
             )
-            Spacer(modifier = Modifier.height(6.dp))
+
             CustomMontserratText(
                 text = "Your address help us deliver your order",
                 fontSize = (screenWidth.value * 0.0376).sp,
@@ -486,6 +460,7 @@ fun AnimatedIconWithText(
                 fontWeight = FontWeight.Normal,
                 textAlign = TextAlign.Center
             )
+            Spacer(modifier = Modifier.height(4.dp))
         }
     }
 }

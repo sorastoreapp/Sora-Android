@@ -304,7 +304,9 @@ fun ProfileScreen() {
           Spacer(modifier = Modifier.height(22.dp))
           CustomButton(
               label = "Log in",
-              onClick = {},
+              onClick = {
+                  navController.navigate(Dest.SignIn::class.toRoute())
+              },
               containerColor = LightBrown,
               textColor = PrimaryColor,
 
@@ -334,8 +336,6 @@ fun ProfileScreen() {
             visible = showSnackbar,
             topPadding = 50.dp,
             horizontalMargin = 10.dp,
-
-
 
             data = SnackBarData(
                 title = "Success!",
