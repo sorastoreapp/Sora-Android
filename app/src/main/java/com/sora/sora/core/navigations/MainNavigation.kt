@@ -1,7 +1,5 @@
 package com.sora.sora.core.navigations
 
-import android.media.SoundPool
-import com.sora.sora.R
 import com.sora.sora.features.category.screen.CategoryDetailScreen
 import CreateAccountScreen
 import EmptyCartScreen
@@ -16,9 +14,7 @@ import WelcomeScreen
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -29,7 +25,6 @@ import com.sora.sora.core.snackbar.AnimatedTopSnackbarDemo
 import com.sora.sora.features.static_screens.OnboardingScreen
 import com.sora.sora.core.temp.TempCustomData
 import com.sora.sora.features.category.CategoryDetailModel
-import com.sora.sora.features.category.screen.CategoryModel
 import com.sora.sora.features.common.view.screen.SeeAllProductScreen
 import com.sora.sora.features.dashboard.CartScreen
 import com.sora.sora.features.dashboard.CategoryScreen
@@ -39,13 +34,12 @@ import com.sora.sora.features.dashboard.HomeScreen
 import com.sora.sora.features.dashboard.ItemDetailScreen
 import com.sora.sora.features.favourites.widgets.ReviewDetailScreen
 import com.sora.sora.features.profile.screen.AboutUsScreen
-import com.sora.sora.features.profile.screen.AddNewAddressScreen
+import com.sora.sora.features.profile.address.screen.AddNewAddressScreen
 import com.sora.sora.features.profile.screen.AddReviewScreen
 
 import com.sora.sora.features.profile.screen.EditProfileScreen
 import com.sora.sora.features.profile.screen.FaqScreen
-import com.sora.sora.features.profile.screen.MyAddressesScreen
-import com.sora.sora.features.profile.screen.NotificationEmptyStateView
+import com.sora.sora.features.profile.address.screen.MyAddressesScreen
 
 import com.sora.sora.features.profile.screen.NotificationScreen
 import com.sora.sora.features.profile.screen.OrderDetailScreen
@@ -83,7 +77,7 @@ fun MainNavigation(modifier: Modifier = Modifier) {
 
     NavHost(
         navController = navController,
-        startDestination = Dest.DashBoardScreen::class.toRoute(),
+        startDestination = Dest.MyAddressScreen::class.toRoute(),
         modifier = modifier
     ) {
          composable(Dest.OnboardingScreen::class.toRoute()) {

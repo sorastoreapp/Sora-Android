@@ -66,7 +66,9 @@ fun ProfileScreen() {
 
       modifier = Modifier
           .background(Color.White)
-          .fillMaxSize(),
+          .fillMaxSize()
+          .systemBarsPadding()
+      ,
 
       topBar = {
 
