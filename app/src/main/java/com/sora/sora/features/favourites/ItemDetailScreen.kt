@@ -1,5 +1,7 @@
 package com.sora.sora.features.dashboard
 
+import android.content.Intent
+import android.util.Log
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
@@ -7,6 +9,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -39,19 +42,25 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.ColorFilter.Companion.tint
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.sora.sora.core.controller.GlobalController
 import com.sora.sora.core.customButtons.CountButton
 import com.sora.sora.core.customButtons.CustomButton
 
 import com.sora.sora.core.customButtons.PrimaryButton
 import com.sora.sora.core.customText.CustomMontserratText
+import com.sora.sora.core.navigations.Dest
 import com.sora.sora.core.navigations.NavigationManager.navController
+import com.sora.sora.core.navigations.toRoute
 import com.sora.sora.core.widgets.AnimatedAddToCart
 import com.sora.sora.core.widgets.ProductCard
 import com.sora.sora.features.favourites.widgets.RatingReviews
@@ -155,6 +164,16 @@ fun ItemDetailScreen(
                     .size(35.dp)
                     .clip(CircleShape)
                     .background(PrimaryColor100)
+                    .pointerInput(Unit){
+                      detectTapGestures(
+                          onPress = { /* No animation on press */ },
+                          onTap =  {
+                              GlobalController.updateSelectedIndex(2)
+                              navController.navigate(Dest.DashBoardScreen::class.toRoute())
+                          }
+                          )
+                    }
+
 
             ) {
                 Image(
@@ -529,6 +548,8 @@ fun ItemSlider(
         R.drawable.img_temp_teddy
     )
     val pagerState = rememberPagerState()
+    var isFavourite by remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
     // Only ONE coroutine that never interrupts in-progress scrolls
 //    LaunchedEffect(pagerState) {
@@ -619,10 +640,20 @@ fun ItemSlider(
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.ic_favorite_outline,),
+                        painter =  if (isFavourite) painterResource(R.drawable.ic_selected_favorite ) else painterResource(R.drawable.ic_favorite_outline),
                         contentDescription = null,
                         tint = PrimaryColor,
-                        modifier = Modifier.padding(7.dp)
+                        modifier = Modifier
+                            .padding(7.dp)
+                            .pointerInput(Unit) {
+                                detectTapGestures(
+                                    onTap = {
+
+                                        isFavourite = !isFavourite
+                                    }
+                                )
+                            }
+
                     )
 
                 }
@@ -634,8 +665,26 @@ fun ItemSlider(
                         .padding(8.dp)
                         .size(40.dp)
                         .background(IconBackgroundColor, CircleShape)
-                        .clickable {
-                            //                            onShare()
+                        .pointerInput(Unit) {
+                            detectTapGestures(
+                                onTap = {
+                                    Log.d("ProductCard", "Share clicked") // Add debug log
+                                    // Debugging log to ensure this block is reached
+                                    Log.d("MyTag", "Share button clicked!")
+
+                                    // Ensuring context is not null and start activity safely
+                                    context?.let {
+                                        val sendIntent: Intent = Intent().apply {
+                                            action = Intent.ACTION_SEND
+                                            putExtra(Intent.EXTRA_TEXT, "https://www.sora.com")
+                                            type = "text/plain"
+                                        }
+
+                                        val shareIntent = Intent.createChooser(sendIntent, null)
+                                        it.startActivity(shareIntent)
+                                    }
+                                }
+                            )
                         },
                     contentAlignment = Alignment.Center
                 ) {

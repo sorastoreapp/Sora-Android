@@ -49,6 +49,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -96,58 +97,64 @@ fun NotificationScreen() {
                 .fillMaxSize()
                 .pullRefresh(pullRefreshState)
         ) {
-            CustomAppBar(
-                title = "Notifications",
-                isBackButton = true,
-                onBackClick = {
-                    // Handle back click, navigate back or pop from the navigation stack
-                    navController.popBackStack()
-                },
-            )
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.White)
-                    .padding(horizontal = hFactor(20))// Background for the entire screen
-            ) {
+             CustomAppBar(
+                 title = "Notifications",
+                 isBackButton = true,
+                 onBackClick = {
+                     // Handle back click, navigate back or pop from the navigation stack
+                     navController.popBackStack()
+                 },
+             )
+             if (isNotificationEmpty) {
+                 NotificationEmptyStateView()
+             } else {
 
-                // Image Background
-                Spacer(modifier = Modifier.height(vFactor(16)))
 
-                // Notifications List
-                val notifications = listOf(
-                    NotificationItem(
-                        icon = R.drawable.ic_notification,
-                        title = "Big Savings Alert!",
-                        description = "Get up to 50% off on your favorite toys & kids' accessories. Hurry, limited time only",
-                        time = "10 hr ago"
-                    ),
-                    //                NotificationItem(
-                    //                    icon = R.drawable.ic_truck,
-                    //                    title = "Order Delivered!",
-                    //                    description = "Yay! Your order #12345 has been delivered. We hope your little one loves it! Let us know what you think!",
-                    //                    time = "Yesterday"
-                    //                ),
-                    NotificationItem(
-                        icon = R.drawable.ic_favorite_outline,
-                        title = "New Arrivals Just Landed!",
-                        description = "Discover the latest toys & trendy accessories for your little ones. Shop now!",
-                        time = "Yesterday"
-                    )
-                )
+                 Column(
+                     modifier = Modifier
+                         .fillMaxSize()
+                         .background(Color.White)
+                         .padding(horizontal = hFactor(20))// Background for the entire screen
+                 ) {
 
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.spacedBy(vFactor(12))
-                ) {
-                    items(notifications) { item ->
-                        NotificationCard(item)
-                    }
-                }
-            }
+                     // Image Background
+                     Spacer(modifier = Modifier.height(vFactor(16)))
+
+                     // Notifications List
+                     val notifications = listOf(
+                         NotificationItem(
+                             icon = R.drawable.ic_notification,
+                             title = "Big Savings Alert!",
+                             description = "Get up to 50% off on your favorite toys & kids' accessories. Hurry, limited time only",
+                             time = "10 hr ago"
+                         ),
+                         //                NotificationItem(
+                         //                    icon = R.drawable.ic_truck,
+                         //                    title = "Order Delivered!",
+                         //                    description = "Yay! Your order #12345 has been delivered. We hope your little one loves it! Let us know what you think!",
+                         //                    time = "Yesterday"
+                         //                ),
+                         NotificationItem(
+                             icon = R.drawable.ic_favorite_outline,
+                             title = "New Arrivals Just Landed!",
+                             description = "Discover the latest toys & trendy accessories for your little ones. Shop now!",
+                             time = "Yesterday"
+                         )
+                     )
+
+                     LazyColumn(
+                         modifier = Modifier.fillMaxSize(),
+                         verticalArrangement = Arrangement.spacedBy(vFactor(12))
+                     ) {
+                         items(notifications) { item ->
+                             NotificationCard(item)
+                         }
+                     }
+                 }
+             }
+
+
         }
-
-
 
         PullRefreshIndicator(
             refreshing = isRefreshing,
@@ -194,19 +201,24 @@ fun NotificationEmptyStateView() {
 
 
     // Layout of the notification with shaking effect
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        //contentAlignment = Alignment.Center
-    ) {
+
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)
+                .systemBarsPadding()
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+
+
         ) {
 
             Box(
                 modifier = Modifier
 
-                        .width(screenWidth * 0.185f)
-                    .height(screenHeight* 0.085f )
+                    .width(screenWidth * 0.185f)
+                    .height(screenHeight * 0.085f)
                     .shadow(elevation = 8.dp, shape = CircleShape, clip = false)
                     .background(color = ProductCardColor, shape = CircleShape),
 
@@ -222,12 +234,24 @@ fun NotificationEmptyStateView() {
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Text below the notification icon
-            Text("No New Notifications", style = MaterialTheme.typography.bodyLarge)
+            Spacer(modifier = Modifier.height(15.dp))
+            CustomMontserratText(
+                text = "Your Favourite is empty",
+                fontSize = (screenWidth.value * 0.043).sp,
+                color = Color.Black.copy(alpha = 0.8f),
+                fontWeight = FontWeight.Medium,
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(6.dp))
+            CustomMontserratText(
+                text = "Start liking your favorite products",
+                fontSize = (screenWidth.value * 0.0376).sp,
+                color = AppTextGray,
+                fontWeight = FontWeight.Normal,
+                textAlign = TextAlign.Center
+            )
         }
-    }
+
 }
 
 @Preview(showBackground = true)
