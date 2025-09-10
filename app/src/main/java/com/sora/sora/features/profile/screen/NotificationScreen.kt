@@ -219,10 +219,6 @@ fun NotificationEmptyStateView() {
                 .verticalScroll(rememberScrollState())
                 .systemBarsPadding()
                 .padding(horizontal = 16.dp, vertical = 8.dp)
-
-
-
-
         ) {
 
             Box(

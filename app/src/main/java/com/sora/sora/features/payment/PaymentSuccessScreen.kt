@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
 import com.sora.sora.core.CustomAppBar
+import com.sora.sora.core.controller.GlobalController
 import com.sora.sora.core.customButtons.CustomButton
 import com.sora.sora.core.customText.CustomMontserratText
 import com.sora.sora.core.navigations.Dest
@@ -88,6 +89,7 @@ fun PaymentSuccessScreen() {
             CustomButton(
                 label = "Done",
                 onClick = {
+                    GlobalController.updateSelectedIndex(0)
                     navController.popBackStack()
                 }
             )

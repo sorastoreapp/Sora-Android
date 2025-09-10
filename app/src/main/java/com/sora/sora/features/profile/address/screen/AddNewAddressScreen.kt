@@ -327,6 +327,7 @@ fun AddNewAddressScreen() {
 
             Spacer(modifier = Modifier.height(16.dp))
 
+
     //         Block Field
             AppTextField2(
                 placeholder = "Block",
@@ -337,6 +338,7 @@ fun AddNewAddressScreen() {
             )
 
             Spacer(modifier = Modifier.height(16.dp))
+
 
             // House No Field
             AppTextField2(

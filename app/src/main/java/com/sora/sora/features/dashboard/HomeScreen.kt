@@ -134,12 +134,13 @@ fun HomeScreen() {
                     Image(
                         painter = painterResource(R.drawable.ic_sora_logo),
                         contentDescription = "Sora Logo",
-                        modifier = Modifier.size(80.dp)
-                            .background(Color.White),
+                        modifier = Modifier.size(90.dp)
+                            .background(Color.White)
+                             .padding(5.dp),
 
                         )
                 },
-                modifier = Modifier.background(Color.White),
+                modifier = Modifier.background(Color.White).padding(vertical = vFactor(10)),
 //                colors = TopAppBarDefaults.topAppBarColors(
 //                    containerColor = Color.White
 //                )

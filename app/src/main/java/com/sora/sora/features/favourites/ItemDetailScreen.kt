@@ -46,6 +46,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.ColorFilter.Companion.tint
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.DefaultTintColor
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontStyle
@@ -59,6 +60,9 @@ import com.sora.sora.core.customButtons.CustomButton
 import com.sora.sora.core.customButtons.PrimaryButton
 import com.sora.sora.core.customText.CustomMontserratText
 import com.sora.sora.core.navigations.Dest
+
+import com.sora.sora.core.navigations.NavigationManager
+
 import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.navigations.toRoute
 import com.sora.sora.core.widgets.AnimatedAddToCart
@@ -111,8 +115,9 @@ fun ItemDetailScreen(
         Row(
             Modifier
                 .padding(horizontal = 16.dp)
-                .fillMaxWidth()
-                .padding(top = 5.dp),
+//                .background(Color.Red)
+                .fillMaxWidth(),
+//                .padding(top = 5.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             // Back Button
@@ -150,11 +155,11 @@ fun ItemDetailScreen(
 
             Image(
                 painter = painterResource(R.drawable.ic_sora_logo),
-                colorFilter = tint(PrimaryColor),
                 modifier = Modifier
-                    .padding(5.dp)
                     .size(70.dp),
+
                 contentDescription = "Cart",
+
             )
 
             Spacer(Modifier.weight(1f))
@@ -164,14 +169,15 @@ fun ItemDetailScreen(
                     .size(35.dp)
                     .clip(CircleShape)
                     .background(PrimaryColor100)
-                    .pointerInput(Unit){
-                      detectTapGestures(
-                          onPress = { /* No animation on press */ },
-                          onTap =  {
-                              GlobalController.updateSelectedIndex(2)
-                              navController.navigate(Dest.DashBoardScreen::class.toRoute())
-                          }
-                          )
+
+                    .pointerInput(Unit) {
+                        detectTapGestures(
+                            onPress = { /* No animation on press */ },
+                            onTap = {
+                                GlobalController.updateSelectedIndex(2)
+                                navController.navigate(Dest.DashBoardScreen::class.toRoute())
+                            }
+                        )
                     }
 
 
@@ -353,8 +359,14 @@ fun ItemDetailScreen(
               //        Spacer(modifier = Modifier.height(20.dp))
 
 
-              CountButton()
-
+//              CountButton()
+              PrimaryButton(
+                  text = "Add to Cart",
+                  backgroundColor = PrimaryColor,
+                  onClick = {
+//                      NavigationManager.navigateAndClearStack(Dest.DashBoardScreen::class.toRoute())
+                  },
+              )
 
 
               Spacer(modifier = Modifier.height(24.dp))

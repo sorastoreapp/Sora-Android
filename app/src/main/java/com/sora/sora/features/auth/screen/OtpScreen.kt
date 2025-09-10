@@ -216,13 +216,13 @@ fun OtpScreen() {
                 // Resend OTP section
                 if (isTimerRunning) {
                     CustomMontserratText(
-                        text = "Resend OTP in ${timer}s",
+                        text = "Resend Code in ${timer}s",
                         fontSize = 14.sp,
                         color = AppTextGray
                     )
                 } else {
                     Text(
-                        text = "Resend OTP",
+                        text = "Resend Code",
                         color = AppTextGray,
                         fontSize = 14.sp,
                         modifier = Modifier.clickable {
