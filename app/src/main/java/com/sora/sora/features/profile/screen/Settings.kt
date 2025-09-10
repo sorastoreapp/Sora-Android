@@ -1,5 +1,7 @@
 package com.sora.sora.features.profile.screen
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
@@ -312,13 +314,17 @@ fun ProfileScreen() {
           Spacer(modifier = Modifier.height(16.dp))
           CustomButton(
               label = "Have an issue? Contact us",
-              onClick = { /* Handle Click */ },
+              onClick = {
+                  val url = "https://api.whatsapp.com/send?phone=+96598981788&text=Hello,%20I%20want%20to%20inquire%20about%20your%20product."
+                  val intent = Intent(Intent.ACTION_VIEW)
+                  intent.data = Uri.parse(url)
+                  context.startActivity(intent)
+              },
               containerColor = Color(0xFFF2FBF8),
               textColor = Color(0xFF07BD74),
               icon = R.drawable.img_whatsapp // Pass the resource ID of the icon
           )
           Spacer(modifier = Modifier.height(200.dp))
-
 
       }
 

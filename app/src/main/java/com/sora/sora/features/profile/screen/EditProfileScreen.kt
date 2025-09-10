@@ -67,100 +67,129 @@ fun EditProfileScreen() {
 
     val scrollState = rememberScrollState()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.White)
-            .verticalScroll(scrollState)
-    ) {
-        CustomAppBar(
-            title = "Edit Profile",
-            onBackClick = { navController.popBackStack() }
-        )
+    Scaffold (
+        containerColor = Color.White,
 
+
+        modifier = Modifier
+            .background(Color.White)
+            .padding(
+                bottom = WindowInsets.systemBars
+                    .asPaddingValues()
+                    .calculateBottomPadding()
+            )
+            .fillMaxSize(),
+
+        topBar = {
+            CustomAppBar(
+                title = "Edit Profile",
+                isBackButton = true,
+                onBackClick = {
+                    // Handle back click, navigate back or pop from the navigation stack
+                    navController.popBackStack()
+                },
+            )
+        }
+
+    ) {
+            paddingValues ->
+
+        // Column for text content
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 16.dp, vertical = vFactor(10))
-                .background(color = Color.White),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .background(color = Color.White)
+                .padding(top = 80.dp)
+                .verticalScroll(scrollState)
         ) {
-            // Profile Image + Camera Icon
-            Box(
-                Modifier
-                    .width(87.dp)
-                    .height(88.dp)
-                    .background(
-                        color = Color(0x1A8A4C3D),
-                        shape = RoundedCornerShape(size = 9999.dp)
-                    )
-                    .align(Alignment.CenterHorizontally)
+            Spacer(modifier = Modifier.height(vFactor(30)))
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp, vertical = vFactor(10))
+                    .background(color = Color.White),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                // Use ProfileImagePicker composable to handle image selection
-                ProfileImagePicker()
+                // Profile Image + Camera Icon
+                Box(
+                    Modifier
+                        .width(87.dp)
+                        .height(88.dp)
+                        .background(
+                            color = Color(0x1A8A4C3D),
+                            shape = RoundedCornerShape(size = 9999.dp)
+                        )
+                        .align(Alignment.CenterHorizontally)
+                ) {
+                    // Use ProfileImagePicker composable to handle image selection
+                    ProfileImagePicker()
+                }
+
+
+                Spacer(modifier = Modifier.height(1.dp))
+
+                AppTextFieldWithSuffix(
+                    value = name,
+                    onValueChange = { name = it },
+                    placeholder = "Full Name",
+                    keyboardType = KeyboardType.Text,
+                    suffix = {
+                        Icon(painter = painterResource(id = R.drawable.ic_profile2), contentDescription = "Some Icon",tint = PrimaryColor)
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+
+                PhoneNumberInputField(
+                    selectedCountry = selectedCountry,
+                    onCountrySelected = { selectedCountry = it },
+                    phoneNumber = phone,
+                    onPhoneNumberChange = { phone = it }
+                )
+
+                // Email field
+                AppTextFieldWithSuffix(
+                    value = email,
+                    onValueChange = { email = it },
+                    placeholder = "Email",
+                    suffix = {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_email),
+                            contentDescription = "Email",
+                            tint = PrimaryColor
+                        )
+                    },
+                    keyboardType = KeyboardType.Email,
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(16.dp)) // Spacer before buttons
             }
+            Spacer(modifier = Modifier.weight(1f))
 
+            // Buttons at the bottom
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                CustomButton(
+                    label = "Update",
+                    onClick = { /* TODO: Handle update logic */ }
+                )
 
-            Spacer(modifier = Modifier.height(1.dp))
-
-            AppTextFieldWithSuffix(
-                value = name,
-                onValueChange = { name = it },
-                placeholder = "Full Name",
-                keyboardType = KeyboardType.Text,
-                suffix = {
-                    Icon(painter = painterResource(id = R.drawable.ic_profile2), contentDescription = "Some Icon",tint = PrimaryColor)
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-
-            PhoneNumberInputField(
-                selectedCountry = selectedCountry,
-                onCountrySelected = { selectedCountry = it },
-                phoneNumber = phone,
-                onPhoneNumberChange = { phone = it }
-            )
-
-            // Email field
-            AppTextFieldWithSuffix(
-                value = email,
-                onValueChange = { email = it },
-                placeholder = "Email",
-                suffix = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_email),
-                        contentDescription = "Email",
-                        tint = PrimaryColor
-                    )
-                },
-                keyboardType = KeyboardType.Email,
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(16.dp)) // Spacer before buttons
+                CustomButton(
+                    label = "Delete Account?",
+                    onClick = { showBottomSheet.value = true },
+                    secondaryButton = true
+                )
+            }
+            Spacer(modifier = Modifier.height(20.dp)) // Spacer
         }
-        Spacer(modifier = Modifier.weight(1f))
 
-        // Buttons at the bottom
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            CustomButton(
-                label = "Update",
-                onClick = { /* TODO: Handle update logic */ }
-            )
 
-            CustomButton(
-                label = "Delete Account?",
-                onClick = { showBottomSheet.value = true },
-                secondaryButton = true
-            )
-        }
-        Spacer(modifier = Modifier.height(20.dp)) // Spacer
     }
 
     // Show bottom sheet if required
