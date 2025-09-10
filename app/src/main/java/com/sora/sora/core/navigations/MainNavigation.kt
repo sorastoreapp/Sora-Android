@@ -1,7 +1,5 @@
 package com.sora.sora.core.navigations
 
-import android.media.SoundPool
-import com.sora.sora.R
 import com.sora.sora.features.category.screen.CategoryDetailScreen
 import CreateAccountScreen
 import EmptyCartScreen
@@ -16,9 +14,7 @@ import WelcomeScreen
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -29,7 +25,6 @@ import com.sora.sora.core.snackbar.AnimatedTopSnackbarDemo
 import com.sora.sora.features.static_screens.OnboardingScreen
 import com.sora.sora.core.temp.TempCustomData
 import com.sora.sora.features.category.CategoryDetailModel
-import com.sora.sora.features.category.screen.CategoryModel
 import com.sora.sora.features.common.view.screen.SeeAllProductScreen
 import com.sora.sora.features.dashboard.CartScreen
 import com.sora.sora.features.dashboard.CategoryScreen
@@ -39,13 +34,12 @@ import com.sora.sora.features.dashboard.HomeScreen
 import com.sora.sora.features.dashboard.ItemDetailScreen
 import com.sora.sora.features.favourites.widgets.ReviewDetailScreen
 import com.sora.sora.features.profile.screen.AboutUsScreen
-import com.sora.sora.features.profile.screen.AddNewAddressScreen
+import com.sora.sora.features.profile.address.screen.AddNewAddressScreen
 import com.sora.sora.features.profile.screen.AddReviewScreen
 
 import com.sora.sora.features.profile.screen.EditProfileScreen
 import com.sora.sora.features.profile.screen.FaqScreen
-import com.sora.sora.features.profile.screen.MyAddressesScreen
-import com.sora.sora.features.profile.screen.NotificationEmptyStateView
+import com.sora.sora.features.profile.address.screen.MyAddressesScreen
 
 import com.sora.sora.features.profile.screen.NotificationScreen
 import com.sora.sora.features.profile.screen.OrderDetailScreen
@@ -86,7 +80,7 @@ fun MainNavigation(modifier: Modifier = Modifier) {
         startDestination = Dest.Welcome::class.toRoute(),
         modifier = modifier
     ) {
-         composable(Dest.OnboardingScreen::class.toRoute()) {
+         composable(Dest.DashBoardScreen::class.toRoute()) {
             // Pass navController so OnboardingScreen can navigate
             OnboardingScreen(navController = navController)
         }
@@ -214,19 +208,19 @@ fun MainNavigation(modifier: Modifier = Modifier) {
         composable(Dest.AddReviewScreen::class.toRoute()) { AddReviewScreen() }
         composable(Dest.ReviewDetailScreen::class.toRoute()) { ReviewDetailScreen() }
         composable(Dest.SplashScreen::class.toRoute()) { SplashScreen() }
-       // composable(Dest.NotificationScreen::class.toRoute()) { NotificationScreen() }
+        composable(Dest.NotificationScreen::class.toRoute()) { NotificationScreen() }
 
-
-            composable(Dest.NotificationScreen::class.toRoute()) {
-                var context = LocalContext.current
-                // Passing parameters if necessary
-                val soundPool = remember { SoundPool.Builder().setMaxStreams(1).build() }
-                val soundId = remember { soundPool.load(context, R.raw.notification_sound, 1) }
-                NotificationEmptyStateView(
-//                    soundPool = soundPool,
-//                    soundId = soundId
-                )
-            }
+// testing notification sound
+//            composable(Dest.NotificationScreen::class.toRoute()) {
+//                var context = LocalContext.current
+//                // Passing parameters if necessary
+//                val soundPool = remember { SoundPool.Builder().setMaxStreams(1).build() }
+//                val soundId = remember { soundPool.load(context, R.raw.notification_sound, 1) }
+//                NotificationEmptyStateView(
+////                    soundPool = soundPool,
+////                    soundId = soundId
+//                )
+//            }
 
 
         /**Single Primitive Parameter*/

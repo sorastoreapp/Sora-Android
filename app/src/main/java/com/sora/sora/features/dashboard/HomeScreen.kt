@@ -41,6 +41,7 @@ import com.sora.sora.ui.theme.PrimaryColor
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.material.Scaffold
 import androidx.compose.ui.input.pointer.pointerInput
 import com.google.accompanist.pager.PagerState
 import com.sora.sora.core.controller.GlobalController
@@ -78,7 +79,10 @@ fun HomeScreen() {
         Category(2, "Clothing Products", painterResource(R.drawable.ic_temp_shirts), Color(0xFFB0A9F2)),
         Category(3, "Baby Essentials", painterResource(R.drawable.ic_temp_baby_essentials), Color(0xFFF6A2DB)),
         Category(4, "Cups & Mugs", painterResource(R.drawable.ic_temp_cup), Color(0xFFB7E9BC)),
-//        Category(5, "Accessories", painterResource(R.drawable.ic_temp_), Color(0xFFD5C2E3))
+        Category(5, "Toys & Plushies", painterResource(R.drawable.ic_temp_toy), Color(0xFFFFFAF1)),
+        Category(6, "Clothing Products", painterResource(R.drawable.img_temp_categories2), Color(0xFFF9F8FF)),
+        Category(7, "Baby Essentials", painterResource(R.drawable.img_temp_categories3), Color(0xFFFEF8F8)),
+        Category(8, "Accessories", painterResource(R.drawable.img_temp_categories4), Color(0xFFFFF7F7)),
     )
 
     // Dummy products list
@@ -113,12 +117,13 @@ fun HomeScreen() {
 
     // Scaffold for general layout
     Scaffold(
-        containerColor = Color.White,
+        backgroundColor = Color.White,
 
-//        bottomBar = { BottomNavigationBar() },
-        modifier = Modifier.fillMaxSize()
-            //.systemBarsPadding()
-            .background(Color.White),
+        modifier = Modifier
+            .background(Color.White)
+            .fillMaxSize()
+            .systemBarsPadding(),
+
         topBar = {
             TopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -132,7 +137,7 @@ fun HomeScreen() {
                         modifier = Modifier.size(80.dp)
                             .background(Color.White),
 
-                    )
+                        )
                 },
                 modifier = Modifier.background(Color.White),
 //                colors = TopAppBarDefaults.topAppBarColors(
@@ -146,7 +151,7 @@ fun HomeScreen() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = vFactor(76))
+
                 .verticalScroll(scrollState)
 
         ) {
@@ -157,23 +162,39 @@ fun HomeScreen() {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-            ){
+            ) {
                 Spacer(modifier = Modifier.height(vFactor(10)))
                 CategorySection(categories)
                 Spacer(modifier = Modifier.height(vFactor(35)))
-                ProductSection(title = AppTexts.newArrivals, products = newArrivals,categoryList = categoryList)
+                ProductSection(
+                    title = AppTexts.newArrivals,
+                    products = newArrivals,
+                    categoryList = categoryList
+                )
                 Spacer(modifier = Modifier.height(24.dp))
-                ProductSection(title = "Clothings", products = clothingProducts,categoryList = categoryList)
+                ProductSection(
+                    title = "Clothing",
+                    products = clothingProducts,
+                    categoryList = categoryList
+                )
                 Spacer(modifier = Modifier.height(vFactor(30)))
                 OfferCard()
                 Spacer(modifier = Modifier.height(vFactor(30)))
-                ProductSection(title = "Towels", products = towels,categoryList = categoryList)
+                ProductSection(title = "Towels", products = towels, categoryList = categoryList)
                 Spacer(modifier = Modifier.height(24.dp))
-                ProductSection(title = AppTexts.soraDeals, products = towels,categoryList = categoryList)
+                ProductSection(
+                    title = AppTexts.soraDeals,
+                    products = towels,
+                    categoryList = categoryList
+                )
                 Spacer(modifier = Modifier.height(24.dp))
-                ProductSection(title = "Cups & Mugs", products = mugs,categoryList = categoryList)
+                ProductSection(title = "Cups & Mugs", products = mugs, categoryList = categoryList)
                 Spacer(modifier = Modifier.height(24.dp))
-                ProductSection(title = "Discount Product", products = discountProducts,categoryList = categoryList)
+                ProductSection(
+                    title = "Discount Product",
+                    products = discountProducts,
+                    categoryList = categoryList
+                )
                 Spacer(modifier = Modifier.height(100.dp)) // extra bottom padding
             }
         }
@@ -554,7 +575,11 @@ fun PreviewCategorySection(){
         Category(2, "Clothing Products", painterResource(R.drawable.img_temp_categories2), Color(0xFFF9F8FF)),
         Category(3, "Baby Essentials", painterResource(R.drawable.img_temp_categories3), Color(0xFFFEF8F8)),
         Category(4, "Cups & Mugs", painterResource(R.drawable.img_temp_categories4), Color(0xFFF6FFF2)),
-        Category(5, "Accessories", painterResource(R.drawable.img_temp_categories4), Color(0xFFFFF7F7))
+        Category(5, "Toys & Plushies", painterResource(R.drawable.ic_temp_toy), Color(0xFFFFFAF1)),
+        Category(6, "Clothing Products", painterResource(R.drawable.img_temp_categories2), Color(0xFFF9F8FF)),
+        Category(7, "Baby Essentials", painterResource(R.drawable.img_temp_categories3), Color(0xFFFEF8F8)),
+        Category(8, "Accessories", painterResource(R.drawable.img_temp_categories4), Color(0xFFFFF7F7)),
+
     )
 
 //    CategorySection(categories = categories, onSeeAllClick = {})

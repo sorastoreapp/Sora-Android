@@ -45,6 +45,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
+import com.sora.sora.core.controller.GlobalController
 import com.sora.sora.core.customButtons.CustomButton
 import com.sora.sora.core.customText.CustomMontserratText
 import com.sora.sora.core.navigations.Dest
@@ -63,7 +64,6 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun CartScreen() {
-
 
     // Initialize controller
     val controller = remember { CartController() }
@@ -105,6 +105,14 @@ fun CartScreen() {
                     color = Color.Black
                 )
             },
+            navigationIcon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.img_back_circular),
+                    contentDescription = "Back",
+                    tint = Color.Black,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
 
             )
 
@@ -115,7 +123,13 @@ fun CartScreen() {
         Box{
 
             if (isCartEmpty)  CartScreenMainView()
-            else  EmptyCartScreen()
+            else  EmptyCartScreen(
+                onShop = {
+
+                            GlobalController.updateSelectedIndex(0)
+                            navController.navigate(Dest.DashBoardScreen::class.toRoute())
+                        })
+
 
 
 

@@ -369,7 +369,8 @@ fun CountButton(
                     contentAlignment = Alignment.Center
                 ) {
                     CustomMontserratText(
-                        text = "Add To Cart", color = PrimaryColor, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                        text = "Add To Cart", color = PrimaryColor,
+                        fontSize = 16.sp, fontWeight = FontWeight.Bold)
                 }
             }
         }

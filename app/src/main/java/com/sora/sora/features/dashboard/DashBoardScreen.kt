@@ -242,11 +242,12 @@ fun BottomNavigationBar(
             .fillMaxWidth()
             .navigationBarsPadding()  // Ensure no padding around the bottom nav
             .wrapContentSize(Alignment.BottomCenter)  // Position the bottom bar at the bottom
+
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 16.dp),
+                .padding(horizontal = 24.dp, vertical = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
