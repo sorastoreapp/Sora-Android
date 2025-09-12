@@ -78,7 +78,7 @@ fun MainNavigation(modifier: Modifier = Modifier) {
 
     NavHost(
         navController = navController,
-        startDestination = Dest.Welcome::class.toRoute(),
+        startDestination = Dest.DashBoardScreen::class.toRoute(),
         modifier = modifier
     ) {
          composable(Dest.DashBoardScreen::class.toRoute()) {
