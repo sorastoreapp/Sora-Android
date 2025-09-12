@@ -12,6 +12,7 @@ import SplashScreen
 import WelcomeScreen
 
 import android.os.Parcelable
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -120,16 +121,19 @@ fun MainNavigation(modifier: Modifier = Modifier) {
 
             )
         }
+
         composable(Dest.ForgetPasswordScreen::class.toRoute()) {
             ForgetPasswordScreen(
 
             )
         }
+
         composable(Dest.OtpScreen::class.toRoute()) {
             OtpScreen(
 
             )
         }
+
         composable(Dest.NewPasswordScreen::class.toRoute()) {
             NewPasswordScreen(
 
@@ -157,6 +161,7 @@ fun MainNavigation(modifier: Modifier = Modifier) {
             val categories = TempCustomData().categories
             CategoryScreen(  categories = categories )
         }
+
 //
 //        composable(Dest.SeeAllProductScreen::class.toRoute()) {
 //            val categories = TempCustomData().categories
@@ -183,13 +188,20 @@ fun MainNavigation(modifier: Modifier = Modifier) {
             CategoryDetailScreen(categoryDetailModel = CategoryDetailModel(title = title, themeColor1 = themeColor1, themeColor2 = themeColor2))
         }
 
-
-
-
         composable(Dest.FavoritesScreen::class.toRoute()) {
             FavoritesScreen()
         }
-        composable(Dest.CartScreen::class.toRoute()) { CartScreen()}
+//        composable(Dest.CartScreen::class.toRoute()) { CartScreen()}
+
+        composable(Dest.CartScreen::class.toRoute() + "?isBackButton={isBackButton}") { backStackEntry ->
+            val isBackButton = backStackEntry.arguments?.getString("isBackButton") ?: "false" // Default to false if null
+            val isBackButtonBool = if (isBackButton == "true") true else false
+            Log.d("MyTag", "MainNavigation: isBackButton=$isBackButtonBool")
+            CartScreen(isBackButton = isBackButtonBool)
+        }
+
+
+
         composable(Dest.ItemDetailScreen::class.toRoute()) { ItemDetailScreen()}
 //        composable(Dest.CategoryDetailScreen::class.toRoute()) { CategoryDetailScreen()}
 

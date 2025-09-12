@@ -195,7 +195,7 @@ fun CategoryDetailScreen(categoryDetailModel : CategoryDetailModel) {
                         // Back Button
                         Box(
                             modifier = Modifier
-                                .size(35.dp)
+                                .size(45.dp)
                                 .clip(CircleShape)
                                 .background(themeColor2.copy(alpha = 0.1f))
 
@@ -207,7 +207,7 @@ fun CategoryDetailScreen(categoryDetailModel : CategoryDetailModel) {
                                 tint = themeColor2,
                                 modifier = Modifier
                                     .align(Alignment.Center)
-                                    .size(30.dp)
+                                    .size(24.dp)
                                     .clickable() {
 
                                         // If the button is pressed and no previous action was triggered, handle the navigation
@@ -251,8 +251,8 @@ fun CategoryDetailScreen(categoryDetailModel : CategoryDetailModel) {
                                     detectTapGestures(
                                         onPress = { /* No animation on press */ },
                                         onTap = {
-                                            GlobalController.updateSelectedIndex(2)
-                                            navController.navigate(Dest.DashBoardScreen::class.toRoute())
+                                            navController.navigate(Dest.CartScreen::class.toRoute() + "?isBackButton=true")
+
                                         }
                                     )
                                 }

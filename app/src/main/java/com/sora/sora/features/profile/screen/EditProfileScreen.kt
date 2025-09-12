@@ -176,8 +176,10 @@ fun EditProfileScreen() {
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 CustomButton(
-                    label = "Update",
-                    onClick = { /* TODO: Handle update logic */ }
+                    label   = "Update",
+                    onClick = {
+                    navController.popBackStack()
+                    }
                 )
 
                 CustomButton(

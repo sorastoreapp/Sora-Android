@@ -326,7 +326,7 @@ fun ProfileScreen() {
               textColor = Color(0xFF07BD74),
               icon = R.drawable.img_whatsapp // Pass the resource ID of the icon
           )
-          Spacer(modifier = Modifier.height(200.dp))
+          Spacer(modifier = Modifier.height(80.dp))
 
       }
 

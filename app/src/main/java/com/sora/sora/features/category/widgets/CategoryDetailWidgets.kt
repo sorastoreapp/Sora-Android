@@ -61,6 +61,7 @@ fun CategoryResultRow(resultCount: Int = 23, verticalPadding: Dp = 8.dp, horizon
             .padding(horizontal = horizontalPadding, vertical = verticalPadding),
         verticalAlignment = Alignment.CenterVertically
     ) {
+
         CustomMontserratText(
             text = "$resultCount Results",
             modifier = Modifier.weight(1f),
@@ -131,6 +132,7 @@ fun CategoryResultRow(resultCount: Int = 23, verticalPadding: Dp = 8.dp, horizon
                     showSortSheet = false
                 }
             },
+            containerColor = Color.White,
             sheetState = sortSheetState,
             modifier = Modifier.height(400.dp)
         ) {
@@ -221,6 +223,7 @@ fun CategoryResultRow(resultCount: Int = 23, verticalPadding: Dp = 8.dp, horizon
                     showFilterSheet = false
                 }
             },
+            containerColor = Color.White,
             sheetState = filterSheetState,
             modifier = Modifier.heightIn(min = 300.dp)
         ) {

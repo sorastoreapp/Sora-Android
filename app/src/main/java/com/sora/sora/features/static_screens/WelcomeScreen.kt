@@ -71,7 +71,7 @@ fun WelcomeScreen(
                     ) { onSkipClick() }
             ) {
                 CustomMontserratText(
-                    "Continue as a Guest",
+                    "Continue as a guest",
                     color = PrimaryColor,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.W700

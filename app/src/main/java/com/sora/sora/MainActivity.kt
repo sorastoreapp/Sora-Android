@@ -6,52 +6,29 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.sora.sora.core.navigations.MainNavigation
 import com.sora.sora.ui.theme.SoraTheme
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Surface
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 
 
-
-
-
-/**CODE WITHOUT NAVIGATIONS"*/
-//
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         setContent {
             SoraTheme {
-
-//                HomeScreen()
-                MainNavigation()
-
-//                AccountDetailsScreen(
-//                    onBackClick = { /* Handle back */ },
-//                    onContinueClick = { data -> /* Handle data */ }
-//                )
-
-//                Surface(modifier = Modifier.fillMaxSize()) {
-//                    SignInScreen(
-//                        modifier = Modifier.fillMaxSize(),
-//                        onLoginClick = { phoneNumber ->
-//                            Log.d("SignInScreen", "Login clicked with phone: $phoneNumber")
-//                            // TODO: Add your login logic here
-//                        },
-//                        onRegisterClick = {
-//                            Log.d("SignInScreen", "Register clicked")
-//                            // TODO: Navigate to registration screen
-//                        },
-//                        onSocialLoginClick = { provider ->
-//                            Log.d("SignInScreen", "Social login clicked: $provider")
-//                            // TODO: Trigger social login flow (Google, Facebook, Apple)
-//                        },
-//                        onCountryCodeChange = { countryCode ->
-//                            Log.d("SignInScreen", "Country code changed to $countryCode")
-//                            // TODO: Handle country code changes if needed
-//                        }
-//                    )
-//                }
+                // Set background to white for the entire screen
+                Surface(modifier = Modifier.fillMaxSize().background(Color.White)) {
+                    // Use MainNavigation for navigation or HomeScreen based on your app's flow
+                    MainNavigation()
+                }
             }
         }
     }
 }
+
 
 
