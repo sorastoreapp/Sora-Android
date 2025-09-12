@@ -89,9 +89,12 @@ fun CartScreen(isBackButton : Boolean = false) {
     )
 
     Scaffold (
+
         backgroundColor = Color.White,
+        contentColor = Color.White,
         modifier = Modifier
             .fillMaxSize()
+            .background(Color.White)
             .systemBarsPadding()
             .pullRefresh(pullRefreshState),
             topBar = {

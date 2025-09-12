@@ -72,7 +72,15 @@ fun FavoritesScreen() {
         }
     }
 
-    Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues ->
+    Scaffold(
+        contentColor = Color.White,
+        containerColor = Color.White,
+        modifier = Modifier.fillMaxSize()
+            .background(color = Color.White)
+            .systemBarsPadding()
+
+    )
+    { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
