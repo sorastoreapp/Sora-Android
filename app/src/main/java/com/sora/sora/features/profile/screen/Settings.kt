@@ -305,13 +305,12 @@ fun ProfileScreen() {
           CustomButton(
               label = "Log in",
               onClick = {
-                  navController.navigate(Dest.SignIn::class.toRoute())
+                  navController.navigate(Dest.CreateAccountScreen::class.toRoute())
               },
               containerColor = LightBrown,
               textColor = PrimaryColor,
 
               )
-
 
           Spacer(modifier = Modifier.height(16.dp))
           CustomButton(

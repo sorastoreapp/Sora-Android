@@ -102,7 +102,7 @@ fun ItemDetailScreen(
     // This ensures that LaunchedEffect is used in a Composable scope
     if (isBackPressed.value) {
         LaunchedEffect(Unit) {
-            delay(300)  // Delay to prevent multiple pops in quick succession
+            delay(700)  // Delay to prevent multiple pops in quick succession
             isBackPressed.value = false
         }
     }

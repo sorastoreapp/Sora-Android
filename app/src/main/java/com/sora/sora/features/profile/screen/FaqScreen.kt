@@ -95,8 +95,8 @@ fun FaqScreen()
 
                 QuestionAnswer(question = "Where does Sora operate?", answer = "Currently, Sora is designed for residents of Kuwait and follows the local laws and regulations.")
 
-                QuestionAnswer(question="Who can use the Sora app?", answer="• You must be at least 18 years old to use the app independently.\n" +
-                        "• Users under 18 can use the app with parental consent.\n"+
+                QuestionAnswer(question="Who can use the Sora app?", answer="• You must be at least 18 years old to use the app independently." +
+                        "• Users under 18 can use the app with parental consent."+
                         "• The app is intended for individuals aged 12 and above (as per the privacy policy).\n")
 
                 QuestionAnswer(question="How do I create an account?", answer="Simply download the Sora app, sign up with your details, and start shopping!")
@@ -133,14 +133,14 @@ fun QuestionAnswer(question:String, answer:String) {
             fontSize = 18.sp,
             color = Color.Black
         )
-
+        Spacer(modifier = Modifier.height(6.dp))
         CustomMontserratText(
             text = answer,
-            fontSize = 18.sp,
+            fontSize = 16.sp,
             color = Color.Black,
-            fontWeight = FontWeight.Medium
+            fontWeight = FontWeight.W500
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(12.dp))
     }
 }
