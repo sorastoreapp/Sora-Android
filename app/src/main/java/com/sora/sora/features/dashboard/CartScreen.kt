@@ -532,14 +532,14 @@ fun CartItemCard(
                 Column(
                 ) {
                     Row(
-                        verticalAlignment = Alignment.CenterVertically,
+                        verticalAlignment = Alignment.Bottom,
                         horizontalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
                         CustomMontserratText(
                             "KD 5.500",
                             fontWeight = FontWeight.Bold,
-                            fontSize = 12.sp,
-                            color = Color(0xFF605755)
+                            fontSize = 18.sp,
+                            color = PrimaryColor
                         )
                         Text(
                             "KD6.500",
@@ -548,14 +548,18 @@ fun CartItemCard(
                                 color = Color.Gray,
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.Normal
-                            )
+
+                            ),
+                            modifier = Modifier.padding(bottom = 1.6.dp)
                         )
                         CustomMontserratText(
                             "10%",
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 12.sp,
-                            color = Color.Red
+                            color = Color.Red,
+                            modifier = Modifier.padding(bottom = 1.6.dp)
                         )
+
 
                     }
                     Spacer(Modifier.height(6.dp))

@@ -243,7 +243,7 @@ fun NotificationEmptyStateView() {
 
             Spacer(modifier = Modifier.height(15.dp))
             CustomMontserratText(
-                text = "Your Favourite is empty",
+                text = "You haven't received any alerts yet.",
                 fontSize = (screenWidth.value * 0.043).sp,
                 color = Color.Black.copy(alpha = 0.8f),
                 fontWeight = FontWeight.Medium,
@@ -251,7 +251,7 @@ fun NotificationEmptyStateView() {
             )
             Spacer(modifier = Modifier.height(6.dp))
             CustomMontserratText(
-                text = "Start liking your favorite products",
+                text = "Stay updated on the best offers!",
                 fontSize = (screenWidth.value * 0.0376).sp,
                 color = AppTextGray,
                 fontWeight = FontWeight.Normal,

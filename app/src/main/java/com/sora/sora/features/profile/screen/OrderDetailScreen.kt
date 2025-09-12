@@ -204,21 +204,21 @@ fun OrderDetailScreen(status: String ="Processing", ) {
                         Spacer(modifier = Modifier.height(vFactor(24)))
 
                         // Cancel Order Button for specific statuses
-                        if (orderStatusEnum == OrderStatusEnum.Processing) {
-                            CustomButton(
-                                label = "Cancel Order?",
-                                onClick = {
-                                    // Show the bottom sheet when the Cancel Order button is clicked
-                                    showBottomSheet.value = true
-
-                                },
-
-                                containerColor = Color(0xFFDB5A5A).copy(alpha = 0.05f),
-                                textColor = Color(0xFFDB5A5A),
-                                modifier = Modifier.padding(bottom = 8.dp)
-                            )
-                            Spacer(modifier = Modifier.width(hFactor(16)))
-                        }
+//                        if (orderStatusEnum == OrderStatusEnum.Processing) {
+//                            CustomButton(
+//                                label = "Cancel Order?",
+//                                onClick = {
+//                                    // Show the bottom sheet when the Cancel Order button is clicked
+//                                    showBottomSheet.value = true
+//
+//                                },
+//
+//                                containerColor = Color(0xFFDB5A5A).copy(alpha = 0.05f),
+//                                textColor = Color(0xFFDB5A5A),
+//                                modifier = Modifier.padding(bottom = 8.dp)
+//                            )
+//                            Spacer(modifier = Modifier.width(hFactor(16)))
+//                        }
 
                         // Conditional button text for specific order statuses
                         if (orderStatusEnum != null && orderStatusEnum in listOf(
@@ -227,7 +227,8 @@ fun OrderDetailScreen(status: String ="Processing", ) {
                                 OrderStatusEnum.Delivered,
                                 OrderStatusEnum.Refund,
                                 OrderStatusEnum.Returned,
-                                OrderStatusEnum.Confirmed
+                                OrderStatusEnum.Confirmed,
+                                OrderStatusEnum.Processing
                             )
                         ) {
                             CustomButton(

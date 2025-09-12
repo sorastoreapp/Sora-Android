@@ -98,7 +98,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
 import com.sora.sora.core.customText.CustomMontserratText
-import com.sora.sora.core.widgets.AnimatedAddToCart
+//import com.sora.sora.core.widgets.AnimatedAddToCart
 import com.sora.sora.ui.theme.PrimaryColor
 import com.sora.sora.ui.theme.TextFieldColor3
 import kotlinx.coroutines.delay
@@ -169,15 +169,17 @@ fun CustomButton(
                     painter = painterResource(id = icon),
 
                     contentDescription = "",
-                    modifier = Modifier.size(20.dp)
+                    modifier = Modifier.size(24.dp)
 
 
                 )
                 Spacer(modifier = Modifier.width(10.dp)) // Spacer between icon and text
             }
 
+
+
             // Button Text
-            Text(
+            CustomMontserratText(
                 text = if (required) "$label *" else label, // Append '*' for required fields
                 color = if (secondaryButton) Color(0xFFDB5A5A) else textColor,
                 fontSize = 16.sp,

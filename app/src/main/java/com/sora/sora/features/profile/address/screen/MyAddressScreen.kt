@@ -89,9 +89,7 @@ fun MyAddressesScreen() {
         Address(name = "Nasser AL-Quraini", address = "House 12, Street 4, Block 5 Jabriya, Hawally  Kuwait ", phone = "+965 9876 5432"),
         Address(name = "Michael Thompson", address = "4321 Ocean Drive, Floor 3, Hawally, Kuwait, 15002", phone = "+965 9765 4321"),
         Address(name = "Sophia Martinez", address = "7890 Pearl Tower, Apartment 21A, Fahaheel, Kuwait, 30010", phone = "+965 9543 6789"),
-        Address(name = "Sophia Martinez", address = "7890 Pearl Tower, Apartment 21A, Fahaheel, Kuwait, 30010", phone = "+965 9543 6789"),
-        Address(name = "Sophia Martinez", address = "7890 Pearl Tower, Apartment 21A, Fahaheel, Kuwait, 30010", phone = "+965 9543 6789"),
-        Address(name = "Sophia Martinez", address = "7890 Pearl Tower, Apartment 21A, Fahaheel, Kuwait, 30010", phone = "+965 9543 6789")
+
     )
     val pullRefreshState = rememberPullRefreshState(
         refreshing = isRefreshing,
@@ -190,7 +188,7 @@ fun MyAddressesScreen() {
                     modifier = Modifier.fillMaxWidth()
                         .padding(horizontal = hFactor(12)),
 
-                    icon = R.drawable.ic_add_brown,
+                    icon = R.drawable.img_add,
                     label = "Add new address",
                     onClick = {
                         navController.navigate(Dest.AddNewAddressScreen::class.toRoute())

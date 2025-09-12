@@ -288,7 +288,10 @@ fun ItemDetailScreen(
                       )
                       Spacer(modifier = Modifier.height(12.dp))
                       Row(
-                          verticalAlignment = Alignment.Bottom
+                          verticalAlignment = Alignment.Bottom,
+                          modifier = Modifier.fillMaxSize()
+                              .padding(0.dp),
+
                       ) {
                           CustomMontserratText(
                               text = "KD 5.500",
@@ -301,14 +304,16 @@ fun ItemDetailScreen(
                               "2.500",
                               fontSize = 12.sp,
                               color = Color.Gray,
-                              textDecoration = TextDecoration.LineThrough
+                              textDecoration = TextDecoration.LineThrough,
+                              modifier = Modifier.padding(bottom = 1.6.dp)
                           )
                           Spacer(Modifier.width(4.dp))
                           CustomMontserratText(
                               "${20}%",
                               fontSize = 12.sp,
                               fontWeight = FontWeight.Bold,
-                              color = Color(0xFFD93025)
+                              color = Color(0xFFD93025),
+                                      modifier = Modifier.padding(bottom = 1.6.dp)
                           )
                       }
                   }

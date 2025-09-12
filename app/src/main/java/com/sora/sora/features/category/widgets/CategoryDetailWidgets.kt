@@ -224,6 +224,7 @@ fun CategoryResultRow(resultCount: Int = 23, verticalPadding: Dp = 8.dp, horizon
                 }
             },
             containerColor = Color.White,
+
             sheetState = filterSheetState,
             modifier = Modifier.heightIn(min = 300.dp)
         ) {
@@ -241,15 +242,16 @@ fun CategoryResultRow(resultCount: Int = 23, verticalPadding: Dp = 8.dp, horizon
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 2.dp),
+                        .padding(horizontal = 16.dp, )
+                        .padding(bottom = 5.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.Top
                 ) {
                     Spacer(modifier = Modifier.weight(1f))
                     CustomMontserratText(
                         text = "Filter By",
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 14.sp
+                        fontWeight = FontWeight.W500,
+                        fontSize = 16.sp
                     )
                     Spacer(modifier = Modifier.weight(1f))
                     IconButton(
@@ -573,7 +575,9 @@ fun CategoryResultRow(resultCount: Int = 23, verticalPadding: Dp = 8.dp, horizon
                                 .width(160.dp)
                                 .height(60.dp)
                         )
+
                 }
+                    Spacer(modifier = Modifier.height(8.dp))
 
 
                 }

@@ -251,6 +251,7 @@ fun AddNewAddressScreen() {
     var area by remember { mutableStateOf("") }
     var block by remember { mutableStateOf("") }
     var houseNo by remember { mutableStateOf("") }
+    var street by remember { mutableStateOf("") }
     var additionalDetails by remember { mutableStateOf("") }
     var selectedCountry by remember { mutableStateOf(Country("🇸🇦", "+966", "Saudi Arabia")) }
 
@@ -267,6 +268,7 @@ fun AddNewAddressScreen() {
             .background(color = Color.White)
     ) {
         CustomAppBar(
+
             title = "Add New Address",
             onBackClick = {
                 // Handle back click, navigate back or pop from the navigation stack
@@ -314,17 +316,27 @@ fun AddNewAddressScreen() {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Area Dropdown
-            CustomDropdown(
-                label = "Area",
-                items = areas,
-                selectedItem = area,
-                onItemSelected = { area = it },
-                expanded = expandedArea,
-                onExpandChanged = { expandedArea = it },
+//            // Area Dropdown
+//            CustomDropdown(
+//                label = "Area",
+//                items = areas,
+//                selectedItem = area,
+//                onItemSelected = { area = it },
+//                expanded = expandedArea,
+//                onExpandChanged = { expandedArea = it },
+//                modifier = Modifier.fillMaxWidth()
+//            )
+//
+//            Spacer(modifier = Modifier.height(16.dp))
+
+    //        Area Field
+            AppTextField2(
+                placeholder = "Area",
+                value = area,
+                onValueChange = { area = it },
+                keyboardType = KeyboardType.Text,
                 modifier = Modifier.fillMaxWidth()
             )
-
             Spacer(modifier = Modifier.height(16.dp))
 
 
@@ -343,8 +355,8 @@ fun AddNewAddressScreen() {
             // House No Field
             AppTextField2(
                 placeholder = "Street",
-                value = houseNo,
-                onValueChange = { houseNo = it },
+                value = street,
+                onValueChange = { street = it },
                 keyboardType = KeyboardType.Text,
                 modifier = Modifier.fillMaxWidth()
             )

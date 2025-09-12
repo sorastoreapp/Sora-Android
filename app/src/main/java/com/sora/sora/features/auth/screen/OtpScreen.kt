@@ -55,81 +55,6 @@ import com.sora.sora.ui.theme.PrimaryColor
 import com.sora.sora.ui.theme.PrimaryColor100
 import kotlinx.coroutines.delay
 
-
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun OtpScreen() {
-//    var otpValue by remember { mutableStateOf("") }
-//
-//    Box(
-//        modifier = Modifier.fillMaxSize()
-//    ) {
-//        Column(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .align(Alignment.TopCenter)
-//                .background(color = Color.White)
-//        ) {
-//
-//            CustomAppBar(
-//                title = "OTP",
-//                onBackClick = {
-//                    navController.popBackStack()
-//                }
-//            )
-//
-//            Column(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(horizontal = hFactor(20)),
-//                horizontalAlignment = Alignment.CenterHorizontally
-//            ) {
-//
-//                Spacer(modifier = Modifier.height(vFactor(30)))
-//                Image(
-//                    painter = painterResource(id = R.drawable.ic_email),  // your mail icon
-//                    contentDescription = null,
-//                    modifier = Modifier
-//                        .size(64.dp)
-//                        .background(Color(0xFFF8F0E8), shape = CircleShape)
-//                        .padding(18.dp)
-//                )
-//
-//                Spacer(modifier = Modifier.height(vFactor(20)))
-//
-//                CustomMontserratText(
-//                    text = "We sent an OTP to your Email",
-//                    fontSize = 14.sp,
-//                    color = AppSubTextColor
-//                )
-//
-//                Spacer(modifier = Modifier.height(vFactor(30)))
-//
-//                // — OTP Fields —
-//                // — OTP Fields —
-//                OtpTextField(
-//                    otpText = otpValue,
-//                    onOtpTextChange = { otpValue = it },
-//                    otpLength = 4
-//                )
-//
-//
-//                Spacer(modifier = Modifier.height(vFactor(40)))
-//
-//                PrimaryButton(
-//                    text = "Verify Otp",
-//                    backgroundColor = PrimaryColor,
-//                    onClick = {
-//                        // action
-//                    }
-//                )
-//
-//                Spacer(modifier = Modifier.height(vFactor(20)))
-//                //here i want resend otp text and counter
-//            }
-//        }
-//    }
-//}
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
@@ -223,8 +148,9 @@ fun OtpScreen() {
                 } else {
                     Text(
                         text = "Resend Code",
-                        color = AppTextGray,
+                        color = PrimaryColor,
                         fontSize = 14.sp,
+                        fontWeight = FontWeight.SemiBold,
                         modifier = Modifier.clickable {
                             // action to resend
                             timer = 60

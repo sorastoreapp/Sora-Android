@@ -32,7 +32,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -65,6 +65,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
@@ -624,6 +625,10 @@ fun ProductCard(
                         modifier = Modifier
                             .padding(7.dp)
                             .size(20.dp)
+                            .clickable {
+                                onFavorite()
+                                isFavourite = !isFavourite
+                            }
                             .pointerInput(Unit) {
                                 detectTapGestures(
                                     onTap = {
@@ -703,7 +708,7 @@ fun ProductCard(
 
                 Spacer(Modifier.height(4.dp))
 
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(verticalAlignment = Alignment.Bottom) {
                     CustomMontserratText("KD ${product.price}", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = PrimaryColor)
                     Spacer(Modifier.width(4.dp))
                     CustomMontserratText(product.oldPrice, fontSize = 12.sp, color = Color.Gray, textDecoration = TextDecoration.LineThrough)
