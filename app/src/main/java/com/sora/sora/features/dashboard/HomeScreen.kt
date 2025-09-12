@@ -79,10 +79,6 @@ fun HomeScreen() {
         Category(2, "Clothing Products", painterResource(R.drawable.ic_temp_shirts), Color(0xFFB0A9F2)),
         Category(3, "Baby Essentials", painterResource(R.drawable.ic_temp_baby_essentials), Color(0xFFF6A2DB)),
         Category(4, "Cups & Mugs", painterResource(R.drawable.ic_temp_cup), Color(0xFFB7E9BC)),
-        Category(5, "Toys & Plushies", painterResource(R.drawable.ic_temp_toy), Color(0xFFFFFAF1)),
-        Category(6, "Clothing Products", painterResource(R.drawable.img_temp_categories2), Color(0xFFF9F8FF)),
-        Category(7, "Baby Essentials", painterResource(R.drawable.img_temp_categories3), Color(0xFFFEF8F8)),
-        Category(8, "Accessories", painterResource(R.drawable.img_temp_categories4), Color(0xFFFFF7F7)),
     )
 
     // Dummy products list
@@ -137,7 +133,6 @@ fun HomeScreen() {
                         modifier = Modifier.size(90.dp)
                             .background(Color.White)
                              .padding(5.dp),
-
                         )
                 },
                 modifier = Modifier.background(Color.White).padding(vertical = vFactor(10)),

@@ -6,6 +6,7 @@ import com.sora.sora.features.dashboard.Product
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -33,6 +34,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter.Companion.tint
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -40,8 +42,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.R
+import com.sora.sora.core.controller.GlobalController
 import com.sora.sora.core.customText.CustomMontserratText
+import com.sora.sora.core.navigations.Dest
 import com.sora.sora.core.navigations.NavigationManager.navController
+import com.sora.sora.core.navigations.toRoute
 import com.sora.sora.core.temp.SeeAllModel
 import com.sora.sora.ui.theme.PrimaryColor
 import com.sora.sora.ui.theme.PrimaryColorFaded
@@ -159,6 +164,13 @@ fun SeeAllProductScreen(seeAllModel : SeeAllModel) {
                         .size(35.dp)
                         .clip(CircleShape)
                         .background(PrimaryColor100)
+                        .pointerInput(Unit) {
+                            detectTapGestures(
+                                onTap = {
+                                    GlobalController.updateSelectedIndex(2)
+                                 navController.navigate(Dest.DashBoardScreen::class.toRoute())
+                                }
+                            )}
 
                 ) {
                     Image(

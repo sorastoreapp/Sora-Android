@@ -177,7 +177,7 @@ fun OtpScreen() {
                     painter = painterResource(id = R.drawable.ic_mail_normal_outlined),
                     contentDescription = null,
                     modifier = Modifier
-                        .size(65.dp)
+                        .size(50.dp)
                         .background(Color(0xFFF8F0E8), shape = CircleShape)
                         .padding(9.dp)
                 )

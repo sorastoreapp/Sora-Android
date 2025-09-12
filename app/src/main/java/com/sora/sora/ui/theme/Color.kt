@@ -28,7 +28,8 @@ val TextFieldBorderColors = Color(0xFFB58353)
 
 
 val ProductCardColor = Color(0xFFF6F1EF) //#F6F1EF  //F6F1EF
-val IconBackgroundColor =  PrimaryColor100//PrimaryColor100
+val IconBackgroundColor =  PrimaryColor100.copy(alpha = 0.7f)//PrimaryColor100
+val IconBackgroundWithoutAlpha =  PrimaryColor100//PrimaryColor100
 
 //
 val TextHintColor = Color.Black.copy(alpha = 0.6f)

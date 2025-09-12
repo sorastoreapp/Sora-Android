@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sora.sora.core.customText.CustomMontserratText
-import com.sora.sora.ui.theme.IconBackgroundColor
+import com.sora.sora.ui.theme.IconBackgroundWithoutAlpha
 import com.sora.sora.ui.theme.PrimaryColor
 import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
@@ -185,7 +185,7 @@ fun CenterExpandSnackBar(
                         modifier = Modifier
                             .size(imageSize + 4.dp) // fixed logo size
                             .clip(CircleShape)
-                            .background(IconBackgroundColor),
+                            .background(IconBackgroundWithoutAlpha),
                         contentAlignment = Alignment.Center
                     ) {
                         Image(
@@ -195,7 +195,7 @@ fun CenterExpandSnackBar(
                             modifier = Modifier
                                 .size(imageSize)           // fixed logo size
                                 .clip(CircleShape)
-                                .background(IconBackgroundColor)
+                                .background(IconBackgroundWithoutAlpha)
                                 .then(
                                     if (showImageBorder)
                                         Modifier.border(imageBorderWidth, imageBorderColor, CircleShape)
@@ -238,7 +238,7 @@ fun CenterExpandSnackBar(
 
 
                             },
-                            modifier = Modifier.size(imageSize).clip(CircleShape).background(IconBackgroundColor).padding(4.dp),
+                            modifier = Modifier.size(imageSize).clip(CircleShape).background(IconBackgroundWithoutAlpha).padding(4.dp),
                         ) {
                             Icon(
                                 Icons.Default.Close,

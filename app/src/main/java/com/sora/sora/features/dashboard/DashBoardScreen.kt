@@ -201,7 +201,9 @@ fun DashboardScreen(navController: NavController) {
                 }
             )
         },
-        modifier = Modifier.fillMaxSize().background(Color.White)
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -237,84 +239,99 @@ fun BottomNavigationBar(
     )
 
     Surface(
-        color = Color.White,
+        color = Color.Black.copy(alpha = 0.8f),
         modifier = modifier
             .fillMaxWidth()
+            .padding(top = 1.dp)
             .navigationBarsPadding()  // Ensure no padding around the bottom nav
             .wrapContentSize(Alignment.BottomCenter)  // Position the bottom bar at the bottom
-
+            .graphicsLayer {
+                shadowElevation = 10.dp.toPx() // Controls the size of the shadow
+                shape = RoundedCornerShape(16.dp) // Controls the shape of the shadow
+                clip = false // Ensures the shadow is not clipped to the shape
+                translationY = 2.dp.toPx() // Pushes the element upwards to give the appearance of shadow only from the top
+            }
     ) {
-        Row(
-            modifier = Modifier
+        Surface(
+            color = Color.White,
+            modifier = modifier
                 .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+                .navigationBarsPadding()  // Ensure no padding around the bottom nav
+                .wrapContentSize(Alignment.BottomCenter)  // Position the bottom bar at the bottom
+
         ) {
-            items.forEachIndexed { index, item ->
-                val isSelected = selectedItem == index
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                items.forEachIndexed { index, item ->
+                    val isSelected = selectedItem == index
 
-                // Use animateDpAsState for smooth width change for selected tab
-                val paddingHorizontal by animateDpAsState(
-                    targetValue = if (isSelected) 16.dp else 0.dp
-                )
+                    // Use animateDpAsState for smooth width change for selected tab
+                    val paddingHorizontal by animateDpAsState(
+                        targetValue = if (isSelected) 16.dp else 0.dp
+                    )
 
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(if (isSelected) PrimaryColor else Color.Transparent)
-                        .pointerInput(Unit) {
-                            detectTapGestures(
-                                onPress = { /* No animation on press */ },
-                                onTap = { onItemSelected(index) }
-                            )
-                        }
-                        .padding(vertical = 8.dp, horizontal = paddingHorizontal)
-                        .wrapContentWidth(align = Alignment.CenterHorizontally),  // Allow text to dynamically fit width
-                    contentAlignment = Alignment.Center
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(if (isSelected) PrimaryColor else Color.Transparent)
+                            .pointerInput(Unit) {
+                                detectTapGestures(
+                                    onPress = { /* No animation on press */ },
+                                    onTap = { onItemSelected(index) }
+                                )
+                            }
+                            .padding(vertical = 8.dp, horizontal = paddingHorizontal)
+                            .wrapContentWidth(align = Alignment.CenterHorizontally),  // Allow text to dynamically fit width
+                        contentAlignment = Alignment.Center
                     ) {
-                        // Unselected icon with smooth fade and scale
-                        AnimatedVisibility(visible = !isSelected) {
-                            Icon(
-                                painter = painterResource(id = item.icon),
-                                contentDescription = item.title,
-                                modifier = Modifier.size(24.dp),
-                                tint = Color.Gray
-                            )
-                        }
-
-                        // Selected icon with smooth fade and scale
-                        AnimatedVisibility(visible = isSelected) {
-                            Icon(
-                                painter = painterResource(id = item.icon_selected),
-                                contentDescription = item.title,
-                                modifier = Modifier.size(24.dp),
-                                tint = Color.White
-                            )
-                        }
-
-                        // Text label animation with smooth horizontal expansion
-                        AnimatedVisibility(
-                            visible = isSelected,
-                            enter = fadeIn() + slideInHorizontally(initialOffsetX = { 40 }) + expandIn(),
-                            exit = fadeOut() + slideOutHorizontally(targetOffsetX = { -40 }) + shrinkOut()
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
                         ) {
-                            Text(
-                                text = item.title,
-                                color = Color.White,
-                                fontWeight = FontWeight.SemiBold,
-                                fontSize = 13.sp,
-                                modifier = Modifier
-                                    .padding(start = 4.dp)
-                                    .height(24.dp) // Fix height for consistent item size
-                                    .wrapContentWidth()  // Allow text to expand horizontally
-                                    .wrapContentHeight(align = Alignment.CenterVertically)  // Center vertically
-                                    .padding(end = 4.dp)
-                            )
+                            // Unselected icon with smooth fade and scale
+                            AnimatedVisibility(visible = !isSelected) {
+                                Icon(
+                                    painter = painterResource(id = item.icon),
+                                    contentDescription = item.title,
+                                    modifier = Modifier.size(24.dp),
+                                    tint = Color.Gray
+                                )
+                            }
+
+                            // Selected icon with smooth fade and scale
+                            AnimatedVisibility(visible = isSelected) {
+                                Icon(
+                                    painter = painterResource(id = item.icon_selected),
+                                    contentDescription = item.title,
+                                    modifier = Modifier.size(24.dp),
+                                    tint = Color.White
+                                )
+                            }
+
+                            // Text label animation with smooth horizontal expansion
+                            AnimatedVisibility(
+                                visible = isSelected,
+                                enter = fadeIn() + slideInHorizontally(initialOffsetX = { 40 }) + expandIn(),
+                                exit = fadeOut() + slideOutHorizontally(targetOffsetX = { -40 }) + shrinkOut()
+                            ) {
+                                Text(
+                                    text = item.title,
+                                    color = Color.White,
+                                    fontWeight = FontWeight.SemiBold,
+                                    fontSize = 13.sp,
+                                    modifier = Modifier
+                                        .padding(start = 4.dp)
+                                        .height(24.dp) // Fix height for consistent item size
+                                        .wrapContentWidth()  // Allow text to expand horizontally
+                                        .wrapContentHeight(align = Alignment.CenterVertically)  // Center vertically
+                                        .padding(end = 4.dp)
+                                )
+                            }
                         }
                     }
                 }

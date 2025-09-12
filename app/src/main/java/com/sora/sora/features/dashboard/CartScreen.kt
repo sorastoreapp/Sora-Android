@@ -19,6 +19,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
@@ -68,11 +69,10 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun CartScreen() {
+fun CartScreen(isBackButton : Boolean = false) {
 
     // Initialize controller
     val controller = remember { CartController() }
-
     // Observe the state of cart being empty and refreshing
     val isCartEmpty by controller.isEmptyStateTrue.collectAsState()
     val isRefreshing by controller.isRefreshing.collectAsState()
@@ -88,7 +88,6 @@ fun CartScreen() {
         }
     )
 
-
     Scaffold (
         backgroundColor = Color.White,
         modifier = Modifier
@@ -97,26 +96,55 @@ fun CartScreen() {
             .pullRefresh(pullRefreshState),
             topBar = {
 
-        CenterAlignedTopAppBar(
-            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                containerColor = Color.White
-            ),
-            modifier = Modifier.padding(0.dp),
-            title = {
-                CustomMontserratText(
-                    text = "Cart",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
+                CenterAlignedTopAppBar(
+                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                        containerColor = Color.White,
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.White)
+                        .padding(start = 16.dp, end = 16.dp),
+                    title = {
+                        CustomMontserratText(
+                            text = "Cart",
+                            color = Color.Black,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp,
+                            textAlign = TextAlign.Center
+                        )
+                    },
+                    navigationIcon = {
+                       if(isBackButton) Row(
+                            modifier = Modifier
+                                .pointerInput(Unit) {
+                                    detectTapGestures(
+                                        onPress = { offset ->
+                                            navController?.popBackStack()
+                                        }
+                                    )
+                                },
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(45.dp)
+                                    .clip(CircleShape)
+                                    .background(SecondaryColor100)
+                            ) {
+                                androidx.compose.material3.Icon(
+                                    imageVector = Icons.Filled.ArrowBack,
+                                    contentDescription = "Back",
+                                    tint = PrimaryColor,
+                                    modifier = Modifier
+                                        .align(Alignment.Center)
+                                        .size(24.dp)
+                                )
+                            }
+                        }
+                    }
                 )
-            }
-
-
-
-            )
 
     }
-
     ){
         paddingValues ->
         Box{
@@ -124,13 +152,9 @@ fun CartScreen() {
             if (isCartEmpty)  CartScreenMainView()
             else  EmptyCartScreen(
                 onShop = {
-
                             GlobalController.updateSelectedIndex(0)
                             navController.navigate(Dest.DashBoardScreen::class.toRoute())
                         })
-
-
-
 
             PullRefreshIndicator(
                 refreshing = isRefreshing,

@@ -176,8 +176,10 @@ fun ItemDetailScreen(
                         detectTapGestures(
                             onPress = { /* No animation on press */ },
                             onTap = {
-                                GlobalController.updateSelectedIndex(2)
-                                navController.navigate(Dest.DashBoardScreen::class.toRoute())
+//                                navController.navigate(Dest.CartScreen::class.toRoute())
+                                navController.navigate(Dest.CartScreen::class.toRoute() + "?isBackButton=true")
+
+
                             }
                         )
                     }
@@ -548,7 +550,7 @@ fun PreviewItemDetails(){
 
 @Composable
 fun ItemSlider(
-    modifier: Modifier = Modifier.padding(horizontal = 8.dp)
+    modifier: Modifier = Modifier.padding(horizontal = 0.dp)
 ) {
     val bannerImages = listOf(
         R.drawable.img_temp_teddy,
@@ -585,10 +587,12 @@ fun ItemSlider(
         modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        var boxSize = 370.dp
+        var iconSize = 25.dp
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(300.dp)
+                .height(boxSize)
 
         ) {
             HorizontalPager(
@@ -597,12 +601,12 @@ fun ItemSlider(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(ProductCardColor)
-                    .height(300.dp)
+                    .height(boxSize)
             ) { page ->
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(300.dp)
+                        .height(boxSize)
                 ) {
                     Image(
                         painter = painterResource(bannerImages[page]),
@@ -621,7 +625,7 @@ fun ItemSlider(
                 modifier = Modifier
                     .padding(8.dp)
                     .size(40.dp)
-                    .background(IconBackgroundColor, CircleShape)
+//                    .background(IconBackgroundColor, CircleShape)
                     .align(Alignment.TopStart)
                     .clickable {
                         //                            onFavorite()
@@ -631,7 +635,7 @@ fun ItemSlider(
                 Image(
                     painter = painterResource(R.drawable.ic_full_screen),
                     contentDescription = null,
-                    modifier = Modifier.padding(7.dp)
+                    modifier = Modifier.padding(1.dp).size(iconSize)
                 )
             }
 
@@ -653,6 +657,7 @@ fun ItemSlider(
                         tint = PrimaryColor,
                         modifier = Modifier
                             .padding(7.dp)
+                            .size(iconSize)
                             .pointerInput(Unit) {
                                 detectTapGestures(
                                     onTap = {
@@ -700,7 +705,7 @@ fun ItemSlider(
                         painter = painterResource(R.drawable.ic_share),
                         contentDescription = null,
                         tint = PrimaryColor,
-                        modifier = Modifier.padding(7.dp)
+                        modifier = Modifier.padding(7.dp).size(iconSize)
                     )
                 }
 

@@ -10,6 +10,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -40,6 +41,8 @@ import com.sora.sora.features.profile.widgets.CustomSwitch
 
 import com.sora.sora.ui.theme.AppGray
 import com.sora.sora.ui.theme.PrimaryColor
+import com.sora.sora.ui.theme.ProductCardColor
+import com.sora.sora.ui.theme.TextFieldColor
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -76,65 +79,66 @@ fun AddToCartBottomSheet() {
                 }
             },
             sheetState = sortSheetState,
-            modifier = Modifier.height(400.dp)
-        ) {
+            modifier = Modifier.defaultMinSize(),
+            containerColor = Color.White
+        )  {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 16.dp)
+                    .padding(bottom = 16.dp)
+                    .padding(horizontal = 16.dp)
             ) {
                 // Header Row
                 Row {
                     Box(
                         modifier = Modifier
-                            .size(24.dp)
+                            .size(40.dp)
                             .background(PrimaryColor, CircleShape)
-                            .padding(4.dp)
+                            .padding(10.dp)
                     ) {
                         Box(
                             modifier = Modifier
-                                .size(16.dp)
                                 .background(Color.White, CircleShape)
-                                .padding(4.dp)
+                                .align(Alignment.Center)
+                                .padding(1.dp)
                         ) {
                             Icon(
-                                imageVector = Icons.Filled.Close,
+                                imageVector = Icons.Filled.Check,
                                 contentDescription = "Correct",
-                                tint = Color.White
+                                tint = PrimaryColor
                             )
                         }
                     }
+                    Spacer(Modifier.width(10.dp))
                     CustomMontserratText(
                         text = "Are you sure you want to add this item to your cart?",
-                        fontWeight = FontWeight.SemiBold,
+                        fontWeight = FontWeight.Normal,
                         fontSize = 14.sp
                     )
                 }
                 Spacer(modifier = Modifier.height(10.dp))
 
-                Row {
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     Box(
                         modifier = Modifier
-                            .size(24.dp)
-                            .background(PrimaryColor, CircleShape)
-                            .padding(4.dp)
+                            .width(60.dp)
+                            .height(60.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                            .border(1.dp, AppGray, RoundedCornerShape(10.dp))
+                            .padding(5.dp)
                     ) {
-                        Box(
+                        Image(
+                            painter = painterResource(id = R.drawable.img_temp_teddy),
+                            contentDescription = null,
                             modifier = Modifier
-                                .size(16.dp)
-                                .background(Color.White, CircleShape)
-                                .padding(4.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Close,
-                                contentDescription = "Correct",
-                                tint = Color.White
-                            )
-                        }
+                                .fillMaxSize()
+                                .align(Alignment.Center)
+                        )
                     }
+                    Spacer(Modifier.width(10.dp))
                     Column {
                         CustomMontserratText(
-                            text = "Are you sure you want to add this item to your cart?",
+                            text = "Object Coloring Book - 30 Patterns",
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 14.sp
                         )
@@ -144,16 +148,14 @@ fun AddToCartBottomSheet() {
                             color = AppTextGray,
                             fontSize = 12.sp
                         )
-
                     }
                 }
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(15.dp))
 
                 Row{
                     Row(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
+                            .fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Button(
@@ -163,10 +165,15 @@ fun AddToCartBottomSheet() {
                                     showSortSheet = false
                                 }
                             },
+                            colors = ButtonDefaults.buttonColors(containerColor = TextFieldColor),
                             modifier = Modifier
                                 .weight(1f)
+                                .clip(RoundedCornerShape(15.dp))
+                                .background(TextFieldColor)
+                                .weight(1f)
+                                .height(45.dp)
                         ) {
-                            Text(text = "Cancel")
+                            CustomMontserratText(text = "Cancel", color = PrimaryColor, fontSize = 14.sp, fontWeight = FontWeight.Bold)
                         }
                         Spacer(modifier = Modifier.width(10.dp))
                         Button(
@@ -175,16 +182,21 @@ fun AddToCartBottomSheet() {
                                     sortSheetState.hide()
                                     showSortSheet = false
                                 }
-//                                onAddToCart?.invoke()
                             },
+                            colors = ButtonDefaults.buttonColors(containerColor = PrimaryColor),
                             modifier = Modifier
                                 .weight(1f)
+                                .clip(RoundedCornerShape(15.dp))
+                                .background(PrimaryColor)
+                                .weight(1f)
+                                .height(45.dp)
                         ) {
-                            Text(text = "Add to Cart")
+                            CustomMontserratText(text = "Add to Cart", color = Color.White, fontSize = 15.sp, fontWeight = FontWeight.Bold)
                         }
 
                     }
                     }
+
                 }
 
             }

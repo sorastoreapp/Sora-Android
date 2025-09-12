@@ -623,6 +623,7 @@ fun ProductCard(
                         tint = PrimaryColor,
                         modifier = Modifier
                             .padding(7.dp)
+                            .size(20.dp)
                             .pointerInput(Unit) {
                                 detectTapGestures(
                                     onTap = {
