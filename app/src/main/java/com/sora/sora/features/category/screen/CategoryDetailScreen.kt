@@ -277,7 +277,7 @@ fun CategoryDetailScreen(categoryDetailModel : CategoryDetailModel) {
                             }
                     ) {
                         Icon(
-                            painter = painterResource(R.drawable.ic_cat_toy),
+                            painter = painterResource(id = categoryDetailModel.iconRes),
                             contentDescription = "Teddy",
                             tint = themeColor2,
                             modifier = Modifier.size(teddySize)

@@ -49,6 +49,7 @@ import com.sora.sora.core.navigations.NavigationManager
 import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.navigations.toRoute
 import com.sora.sora.core.temp.SeeAllModel
+import com.sora.sora.core.vFactor
 import com.sora.sora.features.category.CategoryDetailModel
 import java.net.URLEncoder
 
@@ -61,7 +62,7 @@ fun CategoryScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color.White)
-            .padding(0.dp)
+            .padding(bottom = vFactor(60))
             .systemBarsPadding()
 
     ) {
@@ -82,14 +83,13 @@ fun CategoryScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .systemBarsPadding()
-               .padding(horizontal = 16.dp, vertical = 8.dp),
+               .padding(horizontal = 16.dp, vertical = 18.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             itemsIndexed(categories) { index, category ->
                 CategoryCard(category = category)
             }
         }
-
 
     }
 }
@@ -114,18 +114,20 @@ fun CategoryCard(category: CategoryItemData) {
                             val categoryDetailModel = CategoryDetailModel(
                                 title = category.title,
                                 themeColor1 = category.colorCode1,  // e.g., "#FFFADA7A"
-                                themeColor2 = category.colorCode2   // e.g., "#FFFADA7B"
+                                themeColor2 = category.colorCode2 ,  // e.g., "#FFFADA7B"
+                                iconRes = category.iconRes
                             )
 
                             // URL encode both the title and theme colors
                             val encodedTitle = URLEncoder.encode(categoryDetailModel.title, "UTF-8")
                             val encodedThemeColor1 = URLEncoder.encode(categoryDetailModel.themeColor1, "UTF-8")
                             val encodedThemeColor2 = URLEncoder.encode(categoryDetailModel.themeColor2, "UTF-8")
+                           // val iconRes = categoryDetailModel.iconRes
 
                             Log.d("MyTag", "CategoryCard: ------------------${categoryDetailModel.title}")
 
-                            // Pass the encoded title and theme colors in the navigation URL
-                            navController.navigate("${Dest.CategoryDetailScreen::class.toRoute()}?title=$encodedTitle&themeColor1=$encodedThemeColor1&themeColor2=$encodedThemeColor2")
+                            // Pass the encoded title, theme colors, and icon resource in the navigation URL
+                            navController.navigate("${Dest.CategoryDetailScreen::class.toRoute()}?title=$encodedTitle&themeColor1=$encodedThemeColor1&themeColor2=$encodedThemeColor2&iconRes=${category.iconRes}")
                         }
                     )
                 },
@@ -204,7 +206,7 @@ fun CategoryCard(category: CategoryItemData) {
 
 data class CategoryItemData(
     val title: String,
-    val iconRes: Int,
     val colorCode1: String,  // Left side color
     val colorCode2: String,  // Right side color (if needed for other purposes)
+    val iconRes: Int,
 )

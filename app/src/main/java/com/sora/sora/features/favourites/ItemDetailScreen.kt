@@ -10,6 +10,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -40,6 +41,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.setValue
@@ -65,10 +67,7 @@ import com.sora.sora.core.navigations.NavigationManager
 
 import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.navigations.toRoute
-import com.sora.sora.core.widgets.AnimatedAddToCart
-import com.sora.sora.core.widgets.ProductCard
-import com.sora.sora.features.favourites.widgets.RatingReviews
-import com.sora.sora.ui.theme.AppGray
+
 import com.sora.sora.ui.theme.PrimaryColor
 import com.sora.sora.ui.theme.PrimaryColorFaded
 import com.sora.sora.core.widgets.ProductSection
@@ -632,7 +631,15 @@ fun ItemSlider(
                     .size(40.dp)
 //                    .background(IconBackgroundColor, CircleShape)
                     .align(Alignment.TopStart)
-                    .clickable {
+                    .clickable(
+                        indication = rememberRipple(
+                            bounded = false,
+                            radius = 20.dp,
+                            color = PrimaryColorFaded
+                        ),
+                        interactionSource = remember { MutableInteractionSource() },
+
+                    ) {
                         //                            onFavorite()
                     },
                 contentAlignment = Alignment.Center
@@ -663,14 +670,18 @@ fun ItemSlider(
                         modifier = Modifier
                             .padding(7.dp)
                             .size(iconSize)
-                            .pointerInput(Unit) {
-                                detectTapGestures(
-                                    onTap = {
+                            .clickable(
+                                indication = rememberRipple(
+                                    bounded = false,
+                                    radius = 20.dp,
+                                    color = PrimaryColorFaded
+                                ),
+                                interactionSource = remember { MutableInteractionSource() },
 
-                                        isFavourite = !isFavourite
-                                    }
-                                )
+                                ){
+                                isFavourite = !isFavourite
                             }
+
 
                     )
 
@@ -683,27 +694,27 @@ fun ItemSlider(
                         .padding(8.dp)
                         .size(40.dp)
                         .background(IconBackgroundColor, CircleShape)
-                        .pointerInput(Unit) {
-                            detectTapGestures(
-                                onTap = {
-                                    Log.d("ProductCard", "Share clicked") // Add debug log
-                                    // Debugging log to ensure this block is reached
-                                    Log.d("MyTag", "Share button clicked!")
+                        .clickable(
+                            indication = rememberRipple(
+                                bounded = false,
+                                radius = 20.dp,
+                                color = PrimaryColorFaded
+                            ),
+                            interactionSource = remember { MutableInteractionSource() },
 
-                                    // Ensuring context is not null and start activity safely
-                                    context?.let {
-                                        val sendIntent: Intent = Intent().apply {
-                                            action = Intent.ACTION_SEND
-                                            putExtra(Intent.EXTRA_TEXT, "https://www.sora.com")
-                                            type = "text/plain"
-                                        }
-
-                                        val shareIntent = Intent.createChooser(sendIntent, null)
-                                        it.startActivity(shareIntent)
-                                    }
+                        ){
+                            context?.let {
+                                val sendIntent: Intent = Intent().apply {
+                                    action = Intent.ACTION_SEND
+                                    putExtra(Intent.EXTRA_TEXT, "https://www.sora.com")
+                                    type = "text/plain"
                                 }
-                            )
+
+                                val shareIntent = Intent.createChooser(sendIntent, null)
+                                it.startActivity(shareIntent)
+                            }
                         },
+
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(

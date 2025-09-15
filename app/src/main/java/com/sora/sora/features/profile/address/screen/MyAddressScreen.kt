@@ -125,17 +125,26 @@ fun MyAddressesScreen() {
                     )
                 },
                 navigationIcon = {
-                    Row(
-                        modifier = Modifier
-                            .pointerInput(Unit) {
-                                detectTapGestures(
-                                    onPress = { offset ->
-                                        navController?.popBackStack()
-                                    }
-                                )
-                            },
-                        verticalAlignment = Alignment.CenterVertically
+                    val scope = rememberCoroutineScope()
+                    var backEnabled by remember { mutableStateOf(true) }
+
+                    IconButton(
+                        onClick = {
+                            if (!backEnabled) return@IconButton
+
+                            backEnabled = false
+
+                            // navigateUp() es más seguro que popBackStack() y devuelve boolean
+                            navController?.navigateUp()
+
+                            // Pequeño throttle para evitar taps múltiples durante la transición
+                            scope.launch {
+                                delay(300) // ajusta si lo necesitas
+                                backEnabled = true
+                            }
+                        }
                     ) {
+                        // Fondo circular + ripple propio del IconButton
                         Box(
                             modifier = Modifier
                                 .size(45.dp)
@@ -147,12 +156,13 @@ fun MyAddressesScreen() {
                                 contentDescription = "Back",
                                 tint = PrimaryColor,
                                 modifier = Modifier
-                                    .align(Alignment.Center)
                                     .size(24.dp)
+                                    .align(Alignment.Center)
                             )
                         }
                     }
                 }
+
             )
         }
     ) { paddingValues ->

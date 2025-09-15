@@ -16,9 +16,11 @@ import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.sora.sora.AccountDetailsScreen
 import com.sora.sora.core.temp.SeeAllModel
 import com.sora.sora.core.snackbar.AnimatedTopSnackbarDemo
@@ -55,6 +57,7 @@ import com.sora.sora.features.profile.screen.TermsAndConditionsScreen
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
 import kotlin.reflect.KClass
 
 @Parcelize
@@ -174,19 +177,59 @@ fun MainNavigation(modifier: Modifier = Modifier) {
             SeeAllProductScreen(seeAllModel = SeeAllModel(title = title, list = list))
         }
 
-        composable(Dest.CategoryDetailScreen::class.toRoute() + "?title={title}&themeColor1={themeColor1}&themeColor2={themeColor2}") { backStackEntry ->
-            val encodedTitle = backStackEntry.arguments?.getString("title") ?: ""
-            val encodedThemeColor1 = backStackEntry.arguments?.getString("themeColor1") ?: ""
-            val encodedThemeColor2 = backStackEntry.arguments?.getString("themeColor2") ?: ""
 
-            // Decode the title and theme colors from the URL encoding
-            val title = URLDecoder.decode(encodedTitle, "UTF-8")
-            val themeColor1 = URLDecoder.decode(encodedThemeColor1, "UTF-8")
-            val themeColor2 = URLDecoder.decode(encodedThemeColor2, "UTF-8")
 
-            // Pass the decoded title and theme colors to CategoryDetailScreen
-            CategoryDetailScreen(categoryDetailModel = CategoryDetailModel(title = title, themeColor1 = themeColor1, themeColor2 = themeColor2))
-        }
+                composable(
+                    route = Dest.CategoryDetailScreen::class.toRoute() +
+                            "?title={title}&themeColor1={themeColor1}&themeColor2={themeColor2}&iconRes={iconRes}",
+                    arguments = listOf(
+                        navArgument("title") { type = NavType.StringType },
+                        navArgument("themeColor1") { type = NavType.StringType },
+                        navArgument("themeColor2") { type = NavType.StringType },
+                        navArgument("iconRes") { type = NavType.IntType } // 👈 importante
+                    )
+                ) { backStackEntry ->
+                    val encodedTitle = backStackEntry.arguments?.getString("title") ?: ""
+                    val encodedThemeColor1 = backStackEntry.arguments?.getString("themeColor1") ?: ""
+                    val encodedThemeColor2 = backStackEntry.arguments?.getString("themeColor2") ?: ""
+                    val iconRes = backStackEntry.arguments?.getInt("iconRes") ?: 0  // ahora debería funcionar
+
+                    val title = URLDecoder.decode(encodedTitle, "UTF-8")
+                    val themeColor1 = URLDecoder.decode(encodedThemeColor1, "UTF-8")
+                    val themeColor2 = URLDecoder.decode(encodedThemeColor2, "UTF-8")
+
+                    CategoryDetailScreen(
+                        categoryDetailModel = CategoryDetailModel(
+                            title = title,
+                            themeColor1 = themeColor1,
+                            themeColor2 = themeColor2,
+                            iconRes = iconRes
+                        )
+                    )
+                }
+
+
+//        composable(Dest.CategoryDetailScreen::class.toRoute() + "?title={title}&themeColor1={themeColor1}&themeColor2={themeColor2}&iconRes={iconRes}") { backStackEntry ->
+//            val encodedTitle = backStackEntry.arguments?.getString("title") ?: ""
+//            val encodedThemeColor1 = backStackEntry.arguments?.getString("themeColor1") ?: ""
+//            val encodedThemeColor2 = backStackEntry.arguments?.getString("themeColor2") ?: ""
+//            val iconRes = backStackEntry.arguments?.getInt("iconRes", 0) ?: 0
+//
+//            // Decode the title and theme colors from the URL encoding
+//            val title = URLDecoder.decode(encodedTitle, "UTF-8")
+//            val themeColor1 = URLDecoder.decode(encodedThemeColor1, "UTF-8")
+//            val themeColor2 = URLDecoder.decode(encodedThemeColor2, "UTF-8")
+//
+//            // Pass the decoded parameters to CategoryDetailScreen
+//            CategoryDetailScreen(
+//                categoryDetailModel = CategoryDetailModel(
+//                    title = title,
+//                    themeColor1 = themeColor1,
+//                    themeColor2 = themeColor2,
+//                    iconRes = iconRes
+//                )
+//            )
+//        }
 
         composable(Dest.FavoritesScreen::class.toRoute()) {
             FavoritesScreen()

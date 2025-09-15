@@ -323,7 +323,8 @@ fun BannerSlider(
                             val categoryDetailModel = CategoryDetailModel(
                                 title = "Toys",
                                 themeColor1 = "#FFFADA7A", // e.g., "#FFFADA7A"
-                                themeColor2 = "#FFF8C844"  // e.g., "#FFFADA7A"
+                                themeColor2 = "#FFF8C844",  // e.g., "#FFFADA7A"
+                                iconRes = R.drawable.ic_cat_toy
                             )
 
                             // URL encode both the title and theme colors
@@ -593,7 +594,8 @@ fun CategoryItem(category: Category) {
                 val categoryDetailModel = CategoryDetailModel(
                     title = "Toys",
                     themeColor1 = "#FFFADA7A",  // e.g., "#FFFADA7A"
-                    themeColor2 = "#FFF8C844"  // e.g., "#FFFADA7A"
+                    themeColor2 = "#FFF8C844",  // e.g., "#FFFADA7A"
+                    iconRes = R.drawable.ic_cat_toy
                 )
 
                 // URL encode both the title and theme colors
@@ -683,7 +685,8 @@ fun OfferCard() {
                     val categoryDetailModel = CategoryDetailModel(
                         title = "Toys",
                         themeColor1 = "#FFFADA7A",  // e.g., "#FFFADA7A"
-                        themeColor2 = "#FFF8C844"  // e.g., "#FFFADA7A"
+                        themeColor2 = "#FFF8C844",  // e.g., "#FFFADA7A"
+                        iconRes = R.drawable.ic_cat_toy
                     )
 
                     // URL encode both the title and theme colors

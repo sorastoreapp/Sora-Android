@@ -56,16 +56,19 @@ import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
@@ -608,37 +611,39 @@ fun ProductCard(
                         .fillMaxWidth()
                 )
 
-                // Heart
-                Box(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .size(iconSize)
-                        .background(IconBackgroundColor, CircleShape)
-                        .align(Alignment.TopStart)
-                        .clickable { onFavorite() },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                       painter =  if (isFavourite) painterResource(R.drawable.ic_selected_favorite ) else painterResource(R.drawable.ic_favorite_outline),
-                        contentDescription = null,
-                        tint = PrimaryColor,
-                        modifier = Modifier
-                            .padding(7.dp)
-                            .size(20.dp)
-                            .clickable {
-                                onFavorite()
-                                isFavourite = !isFavourite
-                            }
-                            .pointerInput(Unit) {
-                                detectTapGestures(
-                                    onTap = {
+                        Box(
+                            modifier = Modifier
+                                .clip(CircleShape) // Hace que todo el contenido (incluido el ripple) sea circular
+                                .padding(8.dp)
+                                .size(iconSize)
+                                .background(IconBackgroundColor, CircleShape)
+                                .align(Alignment.TopStart),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                painter = if (isFavourite) painterResource(R.drawable.ic_selected_favorite)
+                                else painterResource(R.drawable.ic_favorite_outline),
+                                contentDescription = null,
+                                tint = PrimaryColor,
+                                modifier = Modifier
+                                    .clip(CircleShape) // asegura ripple circular
+                                    .clickable(
+                                        indication = rememberRipple(
+                                            bounded = false,
+                                            radius = 24.dp,
+                                            color = PrimaryColorFaded
+                                        ),
+                                        interactionSource = remember { MutableInteractionSource() }
+                                    ) {
                                         onFavorite()
                                         isFavourite = !isFavourite
                                     }
-                                )
-                            }
-                    )
-                }
+                                    .padding(7.dp)
+                                    .size(20.dp)
+                            )
+                        }
+
+
 
                 // Share
                 Box(
@@ -646,36 +651,39 @@ fun ProductCard(
                         .padding(8.dp)
                         .size(iconSize)
                         .background(IconBackgroundColor, CircleShape)
-                        .align(Alignment.TopEnd)
-                        .pointerInput(Unit) {
-                            detectTapGestures(
-                                onTap = {
-                                    Log.d("ProductCard", "Share clicked") // Add debug log
-                                    // Debugging log to ensure this block is reached
-                                    Log.d("MyTag", "Share button clicked!")
+                        .align(Alignment.TopEnd),
 
-                                    // Ensuring context is not null and start activity safely
-                                    context?.let {
-                                        val sendIntent: Intent = Intent().apply {
-                                            action = Intent.ACTION_SEND
-                                            putExtra(Intent.EXTRA_TEXT, "https://www.sora.com")
-                                            type = "text/plain"
-                                        }
-
-                                        val shareIntent = Intent.createChooser(sendIntent, null)
-                                        it.startActivity(shareIntent)
-                                    }
-                                }
-                            )
-                        },
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_share),
                         contentDescription = null,
                         tint = PrimaryColor,
-                        modifier = Modifier.padding(7.dp)
+                        modifier = Modifier
+                            .clip(CircleShape) // asegura ripple circular
+                            .clickable(
+                                indication = rememberRipple(
+                                    bounded = false,
+                                    radius = 24.dp,
+                                    color = PrimaryColorFaded
+                                ),
+                                interactionSource = remember { MutableInteractionSource() }
+                            ) {
+                                context?.let {
+                                    val sendIntent: Intent = Intent().apply {
+                                        action = Intent.ACTION_SEND
+                                        putExtra(Intent.EXTRA_TEXT, "https://www.sora.com")
+                                        type = "text/plain"
+                                    }
+
+                                    val shareIntent = Intent.createChooser(sendIntent, null)
+                                    it.startActivity(shareIntent)
+                                }
+                            }
+                            .padding(7.dp)
+                            .size(20.dp)
                     )
+
                 }
 
                 // *** Animated [- qty +] control ***
