@@ -19,7 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -31,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 import com.sora.sora.R
 import com.sora.sora.core.AppTexts
@@ -40,20 +38,17 @@ import com.sora.sora.core.widgets.ProductSection
 import com.sora.sora.ui.theme.PrimaryColor
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.material.Scaffold
 import androidx.compose.ui.input.pointer.pointerInput
 import com.google.accompanist.pager.PagerState
 import com.sora.sora.core.controller.GlobalController
-import com.sora.sora.core.hFactor
 import com.sora.sora.core.navigations.Dest
 import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.navigations.toRoute
 import com.sora.sora.core.vFactor
 import com.sora.sora.features.category.CategoryDetailModel
 import java.net.URLEncoder
-import androidx.compose.material3.*
-import androidx.compose.material3.AlertDialogDefaults.containerColor
+import com.sora.sora.core.temp.TempCustomData
 
 // Data classes
 data class Category(val id: Int, val title: String, val icon: Painter, val bgColor: Color)
@@ -160,7 +155,7 @@ fun HomeScreen() {
                     .fillMaxSize()
             ) {
                 Spacer(modifier = Modifier.height(vFactor(10)))
-                CategorySection(categories)
+                CategorySection(TempCustomData().categories)
                 Spacer(modifier = Modifier.height(vFactor(35)))
                 ProductSection(
                     title = AppTexts.newArrivals,
@@ -318,40 +313,71 @@ fun BannerSlider(
                         maxLines = 3,
                         modifier = Modifier.padding(bottom = 8.dp).widthIn(max = 230.dp)
                     )
-                    Button(
+                    Surface(
+                        shape = RoundedCornerShape(20.dp),
+                        color = PrimaryColor,
                         onClick = {
+
+
                             val categoryDetailModel = CategoryDetailModel(
                                 title = "Toys",
-                                themeColor1 = "#FFFADA7A", // e.g., "#FFFADA7A"
-                                themeColor2 = "#FFF8C844",  // e.g., "#FFFADA7A"
-                                iconRes = R.drawable.ic_cat_toy
+                                iconRes = R.drawable.ic_cat_toy,
+                                themeColor1 = "#FADA7A",
+                                themeColor2 =  "#F2C549"
                             )
 
-                            // URL encode both the title and theme colors
                             val encodedTitle = URLEncoder.encode(categoryDetailModel.title, "UTF-8")
                             val encodedThemeColor1 = URLEncoder.encode(categoryDetailModel.themeColor1, "UTF-8")
                             val encodedThemeColor2 = URLEncoder.encode(categoryDetailModel.themeColor2, "UTF-8")
 
-                            Log.d("MyTag", "CategoryCard: ------------------${categoryDetailModel.title}")
-
-                            // Pass the encoded title and theme colors in the navigation URL
-                            navController.navigate("${Dest.CategoryDetailScreen::class.toRoute()}?title=$encodedTitle&themeColor1=$encodedThemeColor1&themeColor2=$encodedThemeColor2")
-                        },
-                        shape = RoundedCornerShape(20.dp),
-                        colors = ButtonDefaults.buttonColors(PrimaryColor),
-                        contentPadding = PaddingValues(horizontal = 18.dp, vertical = 0.dp) // Remove internal vertical padding
-                    ) {
-                        Box(modifier = Modifier.padding(vertical = 0.dp)) { // If necessary, adjust padding for CustomMontserratText
-                            CustomMontserratText(
-                                text = "Explore Now",
-                                fontWeight = FontWeight.Bold,
-                                color = Color.White,
-                                fontSize = 12.sp,
-                                textAlign = TextAlign.Center
-
-                            )
+                            navController.navigate("${Dest.CategoryDetailScreen::class.toRoute()}?title=$encodedTitle&themeColor1=$encodedThemeColor1&themeColor2=$encodedThemeColor2&iconRes=${categoryDetailModel.iconRes}")
+                            // nav logic
                         }
+
+                    ) {
+                        CustomMontserratText(
+                            text = "Explore Now",
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White,
+                            fontSize = 12.sp,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(horizontal = 15.dp, vertical = 9.dp) // exact control
+                        )
                     }
+
+//                    Button(
+//                        onClick = {
+//                            val categoryDetailModel = CategoryDetailModel(
+//                                title = "Toys",
+//                                themeColor1 = "#FFFADA7A", // e.g., "#FFFADA7A"
+//                                themeColor2 = "#FFF8C844",  // e.g., "#FFFADA7A"
+//                                iconRes = R.drawable.ic_cat_toy
+//                            )
+//
+//                            // URL encode both the title and theme colors
+//                            val encodedTitle = URLEncoder.encode(categoryDetailModel.title, "UTF-8")
+//                            val encodedThemeColor1 = URLEncoder.encode(categoryDetailModel.themeColor1, "UTF-8")
+//                            val encodedThemeColor2 = URLEncoder.encode(categoryDetailModel.themeColor2, "UTF-8")
+//
+//                            Log.d("MyTag", "CategoryCard: ------------------${categoryDetailModel.title}")
+//
+//                            // Pass the encoded title and theme colors in the navigation URL
+//                            navController.navigate("${Dest.CategoryDetailScreen::class.toRoute()}?title=$encodedTitle&themeColor1=$encodedThemeColor1&themeColor2=$encodedThemeColor2")
+//                        },
+//                        shape = RoundedCornerShape(20.dp),
+//                        colors = ButtonDefaults.buttonColors(PrimaryColor),
+//                        contentPadding = PaddingValues(horizontal = 15.dp, vertical = 0.dp) // Remove internal vertical padding
+//                    ) {
+//                        // If necessary, adjust padding for CustomMontserratText
+//                            CustomMontserratText(
+//                                text = "Explore Now",
+//                                fontWeight = FontWeight.Bold,
+//                                color = Color.White,
+//                                fontSize = 12.sp,
+//                                textAlign = TextAlign.Center,
+//                                modifier = Modifier.padding(vertical = 0.dp)
+//                            )
+//                    }
 
 
 
@@ -517,7 +543,7 @@ fun FancyPagerIndicator(
 
 @Composable
 fun CategorySection(
-    categories: List<Category>,
+    categories: List<CategoryItemData>,
     onSeeAllClick: () -> Unit = {}
 ) {
     Column(
@@ -567,58 +593,62 @@ fun CategorySection(
 @Preview(showBackground = true)
 @Composable
 fun PreviewCategorySection(){
-    val categories = listOf(
-        Category(1, "Toys & Plushies", painterResource(R.drawable.ic_temp_toy), Color(0xFFFFFAF1)),
-        Category(2, "Clothing Products", painterResource(R.drawable.img_temp_categories2), Color(0xFFF9F8FF)),
-        Category(3, "Baby Essentials", painterResource(R.drawable.img_temp_categories3), Color(0xFFFEF8F8)),
-        Category(4, "Cups & Mugs", painterResource(R.drawable.img_temp_categories4), Color(0xFFF6FFF2)),
-        Category(5, "Toys & Plushies", painterResource(R.drawable.ic_temp_toy), Color(0xFFFFFAF1)),
-        Category(6, "Clothing Products", painterResource(R.drawable.img_temp_categories2), Color(0xFFF9F8FF)),
-        Category(7, "Baby Essentials", painterResource(R.drawable.img_temp_categories3), Color(0xFFFEF8F8)),
-        Category(8, "Accessories", painterResource(R.drawable.img_temp_categories4), Color(0xFFFFF7F7)),
-
-    )
+//    val categories = listOf(
+//        Category(1, "Toys & Plushies", painterResource(R.drawable.ic_temp_toy), Color(0xFFFFFAF1)),
+//        Category(2, "Clothing Products", painterResource(R.drawable.img_temp_categories2), Color(0xFFF9F8FF)),
+//        Category(3, "Baby Essentials", painterResource(R.drawable.img_temp_categories3), Color(0xFFFEF8F8)),
+//        Category(4, "Cups & Mugs", painterResource(R.drawable.img_temp_categories4), Color(0xFFF6FFF2)),
+//        Category(5, "Toys & Plushies", painterResource(R.drawable.ic_temp_toy), Color(0xFFFFFAF1)),
+//        Category(6, "Clothing Products", painterResource(R.drawable.img_temp_categories2), Color(0xFFF9F8FF)),
+//        Category(7, "Baby Essentials", painterResource(R.drawable.img_temp_categories3), Color(0xFFFEF8F8)),
+//        Category(8, "Accessories", painterResource(R.drawable.img_temp_categories4), Color(0xFFFFF7F7)),
+//
+//    )
 
 //    CategorySection(categories = categories, onSeeAllClick = {})
 
-    CategoryItem(categories[0])
+    CategoryItem(TempCustomData().categories[0])
 }
 
 @Composable
-fun CategoryItem(category: Category) {
+fun CategoryItem(category: CategoryItemData) {
+    val themeColor = Color(android.graphics.Color.parseColor(category.colorCode1))
+    val themeColor2 = Color(android.graphics.Color.parseColor(category.colorCode2))
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.pointerInput(Unit) {
-            detectTapGestures(onTap = {
+            detectTapGestures(
+                onTap = {
+                    val categoryDetailModel = CategoryDetailModel(
+                        title = category.title,
+                        themeColor1 = category.colorCode1,  // e.g., "#FFFADA7A"
+                        themeColor2 = category.colorCode2 ,  // e.g., "#FFFADA7B"
+                        iconRes = category.iconRes
+                    )
 
-                val categoryDetailModel = CategoryDetailModel(
-                    title = "Toys",
-                    themeColor1 = "#FFFADA7A",  // e.g., "#FFFADA7A"
-                    themeColor2 = "#FFF8C844",  // e.g., "#FFFADA7A"
-                    iconRes = R.drawable.ic_cat_toy
-                )
+                    // URL encode both the title and theme colors
+                    val encodedTitle = URLEncoder.encode(categoryDetailModel.title, "UTF-8")
+                    val encodedThemeColor1 = URLEncoder.encode(categoryDetailModel.themeColor1, "UTF-8")
+                    val encodedThemeColor2 = URLEncoder.encode(categoryDetailModel.themeColor2, "UTF-8")
+                    // val iconRes = categoryDetailModel.iconRes
 
-                // URL encode both the title and theme colors
-                val encodedTitle = URLEncoder.encode(categoryDetailModel.title, "UTF-8")
-                val encodedThemeColor1 = URLEncoder.encode(categoryDetailModel.themeColor1, "UTF-8")
-                val encodedThemeColor2 = URLEncoder.encode(categoryDetailModel.themeColor2, "UTF-8")
+                    Log.d("MyTag", "CategoryCard: ------------------${categoryDetailModel.title}")
 
-                Log.d("MyTag", "CategoryCard: ------------------${categoryDetailModel.title}")
+                    // Pass the encoded title, theme colors, and icon resource in the navigation URL
+                    navController.navigate("${Dest.CategoryDetailScreen::class.toRoute()}?title=$encodedTitle&themeColor1=$encodedThemeColor1&themeColor2=$encodedThemeColor2&iconRes=${category.iconRes}")
+                }
 
-                // Pass the encoded title and theme colors in the navigation URL
-                navController.navigate("${Dest.CategoryDetailScreen::class.toRoute()}?title=$encodedTitle&themeColor1=$encodedThemeColor1&themeColor2=$encodedThemeColor2")
-
-            })
+            )
         }
     ) {
         Box(
             modifier = Modifier
                 .size(60.dp)
-                .background(category.bgColor.copy(alpha = 0.15f), shape = CircleShape),
+                .background(themeColor2.copy(alpha = 0.15f), shape = CircleShape),
             contentAlignment = Alignment.Center
         ) {
             Image(
-                painter = category.icon,
+                painter = painterResource(id = category.iconRes),
                 contentDescription = category.title,
                 modifier = Modifier.size(35.dp)
             )

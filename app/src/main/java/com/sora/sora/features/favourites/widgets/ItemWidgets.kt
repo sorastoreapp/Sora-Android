@@ -54,11 +54,11 @@ import com.sora.sora.ui.theme.TextFieldColor
 @Composable
 fun AddToCartBottomSheet() {
     val coroutineScope = rememberCoroutineScope()
-    var quantity by remember { mutableStateOf(0) }
+    var quantity by remember { mutableStateOf(1) }
      val  onAdd: () -> Unit = {quantity++}
-    val onRemove: () -> Unit = {if (quantity > 0) quantity--}
+    val onRemove: () -> Unit = {if (quantity > 1) quantity--}
     val maxQty by remember { mutableStateOf(5) }
-    val minQty by remember { mutableStateOf(0) }
+    val minQty by remember { mutableStateOf(1) }
     var pressed by remember { mutableStateOf(false) }
 
     // onAddToCart = { qty++ },

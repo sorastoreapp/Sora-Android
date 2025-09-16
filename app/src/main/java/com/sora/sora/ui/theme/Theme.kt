@@ -61,7 +61,9 @@ package com.sora.sora.ui.theme
 
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 // Define your custom color scheme for Light Mode
 private val LightColorScheme = lightColorScheme(
@@ -81,9 +83,19 @@ private val LightColorScheme = lightColorScheme(
 fun SoraTheme(
     content: @Composable () -> Unit
 ) {
+    val systemUiController = rememberSystemUiController()
+    val useDarkIcons = true // black status bar text/icons
+
+    SideEffect {
+        systemUiController.setSystemBarsColor(
+            color = Color.White, // background of status bar
+            darkIcons = useDarkIcons
+        )
+    }
+
     MaterialTheme(
-        colorScheme = LightColorScheme, // Force to use light theme
-        typography = Typography, // You can customize typography here as well
+        colorScheme = lightColorScheme(), // or your custom scheme
+        typography = Typography,
         content = content
     )
 }

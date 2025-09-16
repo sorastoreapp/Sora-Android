@@ -182,7 +182,6 @@ fun ProfileScreen() {
               fontSize = 16.sp,
               color = PrimaryColor
           )
-
           Spacer(modifier = Modifier.height(8.dp))
 
           // Account items
@@ -229,9 +228,6 @@ fun ProfileScreen() {
                   navController.navigate(Dest.NotificationScreen::class.toRoute())
               }
           )
-
-
-
 
           CommonDivider()
 

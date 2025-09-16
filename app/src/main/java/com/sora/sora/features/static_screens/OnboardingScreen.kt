@@ -22,9 +22,24 @@ import com.sora.sora.core.navigations.toRoute
 import com.sora.sora.ui.theme.PrimaryColor
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
-import androidx.compose.ui.layout.ContentScale
+
 import com.google.accompanist.pager.rememberPagerState
 import com.sora.sora.R
+import kotlinx.coroutines.launch
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import com.sora.sora.core.navigations.NavigationManager
 import kotlinx.coroutines.launch
 
 
@@ -149,40 +164,38 @@ import kotlinx.coroutines.launch
 /**Showing white image and transition not working **/
 
 
-data class OnboardingData(
-    val image: Int,
-)
+data class OnboardingData(@androidx.annotation.DrawableRes val image: Int)
 
-@OptIn(ExperimentalPagerApi::class)
-
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun OnboardingScreen(navController: NavController) {
+fun OnboardingScreen() {
+    val navController = NavigationManager.navController
+
     val pages = listOf(
         OnboardingData(R.drawable.img_onboarding1),
-        OnboardingData(R.drawable.img_onboarding2)
+        OnboardingData(R.drawable.img_onboarding2),
     )
 
-    val pagerState = rememberPagerState()
-    val coroutineScope = rememberCoroutineScope()
+    val pagerState = rememberPagerState(
+        initialPage = 0,
+        pageCount = { pages.size }
+    )
+    val scope = rememberCoroutineScope()
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-          //  .safeDrawingPadding()
     ) {
-
-        HorizontalPager(state = pagerState, count = pages.size) { page ->
-            val currentPageData = pages[page]
-
+        HorizontalPager(state = pagerState) { page ->
+            val data = pages[page]
             Image(
-                painter = painterResource(id = currentPageData.image),
-                contentDescription = "image_$page",
+                painter = painterResource(id = data.image),
+                contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
             )
         }
 
-        // Bottom row containing indicators and next button
         Row(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
@@ -191,54 +204,51 @@ fun OnboardingScreen(navController: NavController) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Page indicators
+            // Indicators
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                pages.forEachIndexed { index, _ ->
+                repeat(pages.size) { index ->
                     Box(
                         modifier = Modifier
                             .width(if (index == pagerState.currentPage) 40.dp else 20.dp)
                             .height(if (index == pagerState.currentPage) 10.dp else 8.dp)
-                            .clip(CircleShape)
+                            .clip(MaterialTheme.shapes.large) // pill shape
                             .background(if (index == pagerState.currentPage) PrimaryColor else Color.LightGray)
-                            .animateContentSize()
                     )
                 }
             }
 
-            // Next Button (Arrow button)
-                Box(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(MaterialTheme.shapes.medium)
-                        .background(PrimaryColor)
-                        .clickable {
-                            coroutineScope.launch {
-                                if (pagerState.currentPage < pages.size - 1) {
-                                    pagerState.animateScrollToPage(pagerState.currentPage + 1)
-                                } else {
-                                    navController.navigate(Dest.Welcome::class.toRoute()) {
-                                        popUpTo(Dest.OnboardingScreen::class.toRoute()) { inclusive = true }
-                                    }
+            // Next button
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(MaterialTheme.shapes.medium)
+                    .background(PrimaryColor)
+                    .clickable {
+                        scope.launch {
+                            if (pagerState.currentPage < pages.size - 1) {
+                                pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                            } else {
+                                navController.navigate(Dest.Welcome::class.toRoute()) {
+                                    popUpTo(Dest.OnboardingScreen::class.toRoute()) { inclusive = true }
                                 }
                             }
-                        },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowForward,
-                        contentDescription = "Next",
-                        tint = Color.White,
-                        modifier = Modifier.size(18.dp)
-                    )
-                }
-
+                        }
+                    },
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowForward,
+                    contentDescription = "Next",
+                    tint = Color.White,
+                    modifier = Modifier.size(18.dp)
+                )
+            }
         }
     }
 }
-
 
 
 

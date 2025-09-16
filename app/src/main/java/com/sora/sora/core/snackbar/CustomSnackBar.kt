@@ -63,7 +63,7 @@ data class SnackBarData(
 )
  /**WORKING WITHOUT CANCEL ONTAP*/
 @Composable
-fun CenterExpandSnackBar(
+fun  CenterExpandSnackBar(
 
     visible: Boolean,
     data: SnackBarData,
@@ -109,42 +109,92 @@ fun CenterExpandSnackBar(
      // To trigger shrinking when cross icon is clicked
      var isShrinking by remember { mutableStateOf(false) }
 
-    // Timeline: circle -> expand -> hold -> shrink -> fade-out -> onDismiss
-    LaunchedEffect(visible) {
-        if (visible) {
-            localVisible = true
+     // state
 
-            progress.snapTo(0f)
-            textVisible = true
-            // Expand to pill
-            progress.animateTo(
-                targetValue = 1f,
-                animationSpec = tween(durationMillis = expandDurationMillis, easing = FastOutSlowInEasing)
-            )
+// timeline
+     LaunchedEffect(visible) {
+         if (visible) {
+             localVisible = true
+             isShrinking = false
+             textVisible = false
+             progress.snapTo(0f)
 
-            // Hold content visible
-            if (!isShrinking) delay(contentVisibleMillis.toLong())
+             // 1) Expand first
+             progress.animateTo(
+                 targetValue = 1f,
+                 animationSpec = tween(durationMillis = expandDurationMillis, easing = FastOutSlowInEasing)
+             )
 
-            // Delay before hiding the text (after 4000ms)
-//            delay(textVisibilityDelayMillis.toLong()) // Wait for 4000ms
-            textVisible = false // Hide the text just before shrinking starts
+             // 2) Show text after fully opened
+             textVisible = true
 
-            // Shrink back to circle
-            progress.animateTo(
-                targetValue = 0f,
-                animationSpec = tween(durationMillis = shrinkDurationMillis, easing = FastOutSlowInEasing)
-            )
+             // 3) Hold, unless user taps close
+             val holdMillis = contentVisibleMillis.toLong()
+             val step = 50L
+             var elapsed = 0L
+             while (!isShrinking && elapsed < holdMillis) {
+                 delay(step)
+                 elapsed += step
+             }
 
-            // Briefly stay circular, then fade out and notify parent
-            delay(postShrinkHoldMillis.toLong())
-            localVisible = false
-            delay(fadeOutMillis.toLong())
-            onDismiss()
-        } else {
-            localVisible = false
-            progress.snapTo(0f)
-        }
-    }
+             // 4) Hide text just before shrinking
+             textVisible = false
+
+             // 5) Shrink back to circle
+             progress.animateTo(
+                 targetValue = 0f,
+                 animationSpec = tween(durationMillis = shrinkDurationMillis, easing = FastOutSlowInEasing)
+             )
+
+             // 6) Fade out and complete
+             delay(postShrinkHoldMillis.toLong())
+             localVisible = false
+             delay(fadeOutMillis.toLong())
+             onDismiss()
+         } else {
+             localVisible = false
+             progress.snapTo(0f)
+             textVisible = false
+             isShrinking = false
+         }
+     }
+
+     // Timeline: circle -> expand -> hold -> shrink -> fade-out -> onDismiss
+//    LaunchedEffect(visible) {
+//        if (visible) {
+//            localVisible = true
+//
+//            progress.snapTo(0f)
+//            textVisible = true
+//            // Expand to pill
+//            progress.animateTo(
+//                targetValue = 1f,
+//                animationSpec = tween(durationMillis = expandDurationMillis, easing = FastOutSlowInEasing)
+//            )
+//
+//            // Hold content visible
+//            if (!isShrinking) delay(contentVisibleMillis.toLong())
+//
+//            // Delay before hiding the text (after 4000ms)
+////            delay(textVisibilityDelayMillis.toLong()) // Wait for 4000ms
+//            textVisible = false // Hide the text just before shrinking starts
+//
+//            // Shrink back to circle
+//            progress.animateTo(
+//                targetValue = 0f,
+//                animationSpec = tween(durationMillis = shrinkDurationMillis, easing = FastOutSlowInEasing)
+//            )
+//
+//            // Briefly stay circular, then fade out and notify parent
+//            delay(postShrinkHoldMillis.toLong())
+//            localVisible = false
+//            delay(fadeOutMillis.toLong())
+//            onDismiss()
+//        } else {
+//            localVisible = false
+//            progress.snapTo(0f)
+//        }
+//    }
 
     // Width interpolation: ensuring it never goes below minWidth, and grows up to targetWidthMax
     val widthPx = with(androidx.compose.ui.platform.LocalDensity.current) {

@@ -257,8 +257,8 @@ fun CategoryResultRow(resultCount: Int = 23, verticalPadding: Dp = 8.dp, horizon
                     IconButton(
                         onClick = {
                             coroutineScope.launch {
-                                sortSheetState.hide()
-                                showSortSheet = false
+                                filterSheetState.hide()
+                                showFilterSheet = false
                             }
                         },
                         modifier = Modifier.size(24.dp)

@@ -1,12 +1,16 @@
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -15,6 +19,9 @@ import androidx.compose.ui.unit.sp
 import com.sora.sora.R
 import com.sora.sora.core.customButtons.PrimaryButton
 import com.sora.sora.core.customText.CustomMontserratText
+import com.sora.sora.core.navigations.Dest
+import com.sora.sora.core.navigations.NavigationManager
+import com.sora.sora.core.navigations.toRoute
 import com.sora.sora.ui.theme.PrimaryColor
 import com.sora.sora.ui.theme.PrimaryColor100
 
@@ -62,21 +69,51 @@ fun WelcomeScreen(
             )
 
             Spacer(modifier = Modifier.height(8.dp))
-            // Skip Text Button
-            Box(
+            TextButton(
+                onClick = onSkipClick,
                 modifier = Modifier
-                    .clickable(
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() }
-                    ) { onSkipClick() }
+                    .padding(0.dp)
+                    .background(Color.Transparent),
+                // Remove default TextButton ripple and provide your own
+                interactionSource = remember { MutableInteractionSource() },
+                colors = ButtonDefaults.textButtonColors(
+                    disabledContentColor = Color.Transparent,
+                    contentColor = PrimaryColor,
+                    backgroundColor = Color.Transparent
+
+                   // contentColor = PrimaryColor // text color
+                )
+
             ) {
                 CustomMontserratText(
                     "Continue as a guest",
                     color = PrimaryColor,
                     fontSize = 16.sp,
-                    fontWeight = FontWeight.W700
+                    fontWeight = FontWeight.W700,
+
                 )
+
             }
+            // Skip Text Button
+//            Box(
+//                modifier = Modifier
+//                    .clickable(
+//                     //   indication = null,
+//                      //  interactionSource = remember { MutableInteractionSource() }
+//                    ) {
+//                       // onSkipClick()
+//
+//
+//                    }
+//            ) {
+//                CustomMontserratText(
+//                    "Continue as a guest",
+//                    color = PrimaryColor,
+//                    fontSize = 16.sp,
+//                    fontWeight = FontWeight.W700,
+//
+//                )
+           // }
 
             Spacer(modifier = Modifier.height(25.dp))
         }

@@ -660,7 +660,7 @@ fun ProductCard(
                         contentDescription = null,
                         tint = PrimaryColor,
                         modifier = Modifier
-                            .clip(CircleShape) // asegura ripple circular
+                            .clip(CircleShape)
                             .clickable(
                                 indication = rememberRipple(
                                     bounded = false,

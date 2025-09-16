@@ -12,26 +12,63 @@ import com.sora.sora.R
 import com.sora.sora.core.navigations.Dest
 import com.sora.sora.core.navigations.NavigationManager
 import com.sora.sora.core.navigations.toRoute
+import kotlinx.coroutines.delay
 
+//@Composable
+//fun SplashScreen() {
+//    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.splash_json))
+//    val progress by animateLottieCompositionAsState(
+//        composition = composition,
+//        iterations = 1 // Play the animation only once
+//    )
+//
+//    // Navigation effect
+//    LaunchedEffect(progress) {
+//        if (progress == 1f) { // Animation has finished
+//            NavigationManager.navController.navigate(Dest.OnboardingScreen::class.toRoute()) {
+//                popUpTo(Dest.SplashScreen::class.toRoute()) { inclusive = true }
+//            }
+//        }
+//    }
+//
+//    Box(
+//        modifier = Modifier.fillMaxSize().background(Color.White),
+//        contentAlignment = Alignment.Center
+//    ) {
+//        LottieAnimation(
+//            composition = composition,
+//            progress = progress
+//        )
+//    }
+//}
+//
+//@Preview(showBackground = true)
+//@Composable
+//fun PreviewSplashScreen() {
+//    SplashScreen()
+//}
 @Composable
 fun SplashScreen() {
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.splash_json))
+    val composition by rememberLottieComposition(
+        LottieCompositionSpec.RawRes(R.raw.splash_json)
+    )
     val progress by animateLottieCompositionAsState(
         composition = composition,
-        iterations = 1 // Play the animation only once
+        iterations = 1 // play only once
     )
 
-    // Navigation effect
-    LaunchedEffect(progress) {
-        if (progress == 1f) { // Animation has finished
-            NavigationManager.navController.navigate(Dest.OnboardingScreen::class.toRoute()) {
-                popUpTo(Dest.SplashScreen::class.toRoute()) { inclusive = true }
-            }
+    // Delay navigation by 2 seconds
+    LaunchedEffect(Unit) {
+        delay(2000)
+        NavigationManager.navController.navigate(Dest.OnboardingScreen::class.toRoute()) {
+            popUpTo(Dest.SplashScreen::class.toRoute()) { inclusive = true }
         }
     }
 
     Box(
-        modifier = Modifier.fillMaxSize().background(Color.White),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White),
         contentAlignment = Alignment.Center
     ) {
         LottieAnimation(

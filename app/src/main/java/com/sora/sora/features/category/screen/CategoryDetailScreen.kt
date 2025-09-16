@@ -26,6 +26,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -41,6 +42,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.draw.clip
@@ -74,6 +76,7 @@ import com.sora.sora.core.navigations.NavigationManager.navController
 import com.sora.sora.core.navigations.toRoute
 import com.sora.sora.features.category.CategoryDetailModel
 import com.sora.sora.features.dashboard.FancyPagerIndicator
+import com.sora.sora.ui.theme.PrimaryColorFaded
 import kotlinx.coroutines.delay
 
 
@@ -197,7 +200,7 @@ fun CategoryDetailScreen(categoryDetailModel : CategoryDetailModel) {
                             modifier = Modifier
                                 .size(45.dp)
                                 .clip(CircleShape)
-                                .background(themeColor2.copy(alpha = 0.1f))
+                                .background(themeColor2.copy(alpha = 0.1f),CircleShape)
 
                         ) {
 
@@ -206,9 +209,17 @@ fun CategoryDetailScreen(categoryDetailModel : CategoryDetailModel) {
                                 contentDescription = "Back",
                                 tint = themeColor2,
                                 modifier = Modifier
+                                    .clip(CircleShape)
                                     .align(Alignment.Center)
-                                    .size(24.dp)
-                                    .clickable() {
+                                    .clickable(
+                                        indication = rememberRipple(
+                                            bounded = false,
+                                            radius = 30.dp,
+                                            color = themeColor2
+                                        ),
+                                        interactionSource = remember { MutableInteractionSource() }
+
+                                    ) {
 
                                         // If the button is pressed and no previous action was triggered, handle the navigation
                                         if (!isBackPressed.value) {

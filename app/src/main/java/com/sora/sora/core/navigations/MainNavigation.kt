@@ -84,10 +84,10 @@ fun MainNavigation(modifier: Modifier = Modifier) {
         startDestination = Dest.DashBoardScreen::class.toRoute(),
         modifier = modifier
     ) {
-         composable(Dest.DashBoardScreen::class.toRoute()) {
-            // Pass navController so OnboardingScreen can navigate
-            OnboardingScreen(navController = navController)
+        composable(Dest.OnboardingScreen::class.toRoute()) {
+            OnboardingScreen()
         }
+
 
         composable(Dest.Welcome::class.toRoute()) {
             WelcomeScreen(
