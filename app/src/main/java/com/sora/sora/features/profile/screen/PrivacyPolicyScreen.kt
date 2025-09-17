@@ -44,6 +44,7 @@ fun PrivacyPolicyScreen()
 
     Scaffold (
         containerColor = Color.White,
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
 
 
      modifier = Modifier
@@ -57,7 +58,7 @@ fun PrivacyPolicyScreen()
 
         topBar = {
             CustomAppBar(
-                title = "Privacy Policy",
+                title = "Privacy Policies",
                 isBackButton = true,
                 onBackClick = {
                     // Handle back click, navigate back or pop from the navigation stack
@@ -77,15 +78,20 @@ fun PrivacyPolicyScreen()
             // Background image at the bottom
             BackgrountOtherImage(
                 modifier = Modifier
-                    .align(Alignment.BottomCenter)
                     .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+
             )
+            val scroll = rememberScrollState()
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(top = 70.dp) //
                     .padding(horizontal = 20.dp)
-                    .verticalScroll(rememberScrollState())//  Makes the content scrollable
+                    .verticalScroll(scroll)
+
+                    .imePadding(),
+//  Makes the content scrollable
             ) {
                 // Back Button Section
 

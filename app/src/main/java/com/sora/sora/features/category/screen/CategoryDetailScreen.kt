@@ -196,43 +196,86 @@ fun CategoryDetailScreen(categoryDetailModel : CategoryDetailModel) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         // Back Button
+//                        Box(
+//                            modifier = Modifier
+//                                .size(45.dp)
+//                                .clip(CircleShape)
+//                                .background(themeColor2.copy(alpha = 0.1f),CircleShape)
+//
+//                        ) {
+//
+//                            Icon(
+//                                imageVector = Icons.Filled.ArrowBack,
+//                                contentDescription = "Back",
+//                                tint = themeColor2,
+//                                modifier = Modifier
+//                                    .clip(CircleShape)
+//                                    .align(Alignment.Center)
+//                                    .clickable(
+//                                        indication = rememberRipple(
+//                                            bounded = false,
+//                                            radius = 30.dp,
+//                                            color = themeColor2
+//                                        ),
+//                                        interactionSource = remember { MutableInteractionSource() }
+//
+//                                    ) {
+//
+//                                        // If the button is pressed and no previous action was triggered, handle the navigation
+//                                        if (!isBackPressed.value) {
+//                                            isBackPressed.value = true
+//
+//                                            // Call the provided onBackClick action or default navigation action
+//                                                navController?.popBackStack()
+//
+//                                        }
+//
+//                                    }
+//                            )
+//                        }
+                        // put this near the top of your composable (same scope as the app bar)
+                        var backEnabled by remember { mutableStateOf(true) }
+                        val interaction = remember { MutableInteractionSource() }
+                        val scope = rememberCoroutineScope()
+
+// ...
                         Box(
                             modifier = Modifier
                                 .size(45.dp)
                                 .clip(CircleShape)
-                                .background(themeColor2.copy(alpha = 0.1f),CircleShape)
+                                .background(themeColor2.copy(alpha = 0.1f), CircleShape)
+                                .clickable(
+                                    enabled = backEnabled,
+                                    interactionSource = interaction,
+                                    indication = rememberRipple(
+                                        bounded = true,      // clip ripple to circle
+                                        radius = 30.dp,
+                                        color = themeColor2
+                                    )
+                                ) {
+                                    if (!backEnabled) return@clickable
+                                    backEnabled = false
 
+                                    // Try to pop; if nothing to pop, do navigateUp()
+                                    val popped = navController?.popBackStack() ?: false
+                                    if (!popped) navController?.navigateUp()
+
+                                    // If this screen might remain visible (custom handling), re-enable after a short delay:
+                                    // scope.launch {
+                                    //     delay(350)
+                                    //     backEnabled = true
+                                    // }
+                                },
+                            contentAlignment = Alignment.Center
                         ) {
-
                             Icon(
                                 imageVector = Icons.Filled.ArrowBack,
                                 contentDescription = "Back",
                                 tint = themeColor2,
-                                modifier = Modifier
-                                    .clip(CircleShape)
-                                    .align(Alignment.Center)
-                                    .clickable(
-                                        indication = rememberRipple(
-                                            bounded = false,
-                                            radius = 30.dp,
-                                            color = themeColor2
-                                        ),
-                                        interactionSource = remember { MutableInteractionSource() }
-
-                                    ) {
-
-                                        // If the button is pressed and no previous action was triggered, handle the navigation
-                                        if (!isBackPressed.value) {
-                                            isBackPressed.value = true
-
-                                            // Call the provided onBackClick action or default navigation action
-                                                navController?.popBackStack()
-
-                                        }
-
-                                    }
+                                modifier = Modifier.size(24.dp)
                             )
                         }
+
 
                         Spacer(Modifier.weight(1f))
                         // Animated title

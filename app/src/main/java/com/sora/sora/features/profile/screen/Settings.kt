@@ -71,11 +71,7 @@ fun ProfileScreen() {
           .fillMaxSize()
           .systemBarsPadding()
       ,
-
       topBar = {
-
-
-
           CenterAlignedTopAppBar(
               colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                   containerColor = Color.White
@@ -301,7 +297,7 @@ fun ProfileScreen() {
           CustomButton(
               label = "Log in",
               onClick = {
-                  navController.navigate(Dest.CreateAccountScreen::class.toRoute())
+                  navController.navigate(Dest.Welcome::class.toRoute())
               },
               containerColor = LightBrown,
               textColor = PrimaryColor,

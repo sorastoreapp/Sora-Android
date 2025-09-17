@@ -86,8 +86,8 @@ fun  CenterExpandSnackBar(
     imageBorderColor: Color = Color.White.copy(alpha = 0.6f),
 
     // Timing
-    expandDurationMillis: Int = 1_000,   // 1s expand
-    contentVisibleMillis: Int = 4_000,   // 4s hold
+    expandDurationMillis: Int = 800,   // 1s expand
+    contentVisibleMillis: Int = 3_000,   // 4s hold
     shrinkDurationMillis: Int = 800,     // 0.8s shrink
     postShrinkHoldMillis: Int = 500,     // wait before disappear
     fadeOutMillis: Int = 500,            // fade-out duration

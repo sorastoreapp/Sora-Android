@@ -31,112 +31,102 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
 import com.sora.sora.ui.theme.SecondaryColor
 import com.sora.sora.ui.theme.SecondaryColor100
 import kotlinx.coroutines.delay
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+
 
 @Composable
 fun CustomAppBar(
-    navController: NavController? = null,  // NavController is nullable, as the back button is optional
-    title: String? = null,  // Title is nullable, it may or may not appear
-    isBackButton: Boolean? = true,  // Title is nullable, it may or may not appear
-    backgroundColor: Color = Color.White,  // Optional background color for the AppBar
-    backIconColor: Color = SecondaryColor,  // Back icon color, default is black
-    titleColor: Color = Color.Black,  // Title color, default is black
-    onBackClick: (() -> Unit)? = null,  // onBackClick is nullable for flexible back action handling
-    bottomPadding  : Dp = 0.dp,
-    modifier: Modifier = Modifier  // To allow further customization
+    navController: NavController? = null,
+    title: String? = null,
+    isBackButton: Boolean = true,
+    backgroundColor: Color = Color.White,
+    backIconColor: Color = SecondaryColor,
+    titleColor: Color = Color.Black,
+    onBackClick: (() -> Unit)? = null,
+    bottomPadding: Dp = 0.dp,
+    modifier: Modifier = Modifier
 ) {
-    // Remember the state to control the back button click
-    val isBackPressed = remember { mutableStateOf(false) }
-    // This ensures that LaunchedEffect is used in a Composable scope
-    if (isBackPressed.value) {
-        LaunchedEffect(Unit) {
-            delay(300)  // Delay to prevent multiple pops in quick succession
-            isBackPressed.value = false
-        }
-    }
+    // Prevent double-tap crashes
+    var backEnabled by remember { mutableStateOf(true) }
 
     Box(
-        modifier =  modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(backgroundColor)
-            .padding(top = 55.dp, start = 16.dp, end = 16.dp, bottom = bottomPadding),
+            .statusBarsPadding()
+            .padding(start = 16.dp, end = 16.dp, bottom = bottomPadding,top = 8.dp)
+
     ) {
-        // Back button
-        if (isBackButton == true) {
-            Row(
-                modifier = Modifier
-                    .pointerInput(Unit) {
-                        detectTapGestures(
-                            onPress = { offset ->
-                                // If the button is pressed and no previous action was triggered, handle the navigation
-                                if (!isBackPressed.value) {
-                                    isBackPressed.value = true
-
-                                    // Call the provided onBackClick action or default navigation action
-                                    if (onBackClick == null) {
-                                        navController?.popBackStack()
-                                    } else {
-                                        onBackClick()
-                                    }
-                                }
-                                awaitRelease()
-                            }
-                        )
-                    },
-
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-              if(isBackButton)  Box(
+        if (isBackButton) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                // Circular back button
+                Box(
                     modifier = Modifier
                         .size(45.dp)
                         .clip(CircleShape)
-                        .background(SecondaryColor100)
-
+                        .background(SecondaryColor100),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Back",
-                        tint = backIconColor,
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .size(24.dp)
-                    )
+                    IconButton(
+                        onClick = {
+                            if (!backEnabled) return@IconButton
+                            backEnabled = false
+
+                            // Prefer custom handler if provided
+                            if (onBackClick != null) {
+                                onBackClick()
+                            } else {
+                                // popBackStack() returns false if nothing to pop
+                                val popped = navController?.popBackStack() ?: false
+                                if (!popped) navController?.navigateUp()
+                            }
+
+                            // Usually we navigate away; no need to re-enable.
+                            // If you want the button to be usable again on the same screen,
+                            // re-enable after a short delay:
+                            // LaunchedEffect(Unit) {
+                            //     delay(350)
+                            //     backEnabled = true
+                            // }
+                        },
+                        enabled = backEnabled
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            tint = backIconColor,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
                 }
             }
         }
 
-        // Title (only shown if title is not null)
         title?.let {
             CustomMontserratText(
                 text = it,
-                color = if (titleColor != null) titleColor else Color.Black,
+                color = titleColor,
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .padding(start = if (onBackClick != null) 50.dp else 0.dp)  // Add offset for back button if present
-                    .padding(end = 40.dp),
-
+                    .padding(end = 40.dp)
             )
         }
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewCustomAppBar() {
-    CustomAppBar(
-        navController = null,
-        title = "Welcome",
-        onBackClick = { /* Handle back click */ }
-    )
-}
 
 
 

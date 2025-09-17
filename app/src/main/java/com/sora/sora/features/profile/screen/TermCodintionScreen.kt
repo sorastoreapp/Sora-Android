@@ -58,7 +58,7 @@ fun TermsAndConditionsScreen()
 
         topBar = {
             CustomAppBar(
-                title = "Terms & Condition",
+                title = "Terms & Conditions",
                 isBackButton = true,
                 onBackClick = {
                     // Handle back click, navigate back or pop from the navigation stack
@@ -129,6 +129,6 @@ fun BackgrountOtherImage(
 //            .align(Alignment.BottomCenter)
 //            .fillMaxWidth(),
         // .height(300.dp), // Adjust the height as needed
-        contentScale = ContentScale.FillWidth
+        contentScale = ContentScale.Crop
     )
 }

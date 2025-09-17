@@ -6,8 +6,10 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -15,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -28,6 +31,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -72,152 +76,168 @@ fun SignInScreen(
     // State to handle password visibility toggle
     var passwordVisible by remember { mutableStateOf(false) }
 
-    Box(
-        modifier = modifier
-            .fillMaxSize()
+    Scaffold(
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+    ) { contentpading->
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(0.dp)
 
-    ) {
-        // Background PNG with embedded text, illustrations etc.
-        Image(
-            painter = painterResource(id = R.drawable.signin_background), // Your imported png image
-            contentDescription = null,
-            modifier = Modifier.fillMaxSize().padding(
-                bottom = WindowInsets.systemBars
-                    .asPaddingValues()
-                    .calculateBottomPadding()
-            )
-        )
-
-        CustomAppBar(
-            title = "Sign in",
-            onBackClick = {
-                navController.popBackStack()
-            }
-        )
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.TopCenter)
-                .padding(horizontal = hFactor(20), vertical = vFactor(174))
         ) {
-
-            CustomMontserratText(
-                text = "Login by your Email",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.W500,
-                color = PrimaryColor
+            // Background PNG with embedded text, illustrations etc.
+            Image(
+                painter = painterResource(id = R.drawable.signin_background), // Your imported png image
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
             )
 
-            // i want spacer vertical below
-            Spacer(modifier = Modifier.height(vFactor(20)))
-
-            AppTextFieldWithSuffix(
-                value = emailController,
-                onValueChange = { emailController = it },
-                placeholder = "Email",
-
-                suffix = {
-                    Icon(painter = painterResource(id = R.drawable.ic_email), contentDescription = "Some Icon", tint = PrimaryColor)
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(vFactor(20)))
-
-            // Password field
-
-            AppTextFieldWithSuffix(
-                value = passwordController,
-                onValueChange = { passwordController = it },
-                placeholder = "Password",
-                isPassword = true,  // Set to true for password field
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(vFactor(10)))
-
-            CustomMontserratText(
-                text = "Forget Password?",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.W600,
-                color = PrimaryColor,
-                modifier = Modifier.padding(start = hFactor(10)).pointerInput(Unit) {
-                    detectTapGestures(
-                        onTap = { navController.navigate(Dest.ForgetPasswordScreen::class.toRoute()) },
-                    )
+            CustomAppBar(
+                title = "Sign in",
+                onBackClick = {
+                    navController.popBackStack()
                 }
             )
+            val scroll = rememberScrollState()
 
-            Spacer(modifier = Modifier.height(vFactor(20)))
-
-            // Login Button
-            PrimaryButton(
-                text = "Sign in",
-                backgroundColor = PrimaryColor,
-                onClick = {
-                    NavigationManager.navigateAndClearStack(Dest.DashBoardScreen::class.toRoute())
-                },
-            )
-
-            Spacer(modifier = Modifier.height(vFactor(20)))
-
-            // OR separator
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = hFactor(48))
+                    .align(Alignment.TopCenter)
+                    .padding(horizontal = hFactor(20), vertical = vFactor(174))
+                    .verticalScroll(scroll)
+                    .imePadding(),
+
             ) {
-                Divider(
-                    color = DividerGray,
-                    thickness = 1.dp,
-                    modifier = Modifier.weight(1f)
-                )
+
                 CustomMontserratText(
-                    " OR ",
-                    color = Color.Gray,
+                    text = "Login by your Email",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.W500,
+                    color = PrimaryColor
+                )
+
+                // i want spacer vertical below
+                Spacer(modifier = Modifier.height(vFactor(20)))
+
+                AppTextFieldWithSuffix(
+                    value = emailController,
+                    onValueChange = { emailController = it },
+                    placeholder = "Email",
+
+                    suffix = {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_email),
+                            contentDescription = "Some Icon",
+                            tint = PrimaryColor
+                        )
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(vFactor(20)))
+
+                // Password field
+
+                AppTextFieldWithSuffix(
+                    value = passwordController,
+                    onValueChange = { passwordController = it },
+                    placeholder = "Password",
+                    isPassword = true,  // Set to true for password field
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(vFactor(10)))
+
+                CustomMontserratText(
+                    text = "Forget Password?",
                     fontSize = 14.sp,
-                    modifier = Modifier.padding(horizontal = 8.dp)
-                )
-                Divider(
-                    color = DividerGray,
-                    thickness = 1.dp,
-                    modifier = Modifier.weight(1f)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(vFactor(20)))
-
-            // Social login buttons
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                SocialLoginButton(R.drawable.ic_google) { onSocialLoginClick("Google") }
-//                Spacer(modifier = Modifier.width(10.dp))
-//                SocialLoginButton(R.drawable.ic_facebook) { onSocialLoginClick("Facebook") }
-                Spacer(modifier = Modifier.width(10.dp))
-               /// SocialLoginButton(R.drawable.ic_apple) { onSocialLoginClick("Apple") }
-            }
-
-            Spacer(modifier = Modifier.height(vFactor(20)))
-
-            // Register prompt
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.Top,
-            ) {
-                CustomMontserratText("Don't have account? ", fontSize = 14.sp, color = Color.Black)
-                CustomMontserratText(
-                    text = "Register Now",
+                    fontWeight = FontWeight.W600,
                     color = PrimaryColor,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp,
-                    modifier = Modifier.clickable { onRegisterClick() }
+                    modifier = Modifier
+                        .padding(start = hFactor(10))
+                        .pointerInput(Unit) {
+                            detectTapGestures(
+                                onTap = { navController.navigate(Dest.ForgetPasswordScreen::class.toRoute()) },
+                            )
+                        }
                 )
+
+                Spacer(modifier = Modifier.height(vFactor(20)))
+
+                // Login Button
+                PrimaryButton(
+                    text = "Sign in",
+                    backgroundColor = PrimaryColor,
+                    onClick = {
+                        NavigationManager.navigateAndClearStack(Dest.DashBoardScreen::class.toRoute())
+                    },
+                )
+
+                Spacer(modifier = Modifier.height(vFactor(20)))
+
+                // OR separator
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = hFactor(48))
+                ) {
+                    Divider(
+                        color = DividerGray,
+                        thickness = 1.dp,
+                        modifier = Modifier.weight(1f)
+                    )
+                    CustomMontserratText(
+                        " OR ",
+                        color = Color.Gray,
+                        fontSize = 14.sp,
+                        modifier = Modifier.padding(horizontal = 8.dp)
+                    )
+                    Divider(
+                        color = DividerGray,
+                        thickness = 1.dp,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(vFactor(20)))
+
+                // Social login buttons
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    SocialLoginButton(R.drawable.ic_google) { onSocialLoginClick("Google") }
+                    //                Spacer(modifier = Modifier.width(10.dp))
+                    //                SocialLoginButton(R.drawable.ic_facebook) { onSocialLoginClick("Facebook") }
+                    Spacer(modifier = Modifier.width(10.dp))
+                    /// SocialLoginButton(R.drawable.ic_apple) { onSocialLoginClick("Apple") }
+                }
+
+                Spacer(modifier = Modifier.height(vFactor(20)))
+
+                // Register prompt
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.Top,
+                ) {
+                    CustomMontserratText(
+                        "Don't have account? ",
+                        fontSize = 14.sp,
+                        color = Color.Black
+                    )
+                    CustomMontserratText(
+                        text = "Register Now",
+                        color = PrimaryColor,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 14.sp,
+                        modifier = Modifier.clickable { onRegisterClick() }
+                    )
+                }
             }
         }
     }

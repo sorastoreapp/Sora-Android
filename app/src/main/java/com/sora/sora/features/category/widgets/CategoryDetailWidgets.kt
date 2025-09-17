@@ -134,26 +134,35 @@ fun CategoryResultRow(resultCount: Int = 23, verticalPadding: Dp = 8.dp, horizon
             },
             containerColor = Color.White,
             sheetState = sortSheetState,
-            modifier = Modifier.height(400.dp)
+            // ⬇️ remove handle space
+            dragHandle = null,
+            // ⬇️ remove system insets (status bar, etc.)
+            windowInsets = WindowInsets(0, 0, 0, 0),
+            // optional: make top edge not rounded so it sits flush
+            shape = RoundedCornerShape(topStart = 15.dp, topEnd = 15.dp),
+            modifier = Modifier // your own padding stays 0
+            //modifier = Modifier.height(400.dp)
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 16.dp)
+                    .background(Color.White)
+                    .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
+                    .padding(vertical = 8.dp)
             ) {
                 // Header Row
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 2.dp),
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.Top
                 ) {
                     Spacer(modifier = Modifier.weight(1f))
                     CustomMontserratText(
                         text = "Choose a sort option",
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 14.sp
+                        fontWeight = FontWeight.W500,
+                        fontSize = 17.sp
                     )
                     Spacer(modifier = Modifier.weight(1f))
                     IconButton(
@@ -175,7 +184,7 @@ fun CategoryResultRow(resultCount: Int = 23, verticalPadding: Dp = 8.dp, horizon
                 }
 
                 Divider(color = AppGray, thickness = 1.dp)
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(15.dp))
 
                 sortOptions.forEach { option ->
                     Row(
@@ -189,7 +198,7 @@ fun CategoryResultRow(resultCount: Int = 23, verticalPadding: Dp = 8.dp, horizon
                                     showSortSheet = false
                                 }
                             }
-                            .padding(horizontal = 16.dp, vertical = 10.dp)
+                            .padding(horizontal = 18.dp, vertical = 15.dp)
                     ) {
                         RadioButton(
                             selected = (selectedOption == option),
@@ -207,15 +216,17 @@ fun CategoryResultRow(resultCount: Int = 23, verticalPadding: Dp = 8.dp, horizon
                             )
                         )
                         Spacer(modifier = Modifier.width(14.dp))
-                        CustomMontserratText(text = option, fontSize = 12.sp)
+                        CustomMontserratText(text = option, fontSize = 14.sp)
                     }
                 }
+                Spacer(modifier = Modifier.height(22.dp))
             }
         }
     }
 
     // ---------------- FILTER BOTTOM SHEET ----------------
     if (showFilterSheet) {
+        var screenHeight  = LocalConfiguration.current.screenHeightDp.dp
         ModalBottomSheet(
             onDismissRequest = {
                 coroutineScope.launch {
@@ -226,7 +237,14 @@ fun CategoryResultRow(resultCount: Int = 23, verticalPadding: Dp = 8.dp, horizon
             containerColor = Color.White,
 
             sheetState = filterSheetState,
-            modifier = Modifier.heightIn(min = 300.dp)
+            dragHandle = null,
+
+            windowInsets = WindowInsets(0, 0, 0, 0),
+
+            shape = RoundedCornerShape(topStart = 15.dp, topEnd = 15.dp),
+            modifier = Modifier // your own padding stays 0
+         //   modifier = Modifier.heightIn(min = screenHeight*0.4f),
+
         ) {
             var minPrice by remember { mutableStateOf(0f) }
             var maxPrice by remember { mutableStateOf(1200f) }
@@ -238,12 +256,13 @@ fun CategoryResultRow(resultCount: Int = 23, verticalPadding: Dp = 8.dp, horizon
 
             Column(modifier = Modifier
                 .fillMaxWidth()
+                .padding(bottom = 10.dp, top = 8.dp)
                 ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, )
-                        .padding(bottom = 5.dp),
+                        .padding(bottom = 12.dp, top = 12.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.Top
                 ) {
@@ -251,7 +270,8 @@ fun CategoryResultRow(resultCount: Int = 23, verticalPadding: Dp = 8.dp, horizon
                     CustomMontserratText(
                         text = "Filter By",
                         fontWeight = FontWeight.W500,
-                        fontSize = 16.sp
+                        fontSize = 17.sp,
+                        modifier = Modifier.padding(start = 24.dp)
                     )
                     Spacer(modifier = Modifier.weight(1f))
                     IconButton(
@@ -577,7 +597,7 @@ fun CategoryResultRow(resultCount: Int = 23, verticalPadding: Dp = 8.dp, horizon
                         )
 
                 }
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(25.dp))
 
 
                 }

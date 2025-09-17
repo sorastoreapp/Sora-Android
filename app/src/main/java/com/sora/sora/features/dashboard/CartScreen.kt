@@ -98,7 +98,7 @@ fun CartScreen(isBackButton : Boolean = false) {
             .systemBarsPadding()
             .pullRefresh(pullRefreshState),
             topBar = {
-
+                var backEnabled by remember { mutableStateOf(true) }
                 CenterAlignedTopAppBar(
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                         containerColor = Color.White,
@@ -117,42 +117,63 @@ fun CartScreen(isBackButton : Boolean = false) {
                         )
                     },
                     navigationIcon = {
-                       if(isBackButton) Row(
-                            modifier = Modifier
-                                .pointerInput(Unit) {
-                                    detectTapGestures(
-                                        onPress = { offset ->
-                                            navController?.popBackStack()
-                                        }
-                                    )
+                        if (isBackButton) {
+                            IconButton(
+                                onClick = {
+                                    if (!backEnabled) return@IconButton
+                                    backEnabled = false
+
+                                    val popped = navController?.popBackStack() ?: false
+                                    if (!popped) navController?.navigateUp()
                                 },
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Box(
                                 modifier = Modifier
-                                    .size(45.dp)
                                     .clip(CircleShape)
                                     .background(SecondaryColor100)
                             ) {
-                                androidx.compose.material3.Icon(
+                                Icon(
                                     imageVector = Icons.Filled.ArrowBack,
                                     contentDescription = "Back",
-                                    tint = PrimaryColor,
-                                    modifier = Modifier
-                                        .align(Alignment.Center)
-                                        .size(24.dp)
+                                    tint = PrimaryColor
                                 )
                             }
                         }
                     }
+//                    navigationIcon = {
+//                       if(isBackButton) Row(
+//                            modifier = Modifier
+//                                .pointerInput(Unit) {
+//                                    detectTapGestures(
+//                                        onPress = { offset ->
+//                                            navController?.popBackStack()
+//                                        }
+//                                    )
+//                                },
+//                            verticalAlignment = Alignment.CenterVertically
+//                        ) {
+//                            Box(
+//                                modifier = Modifier
+//                                    .size(45.dp)
+//                                    .clip(CircleShape)
+//                                    .background(SecondaryColor100)
+//                            ) {
+//                                androidx.compose.material3.Icon(
+//                                    imageVector = Icons.Filled.ArrowBack,
+//                                    contentDescription = "Back",
+//                                    tint = PrimaryColor,
+//                                    modifier = Modifier
+//                                        .align(Alignment.Center)
+//                                        .size(24.dp)
+//                                )
+//                            }
+//                        }
+//                    }
                 )
-
     }
     ){
         paddingValues ->
         Box{
 
-            if (isCartEmpty)  CartScreenMainView()
+            if (isBackButton||isCartEmpty)  CartScreenMainView()
             else  EmptyCartScreen(
                 onShop = {
                             GlobalController.updateSelectedIndex(0)

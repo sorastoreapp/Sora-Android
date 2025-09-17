@@ -49,6 +49,8 @@ import com.sora.sora.core.vFactor
 import com.sora.sora.features.category.CategoryDetailModel
 import java.net.URLEncoder
 import com.sora.sora.core.temp.TempCustomData
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 
 // Data classes
 data class Category(val id: Int, val title: String, val icon: Painter, val bgColor: Color)
@@ -241,29 +243,22 @@ fun BannerSlider(
         R.drawable.img_temp_slider,
         R.drawable.img_temp_slider
     )
-    val pagerState = rememberPagerState()
 
-    // Only ONE coroutine that never interrupts in-progress scrolls
+
+    val pagerState = rememberPagerState() // accompanist
     LaunchedEffect(pagerState) {
         while (true) {
             if (!pagerState.isScrollInProgress) {
-                kotlinx.coroutines.delay(2000)
-                // If still not scrolling and on same page, animate
+                delay(65_000) // wait longer before advancing
                 if (!pagerState.isScrollInProgress) {
                     val nextPage = (pagerState.currentPage + 1) % bannerImages.size
-                    pagerState.animateScrollToPage(
-                        page = nextPage,
-                        animationSpec = tween(
-                            durationMillis = 5000,   // 800ms for quick yet smooth
-                            easing = FastOutSlowInEasing // Makes slide look ‘material’
-                        )
-                    )
+                    pagerState.animateScrollToPage(nextPage) // no animationSpec here
                 }
             }
-            // Check every 100ms to avoid busy looping
-            kotlinx.coroutines.delay(100)
+            delay(300 )
         }
     }
+
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
@@ -345,40 +340,7 @@ fun BannerSlider(
                         )
                     }
 
-//                    Button(
-//                        onClick = {
-//                            val categoryDetailModel = CategoryDetailModel(
-//                                title = "Toys",
-//                                themeColor1 = "#FFFADA7A", // e.g., "#FFFADA7A"
-//                                themeColor2 = "#FFF8C844",  // e.g., "#FFFADA7A"
-//                                iconRes = R.drawable.ic_cat_toy
-//                            )
 //
-//                            // URL encode both the title and theme colors
-//                            val encodedTitle = URLEncoder.encode(categoryDetailModel.title, "UTF-8")
-//                            val encodedThemeColor1 = URLEncoder.encode(categoryDetailModel.themeColor1, "UTF-8")
-//                            val encodedThemeColor2 = URLEncoder.encode(categoryDetailModel.themeColor2, "UTF-8")
-//
-//                            Log.d("MyTag", "CategoryCard: ------------------${categoryDetailModel.title}")
-//
-//                            // Pass the encoded title and theme colors in the navigation URL
-//                            navController.navigate("${Dest.CategoryDetailScreen::class.toRoute()}?title=$encodedTitle&themeColor1=$encodedThemeColor1&themeColor2=$encodedThemeColor2")
-//                        },
-//                        shape = RoundedCornerShape(20.dp),
-//                        colors = ButtonDefaults.buttonColors(PrimaryColor),
-//                        contentPadding = PaddingValues(horizontal = 15.dp, vertical = 0.dp) // Remove internal vertical padding
-//                    ) {
-//                        // If necessary, adjust padding for CustomMontserratText
-//                            CustomMontserratText(
-//                                text = "Explore Now",
-//                                fontWeight = FontWeight.Bold,
-//                                color = Color.White,
-//                                fontSize = 12.sp,
-//                                textAlign = TextAlign.Center,
-//                                modifier = Modifier.padding(vertical = 0.dp)
-//                            )
-//                    }
-
 
 
 
